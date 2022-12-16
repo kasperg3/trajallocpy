@@ -3,6 +3,9 @@ from matplotlib.lines import Line2D
 import numpy as np
 from task_allocation import CoverageProblem
 import json
+from shapely.geometry import Polygon
+import matplotlib.pyplot as plt
+import geopandas as gpd
 
 
 class Plotter:
@@ -61,7 +64,18 @@ class Plotter:
         plt.pause(wait_time)
 
     def plotAreas(self, areas, color, is_filled=False):
-        pass
+        # plot geodetic data
+        polygon1 = Polygon(
+            [
+                (0, 5),
+                (1, 1),
+                (3, 0),
+            ]
+        )
+
+        p = gpd.GeoSeries(polygon1)
+        p.plot()
+        plt.show()
 
     def plotTasks(self):
         # TODO Should be able to plot 2 and 1 dimentional tasks
@@ -78,6 +92,7 @@ def loadCoverageProblem(path) -> CoverageProblem.CoverageProblem:
     data = json.load(f)
     f.close()
 
+    # TODO convert all the coordinates to UTM for accurate calculations!!!!
     search = data["search_area"]
     restricted = data["restricted_areas"]
     sweep = data["sweeps"]
