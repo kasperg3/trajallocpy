@@ -3,8 +3,7 @@ import copy
 
 
 class agent:
-    def __init__(self, id=None, task_num=None, agent_num=None, L_t=None):
-
+    def __init__(self, id=None, task_num=None, agent_num=None, L_t=None, state=None):
         self.task_num = task_num
         self.agent_num = agent_num
 
@@ -30,10 +29,12 @@ class agent:
         # Time Stamp List
         self.timestamps = {a: self.time_step for a in range(self.agent_num)}
 
-        # This part can be modified depend on the problem
-        self.state = np.random.uniform(
-            low=0, high=0.1, size=(1, 2)
-        )  # Agent State (Position)
+        # TODO add a way to set an initial state initial state
+        if state is None:
+            self.state = np.random.uniform(
+                low=0, high=0.1, size=(1, 2)
+            ).squeeze()  # Agent State (Position)
+
         self.c = np.zeros(self.task_num)  # Initial Score (Euclidean Distance)
 
     def set_state(self, state):
@@ -53,7 +54,7 @@ class agent:
             S_p = 0
             if len(self.path) > 0:
                 distance_j = 0
-                distance_j += np.linalg.norm(self.state.squeeze() - task[self.path[0]])
+                distance_j += np.linalg.norm(self.state - task[self.path[0]])
                 S_p += np.exp(-distance_j)
                 for p_idx in range(len(self.path) - 1):
                     distance_j += np.linalg.norm(
@@ -73,9 +74,7 @@ class agent:
                         p_temp.insert(n, j)
                         c_temp = 0
                         distance_j = 0
-                        distance_j += np.linalg.norm(
-                            self.state.squeeze() - task[p_temp[0]]
-                        )
+                        distance_j += np.linalg.norm(self.state - task[p_temp[0]])
                         c_temp += np.exp(-distance_j)
                         if len(p_temp) > 1:
                             for p_loc in range(len(p_temp) - 1):

@@ -15,8 +15,8 @@ class Plotter:
         self.ax.plot(task[:, 0], task[:, 1], "rx", label="Task")
 
         # Plot agents
-        robot_pos = np.array([r.state[0].tolist() for r in robot_list])
-        self.ax.plot(robot_pos[:, 0], robot_pos[:, 1], "b*", label="Robot")
+        robot_pos = np.array([r.state.tolist() for r in robot_list])
+        self.ax.plot(robot_pos[0], robot_pos[1], "b*", label="Robot")
 
         # Plot communication paths
         for i in range(len(robot_list) - 1):
@@ -37,13 +37,13 @@ class Plotter:
         self.ax.legend(handles=handles)
         self.assign_plots = []
 
-    def plot_agents(self, robot, task, iteration):
+    def plotAgents(self, robot, task, iteration):
         if len(robot.path) > 0:
-            self.x_data = [robot.state[0][0]] + task[robot.path, 0].tolist()
-            self.y_data = [robot.state[0][1]] + task[robot.path, 1].tolist()
+            self.x_data = [robot.state[0]] + task[robot.path, 0].tolist()
+            self.y_data = [robot.state[1]] + task[robot.path, 1].tolist()
         else:
-            self.x_data = [robot.state[0][0]]
-            self.y_data = [robot.state[0][1]]
+            self.x_data = [robot.state[0]]
+            self.y_data = [robot.state[1]]
 
         if iteration == 0:
             (assign_line,) = self.ax.plot(self.x_data, self.y_data, "k-", linewidth=1)
@@ -51,7 +51,7 @@ class Plotter:
         else:
             self.assign_plots[robot.id].set_data(self.x_data, self.y_data)
 
-    def set_title(self, title):
+    def setTitle(self, title):
         self.ax.set_title(title)
 
     def show(self):
@@ -60,10 +60,7 @@ class Plotter:
     def pause(self, wait_time=0.1):
         plt.pause(wait_time)
 
-    def plotSearchArea(self, searchArea):
-        pass
-
-    def plotRestrictedArea():
+    def plotAreas(self, areas, color, is_filled=False):
         pass
 
     def plotTasks(self):
