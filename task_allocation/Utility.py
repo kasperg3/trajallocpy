@@ -64,6 +64,11 @@ class Plotter:
         plt.pause(wait_time)
 
     def plotAreas(self, areas, color, is_filled=False):
+        print(areas)
+
+        # TODO convert dict to np array
+        # Polygon(np.array(areas))
+
         # # plot geodetic data TODO Finish this
         # polygon1 = Polygon(
         #     [

@@ -18,29 +18,16 @@ class runner:
     ):
         # Task definition
         self.coverage_problem = coverage_problem
-        self.task_num = int(len(self.coverage_problem.getSweeps()) / 2)
+        self.task_num = int(len(self.coverage_problem.getSweeps()))
         self.robot_num = self.coverage_problem.getNumberOfRobots()
 
         # TODO this should be based able to be based on distance/batterylife
         task_capacity = 10
 
-        # TODO
-        sweeps = self.coverage_problem.getSweeps()
-        tasks = []
-        # TODO make this a line coverage task
-        for i in range(len(sweeps) - 1):
-            if not i % 2:
-                lat = (
-                    (sweeps[i]["latitude"] - sweeps[i + 1]["latitude"]) / 2
-                ) + sweeps[i]["latitude"]
-                lon = (
-                    (sweeps[i]["longitude"] - sweeps[i + 1]["longitude"]) / 2
-                ) + sweeps[i]["longitude"]
-                tasks.append([lat, lon])
-        self.task = np.array(tasks)
+        self.task = np.array(self.coverage_problem.getSweeps())
 
         # TODO do not use the first task as initial state
-        initial_state = np.array(tasks[0])
+        initial_state = np.array(self.task[0])
 
         self.robot_list = [
             CBBA.agent(
