@@ -17,6 +17,7 @@ class CoverageProblem:
         return self.__search_area
 
     def getSweeps(self):
+        # TODO return tuples of 2 coordinates
         return self.__sweeps
 
     def setCommunicationGraph(self, com_graph):

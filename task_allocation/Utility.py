@@ -11,15 +11,15 @@ import geopandas as gpd
 class Plotter:
     def __init__(self, task, robot_list, communication_graph):
         self.fig, self.ax = plt.subplots()
-        self.ax.set_xlim((-0.1, 1.1))
-        self.ax.set_ylim((-0.1, 1.1))
+        # self.ax.set_xlim((-0.1, 1.1))
+        # self.ax.set_ylim((-0.1, 1.1))
 
         # Plot tasks
         self.ax.plot(task[:, 0], task[:, 1], "rx", label="Task")
 
         # Plot agents
         robot_pos = np.array([r.state.tolist() for r in robot_list])
-        self.ax.plot(robot_pos[0], robot_pos[1], "b*", label="Robot")
+        self.ax.plot(robot_pos[0][0], robot_pos[0][1], "b*", label="Robot")
 
         # Plot communication paths
         for i in range(len(robot_list) - 1):
@@ -64,18 +64,19 @@ class Plotter:
         plt.pause(wait_time)
 
     def plotAreas(self, areas, color, is_filled=False):
-        # plot geodetic data
-        polygon1 = Polygon(
-            [
-                (0, 5),
-                (1, 1),
-                (3, 0),
-            ]
-        )
+        # # plot geodetic data TODO Finish this
+        # polygon1 = Polygon(
+        #     [
+        #         (0, 5),
+        #         (1, 1),
+        #         (3, 0),
+        #     ]
+        # )
 
-        p = gpd.GeoSeries(polygon1)
-        p.plot()
-        plt.show()
+        # p = gpd.GeoSeries(polygon1)
+        # p.plot()
+        # plt.show()
+        pass
 
     def plotTasks(self):
         # TODO Should be able to plot 2 and 1 dimentional tasks

@@ -17,16 +17,30 @@ class runner:
         max_iterations=100,
     ):
         # Task definition
-        self.task_num = len(coverage_problem.getSweeps())
-        print(self.task_num)
-        self.robot_num = coverage_problem.getNumberOfRobots()
-
         self.coverage_problem = coverage_problem
+        self.task_num = int(len(self.coverage_problem.getSweeps()) / 2)
+        self.robot_num = self.coverage_problem.getNumberOfRobots()
 
         # TODO this should be based able to be based on distance/batterylife
         task_capacity = 10
 
-        self.task = np.random.uniform(low=0, high=1, size=(self.task_num, 2))
+        # TODO
+        sweeps = self.coverage_problem.getSweeps()
+        tasks = []
+        # TODO make this a line coverage task
+        for i in range(len(sweeps) - 1):
+            if not i % 2:
+                lat = (
+                    (sweeps[i]["latitude"] - sweeps[i + 1]["latitude"]) / 2
+                ) + sweeps[i]["latitude"]
+                lon = (
+                    (sweeps[i]["longitude"] - sweeps[i + 1]["longitude"]) / 2
+                ) + sweeps[i]["longitude"]
+                tasks.append([lat, lon])
+        self.task = np.array(tasks)
+
+        # TODO do not use the first task as initial state
+        initial_state = np.array(tasks[0])
 
         self.robot_list = [
             CBBA.agent(
@@ -34,6 +48,7 @@ class runner:
                 task_num=self.task_num,
                 agent_num=self.robot_num,
                 L_t=task_capacity,
+                state=initial_state,
             )
             for i in range(self.robot_num)
         ]
@@ -77,7 +92,6 @@ class runner:
 
                 (connected,) = np.where(g == 1)
                 connected = list(connected)
-                connected.remove(robot_id)
 
                 Y = (
                     {
@@ -109,10 +123,10 @@ class runner:
             if sum(converged_list) == self.robot_num or t > self.max_t:
                 break
 
+        print("Robot Routes")
         for robot in self.robot_list:
-            print("Robot Routes")
             print(robot.path)
 
-        print("Executiontime:", timeit.default_timer() - starttime)
+        print("Execution time:", timeit.default_timer() - starttime)
         if self.plot:
             plotter.show()

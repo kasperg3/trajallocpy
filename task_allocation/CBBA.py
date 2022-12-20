@@ -20,21 +20,21 @@ class agent:
         self.bundle = []
         # Path
         self.path = []
-        # Maximum Task Number
+        # Maximum Task Number #TODO add an option to have non integer task limits
         self.L_t = L_t
-        # TODO add an option to have non integer task limits
 
         # Local Clock
         self.time_step = 0
         # Time Stamp List
         self.timestamps = {a: self.time_step for a in range(self.agent_num)}
 
-        # TODO add a way to set an initial state initial state
+        # initialize state initial state
         if state is None:
             self.state = np.random.uniform(
                 low=0, high=0.1, size=(1, 2)
             ).squeeze()  # Agent State (Position)
-
+        else:
+            self.state = state.squeeze()
         self.c = np.zeros(self.task_num)  # Initial Score (Euclidean Distance)
 
     def set_state(self, state):
