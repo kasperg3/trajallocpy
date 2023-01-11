@@ -44,7 +44,13 @@ class runner:
         self.max_t = max_iterations
         self.plot = enable_plotting
 
-    def run(self):
+    def run(self, profiling_enabled=False):
+        if profiling_enabled:
+            import cProfile, pstats, io
+            from pstats import SortKey
+
+            pr = cProfile.Profile()
+            pr.enable()
         t = 0  # Iteration number
         plotter = Utility.Plotter(self.task, self.robot_list, self.communication_graph)
 
@@ -68,7 +74,7 @@ class runner:
                 plotter.setTitle("Time Step:{}, Bundle Construct".format(t))
                 for robot in self.robot_list:
                     plotter.plotAgents(robot, self.task, t)
-                plotter.pause()
+                plotter.pause(0.1)
 
             # Communication stage
             # Send winning bid list to neighbors (depend on env)
@@ -79,15 +85,13 @@ class runner:
 
                 (connected,) = np.where(g == 1)
                 connected = list(connected)
-
-                Y = (
-                    {
+                if len(connected) > 0:
+                    Y = {
                         neighbor_id: message_pool[neighbor_id]
                         for neighbor_id in connected
                     }
-                    if len(connected) > 0
-                    else None
-                )
+                else:
+                    Y = None
 
                 robot.receive_message(Y)
 
@@ -104,11 +108,18 @@ class runner:
                 for robot in self.robot_list:
                     plotter.plotAgents(robot, self.task, t)
 
-                plotter.pause()
+                plotter.pause(0.1)
             t += 1
 
             if sum(converged_list) == self.robot_num or t > self.max_t:
                 break
+
+        if profiling_enabled:
+            pr.disable()
+            s = io.StringIO()
+            sortby = SortKey.CUMULATIVE
+            ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+            ps.print_stats(100)
 
         print("Robot Routes")
         for robot in self.robot_list:

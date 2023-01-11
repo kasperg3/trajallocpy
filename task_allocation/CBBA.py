@@ -28,7 +28,7 @@ class agent:
         # Time Stamp List
         self.timestamps = {a: self.time_step for a in range(self.agent_num)}
 
-        # initialize state initial state
+        # initialize state
         if state is None:
             self.state = np.random.uniform(
                 low=0, high=0.1, size=(1, 2)

@@ -11,6 +11,7 @@ class CoverageProblem:
         # Initialize Fully connected communication network
         self.__com_graph = np.ones((number_of_robots, number_of_robots))
         tasks = []
+        
         # TODO make this a line coverage task
         for i in range(len(sweeps) - 1):
             if not i % 2:

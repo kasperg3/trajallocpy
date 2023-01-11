@@ -60,7 +60,7 @@ class Plotter:
     def show(self):
         plt.show()
 
-    def pause(self, wait_time=0.1):
+    def pause(self, wait_time):
         plt.pause(wait_time)
 
     def plotAreas(self, areas, color, is_filled=False):

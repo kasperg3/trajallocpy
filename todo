@@ -3,6 +3,10 @@ Support plotting of:
     restricted area
     agents moving
     sweeps/tasks
-
-
+    
+Improvements:
+    Return a set of edges for each agent
+    support position initialization of agents
+    Convert from point task to line task
+    Graph based shortest distance
 
