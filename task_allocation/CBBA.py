@@ -1,11 +1,23 @@
-import numpy as np
 import copy
+import random
+
+import numpy as np
+
+from task_allocation import Task
 
 
 class agent:
     def __init__(self, id=None, task_num=None, agent_num=None, L_t=None, state=None):
         self.task_num = task_num
+        self.task_idx = [j for j in range(self.task_num)]
+
         self.agent_num = agent_num
+        self.color = (
+            random.uniform(0, 1),
+            random.uniform(0, 1),
+            random.uniform(0, 1),
+        )
+        self.velocity = 1
 
         # Agent ID
         self.id = id
@@ -30,12 +42,17 @@ class agent:
 
         # initialize state
         if state is None:
-            self.state = np.random.uniform(
-                low=0, high=0.1, size=(1, 2)
-            ).squeeze()  # Agent State (Position)
+            self.set_state(
+                np.random.uniform(low=0, high=0.1, size=(1, 2)).squeeze()
+            )  # Agent State (Position)
         else:
-            self.state = state.squeeze()
+            self.set_state(state.squeeze())
         self.c = np.zeros(self.task_num)  # Initial Score (Euclidean Distance)
+        # socre function parameters
+        self.Lambda = 0.95
+
+    def tau(self, j):
+        pass
 
     def set_state(self, state):
         self.state = state
@@ -46,58 +63,84 @@ class agent:
     def receive_message(self, Y):
         self.Y = Y
 
-    def build_bundle(self, task):
-        J = [j for j in range(self.task_num)]
+    def euclideanDist(self, p0, p1):
+        return np.linalg.norm(p0 - p1)
 
-        while len(self.bundle) < self.L_t:
-            # Calculate S_p for constructed path list
-            S_p = 0
-            if len(self.path) > 0:
-                distance_j = 0
-                distance_j += np.linalg.norm(self.state - task[self.path[0]])
-                S_p += np.exp(-distance_j)
-                for p_idx in range(len(self.path) - 1):
-                    distance_j += np.linalg.norm(
-                        task[self.path[p_idx]] - task[self.path[p_idx + 1]]
+    def getMinDistance(self, robot_state, task):
+        distArray = [
+            self.euclideanDist(robot_state, task.start),
+            self.euclideanDist(robot_state, task.end),
+        ]
+        minIndex = np.min(distArray)
+        return (minIndex, distArray[minIndex])
+
+    def getTravelCost(self, start, end):
+        # TODO use task type to determine the
+        return np.linalg.norm(end - start) / self.vel
+
+    def getTimeDiscountedReward(self, cost, task):
+        (self.Lambda ** (cost / self.vel)) * task.reward
+
+    # S_i calculation of the agent
+    def calculatePathReward(self):
+        S_p = 0
+        if len(self.path) > 0:
+            for p_idx in range(len(self.path)):
+                if p_idx == 0:
+                    # The first task has to calculate the distance to the start position
+                    travel_cost = self.getTravelCost(
+                        self.state.squeeze(), self.path[p_idx].start
                     )
-                    S_p += np.exp(-distance_j)
-
-            # Calculate c_ij for each task j
-            best_pos = {}
-            for j in J:
-                c_list = []
-                if j in self.bundle:  # If already in bundle list
-                    self.c[j] = 0  # Minimum Score
+                    S_p += self.getTimeDiscountedReward(travel_cost, self.path[p_idx])
                 else:
-                    for n in range(len(self.path) + 1):
-                        p_temp = copy.deepcopy(self.path)
-                        p_temp.insert(n, j)
-                        c_temp = 0
-                        distance_j = 0
-                        distance_j += np.linalg.norm(self.state - task[p_temp[0]])
-                        c_temp += np.exp(-distance_j)
-                        if len(p_temp) > 1:
-                            for p_loc in range(len(p_temp) - 1):
-                                distance_j += np.linalg.norm(
-                                    task[p_temp[p_loc]] - task[p_temp[p_loc + 1]]
-                                )
-                                c_temp += np.exp(-distance_j)
+                    travel_cost = self.getTravelCost(
+                        self.path[p_idx - 1].end, self.path[p_idx].start
+                    )
+                    S_p += self.getTimeDiscountedReward(travel_cost, self.path[p_idx])
+        return S_p
 
-                        c_jn = c_temp - S_p
-                        c_list.append(c_jn)
+    # Calculate the path reward with task j at index n
+    def calculatePathRewardWithNewTask(self, tasks, j, n):
+        S_p = 0
+        # TODO implement this and add debugging
+        return S_p
 
-                    max_idx = np.argmax(c_list)
-                    c_j = c_list[max_idx]
-                    self.c[j] = c_j
-                    best_pos[j] = max_idx
+    def getCij(self, tasks):
+        """
+        Returns the cost list c_ij for agent i where the position n results in the greatest reward
+        """
+        # Calculate Sp_i
+        S_p = self.calculatePathReward()
+        best_pos = np.zeros(self.task_num)
+        c = np.zeros(self.task_num)
+        # TODO Calculate c_ij for each task j
+        for j in range(self.task_num):
+            if j in self.bundle:  # If already in bundle list
+                c[j] = 0  # Minimum Score
+            else:
+                # for each j calculate the path reward at each location in the local path
+                best_pos = 0
+                for n in range(len(self.path) + 1):
+                    c_ijn = self.calculatePathRewardWithNewTask(tasks, j, n) - S_p
+                    if c[j] < c_ijn:
+                        c[j] = c_ijn  # Store the cost
+                        best_pos[j] = n
+        return (best_pos, c)
 
+    def build_bundle(self, tasks):
+        while len(self.bundle) < self.L_t:
+            best_pos, self.c = self.getCij(tasks)
+            # TODO update self.c to c_ij
             h = self.c > self.winning_bids
+
             if sum(h) == 0:  # No valid task
                 break
             self.c[~h] = 0
+            # TODO This should
             J_i = np.argmax(self.c)
             n_J = best_pos[J_i]
 
+            # TODO when inserting the task make sure to update the start/end
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
 
@@ -263,10 +306,6 @@ class agent:
 
         if n_bar < len(self.bundle):
             del self.bundle[n_bar:]
-
-        self.path = []
-        for task in self.bundle:
-            self.path.append(task)
 
         self.time_step += 1
 

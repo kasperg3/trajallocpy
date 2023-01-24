@@ -1,21 +1,18 @@
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-import numpy as np
+from matplotlib.patches import Polygon
 from task_allocation import CoverageProblem
 import json
-from shapely.geometry import Polygon
-import matplotlib.pyplot as plt
-import geopandas as gpd
+from task_allocation import Task
 
 
 class Plotter:
-    def __init__(self, task, robot_list, communication_graph):
+    def __init__(self, tasks, robot_list, communication_graph):
         self.fig, self.ax = plt.subplots()
-        # self.ax.set_xlim((-0.1, 1.1))
-        # self.ax.set_ylim((-0.1, 1.1))
 
         # Plot tasks
-        self.ax.plot(task[:, 0], task[:, 1], "rx", label="Task")
+        self.plotTasks(tasks)
 
         # Plot agents
         robot_pos = np.array([r.state.tolist() for r in robot_list])
@@ -42,14 +39,21 @@ class Plotter:
 
     def plotAgents(self, robot, task, iteration):
         if len(robot.path) > 0:
-            self.x_data = [robot.state[0]] + task[robot.path, 0].tolist()
-            self.y_data = [robot.state[1]] + task[robot.path, 1].tolist()
+            sweeps = [t.start for t in task[robot.path]]
+            self.x_data = [robot.state[0]] + [s[0] for s in sweeps]
+            self.y_data = [robot.state[1]] + [s[1] for s in sweeps]
         else:
             self.x_data = [robot.state[0]]
             self.y_data = [robot.state[1]]
 
         if iteration == 0:
-            (assign_line,) = self.ax.plot(self.x_data, self.y_data, "k-", linewidth=1)
+            (assign_line,) = self.ax.plot(
+                self.x_data,
+                self.y_data,
+                linestyle="solid",
+                color=robot.color,
+                linewidth=1,
+            )
             self.assign_plots.append(assign_line)
         else:
             self.assign_plots[robot.id].set_data(self.x_data, self.y_data)
@@ -64,28 +68,28 @@ class Plotter:
         plt.pause(wait_time)
 
     def plotAreas(self, areas, color, is_filled=False):
-        print(areas)
+        for a in areas:
+            y = []
+            for p in a:
+                y.append([p["longitude"], p["latitude"]])
+            p = Polygon(y, facecolor=color)
+            self.ax.add_patch(p)
 
-        # TODO convert dict to np array
-        # Polygon(np.array(areas))
-
-        # # plot geodetic data TODO Finish this
-        # polygon1 = Polygon(
-        #     [
-        #         (0, 5),
-        #         (1, 1),
-        #         (3, 0),
-        #     ]
-        # )
-
-        # p = gpd.GeoSeries(polygon1)
-        # p.plot()
-        # plt.show()
-        pass
-
-    def plotTasks(self):
+    def plotTasks(self, tasks):
         # TODO Should be able to plot 2 and 1 dimentional tasks
-        pass
+        for t in tasks:
+            self.ax.plot(
+                [
+                    t.start[0],
+                    t.end[0],
+                ],
+                [
+                    t.start[1],
+                    t.end[1],
+                ],
+                "b--",
+                linewidth=1,
+            )
 
 
 def loadCoverageProblem(path) -> CoverageProblem.CoverageProblem:
@@ -102,7 +106,14 @@ def loadCoverageProblem(path) -> CoverageProblem.CoverageProblem:
     search = data["search_area"]
     restricted = data["restricted_areas"]
     sweep = data["sweeps"]
+    test = [[s["longitude"], s["latitude"]] for s in sweep]
 
+    sweeps = list(zip(test[::2], test[1::2]))
+    tasks = []
+    i = 0
+    for s in sweeps:
+        tasks.append(Task.Task(start=s[0], end=s[1], task_id=i))
+        i = i + 1
     return CoverageProblem.CoverageProblem(
-        search_area=search, restricted_area=restricted, sweeps=sweep
+        search_area=search, restricted_area=restricted, tasks=tasks
     )

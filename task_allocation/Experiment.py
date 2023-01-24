@@ -15,30 +15,32 @@ class runner:
         coverage_problem: CoverageProblem.CoverageProblem,
         enable_plotting=False,
         max_iterations=100,
+        agents=None,
     ):
         # Task definition
         self.coverage_problem = coverage_problem
-        self.task_num = int(len(self.coverage_problem.getSweeps()))
+        self.tasks = np.array(self.coverage_problem.getTasks())
+        self.task_num = int(len(self.tasks))
         self.robot_num = self.coverage_problem.getNumberOfRobots()
 
         # TODO this should be based able to be based on distance/batterylife
-        task_capacity = 10
-
-        self.task = np.array(self.coverage_problem.getSweeps())
+        task_capacity = self.task_num
 
         # TODO do not use the first task as initial state
-        initial_state = np.array(self.task[0])
-
-        self.robot_list = [
-            CBBA.agent(
-                id=i,
-                task_num=self.task_num,
-                agent_num=self.robot_num,
-                L_t=task_capacity,
-                state=initial_state,
-            )
-            for i in range(self.robot_num)
-        ]
+        initial_state = np.array(self.tasks[0].start)
+        if agents is None:
+            self.robot_list = [
+                CBBA.agent(
+                    id=i,
+                    task_num=self.task_num,
+                    agent_num=self.robot_num,
+                    L_t=task_capacity,
+                    state=initial_state,
+                )
+                for i in range(self.robot_num)
+            ]
+        else:
+            self.robot_list = agents
 
         self.communication_graph = coverage_problem.getCommunicationGraph()
         self.max_t = max_iterations
@@ -52,13 +54,13 @@ class runner:
             pr = cProfile.Profile()
             pr.enable()
         t = 0  # Iteration number
-        plotter = Utility.Plotter(self.task, self.robot_list, self.communication_graph)
+        plotter = Utility.Plotter(self.tasks, self.robot_list, self.communication_graph)
 
         # Plot the search area and restricted area
-        plotter.plotAreas(self.coverage_problem.getSearchArea(), color=[0, 0, 0])
-        plotter.plotAreas(self.coverage_problem.getRestrictedAreas(), color=[0, 0, 0])
-        # TODO plot the sweep tasks
-
+        plotter.plotAreas([self.coverage_problem.getSearchArea()], color=(0, 0, 1, 0.3))
+        plotter.plotAreas(
+            self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.3)
+        )
         starttime = timeit.default_timer()
 
         while True:
@@ -67,13 +69,13 @@ class runner:
             print("Iteration {}".format(t))
             # Phase 1: Auction Process
             for robot in self.robot_list:
-                robot.build_bundle(self.task)
+                robot.build_bundle(self.tasks)
 
             # Plot
             if self.plot:
                 plotter.setTitle("Time Step:{}, Bundle Construct".format(t))
                 for robot in self.robot_list:
-                    plotter.plotAgents(robot, self.task, t)
+                    plotter.plotAgents(robot, self.tasks, t)
                 plotter.pause(0.1)
 
             # Communication stage
@@ -106,7 +108,7 @@ class runner:
             if self.plot:
                 plotter.setTitle("Time Step:{}, Consensus".format(t))
                 for robot in self.robot_list:
-                    plotter.plotAgents(robot, self.task, t)
+                    plotter.plotAgents(robot, self.tasks, t)
 
                 plotter.pause(0.1)
             t += 1
