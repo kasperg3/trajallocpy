@@ -14,3 +14,8 @@ class Task:
     duration: float = 0  # task default duration (sec)
     discount: float = 0.1  # task exponential discount (lambda)
     task_type: int = 1
+
+    def reverse(self):
+        temp = self.end
+        self.end = self.start
+        self.start = temp

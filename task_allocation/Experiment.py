@@ -32,7 +32,7 @@ class runner:
             self.robot_list = [
                 CBBA.agent(
                     id=i,
-                    task_num=self.task_num,
+                    tasks=self.tasks,
                     agent_num=self.robot_num,
                     L_t=task_capacity,
                     state=initial_state,

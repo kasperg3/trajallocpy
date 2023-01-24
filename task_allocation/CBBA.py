@@ -7,8 +7,9 @@ from task_allocation import Task
 
 
 class agent:
-    def __init__(self, id=None, task_num=None, agent_num=None, L_t=None, state=None):
-        self.task_num = task_num
+    def __init__(self, id=None, agent_num=None, L_t=None, state=None, tasks=None):
+        self.tasks = copy.deepcopy(tasks)
+        self.task_num = len(tasks)
         self.task_idx = [j for j in range(self.task_num)]
 
         self.agent_num = agent_num
@@ -47,7 +48,6 @@ class agent:
             )  # Agent State (Position)
         else:
             self.set_state(state.squeeze())
-        self.c = np.zeros(self.task_num)  # Initial Score (Euclidean Distance)
         # socre function parameters
         self.Lambda = 0.95
 
@@ -100,12 +100,13 @@ class agent:
         return S_p
 
     # Calculate the path reward with task j at index n
-    def calculatePathRewardWithNewTask(self, tasks, j, n):
+    def calculatePathRewardWithNewTask(self, j, n):
         S_p = 0
+        is_reversed = False
         # TODO implement this and add debugging
-        return S_p
+        return S_p, is_reversed
 
-    def getCij(self, tasks):
+    def getCij(self):
         """
         Returns the cost list c_ij for agent i where the position n results in the greatest reward
         """
@@ -113,38 +114,48 @@ class agent:
         S_p = self.calculatePathReward()
         best_pos = np.zeros(self.task_num)
         c = np.zeros(self.task_num)
+        reverse = np.zeros(self.task_num)
         # TODO Calculate c_ij for each task j
         for j in range(self.task_num):
             if j in self.bundle:  # If already in bundle list
                 c[j] = 0  # Minimum Score
             else:
                 # for each j calculate the path reward at each location in the local path
-                best_pos = 0
                 for n in range(len(self.path) + 1):
-                    c_ijn = self.calculatePathRewardWithNewTask(tasks, j, n) - S_p
-                    if c[j] < c_ijn:
+                    c_ijn, should_be_reversed = (
+                        self.calculatePathRewardWithNewTask(self.tasks, j, n) - S_p
+                    )
+                    if c[j] <= c_ijn:
                         c[j] = c_ijn  # Store the cost
                         best_pos[j] = n
-        return (best_pos, c)
+                        reverse[j] = should_be_reversed
 
-    def build_bundle(self, tasks):
+        return (best_pos, c, reverse)
+
+    def build_bundle(self):
         while len(self.bundle) < self.L_t:
-            best_pos, self.c = self.getCij(tasks)
-            # TODO update self.c to c_ij
-            h = self.c > self.winning_bids
+            best_pos, c, reverse = self.getCij(self.tasks)
+            h = c > self.winning_bids
 
             if sum(h) == 0:  # No valid task
                 break
-            self.c[~h] = 0
-            # TODO This should
-            J_i = np.argmax(self.c)
+            c[~h] = 0
+            J_i = np.argmax(c)
+
             n_J = best_pos[J_i]
 
             # TODO when inserting the task make sure to update the start/end
+            # TODO create a copy of the task list in each robot, this way it is possible change the direction of each individual task
+            # use deepcopy to create unique tasklists for each agent when
+
+            # reverse the task with max reward if necesarry
+            if reverse[J_i]:
+                self.tasks[J_i].reverse
+
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
 
-            self.winning_bids[J_i] = self.c[J_i]
+            self.winning_bids[J_i] = c[J_i]
             self.winning_agents[J_i] = self.id
 
     def update_task(self):
