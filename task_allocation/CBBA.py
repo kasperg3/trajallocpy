@@ -69,7 +69,9 @@ class agent:
     def calculatePathReward(self):
         S_p = 0
         if len(self.path) > 0:
+            # TODO find a better solution for when there only is a single entry
             travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[self.path[0]].start)
+            S_p += self.Lambda**travel_cost * self.tasks[self.path[0]].reward
             for p_idx in range(len(self.path) - 1):
                 travel_cost += self.getTravelCost(
                     self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start
@@ -91,13 +93,24 @@ class agent:
         temp_path = list(self.path)
         temp_path.insert(n, j)
 
+        # S_p = 0
+        # travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
+        # S_p = self.getTimeDiscountedReward(
+        #     travel_cost,
+        #     self.tasks[temp_path[0]],
+        # )
+        # for p_idx in range(len(temp_path) - 1):
+        #     travel_cost += self.getTravelCost(
+        #         self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start
+        #     )
+        #     S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
+        # return S_p, False
         assert temp_path != self.path
         is_reversed = False
-        S_p = 0
-        travel_cost = 0
         # travel cost to first task
-        S_p += self.getTimeDiscountedReward(
-            self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start),
+        travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
+        S_p = self.getTimeDiscountedReward(
+            travel_cost,
             self.tasks[temp_path[0]],
         )
 
@@ -135,7 +148,6 @@ class agent:
                 # TODO make sure at least one task to be added to the task
                 # for each j calculate the path reward at each location in the local path
                 for n in range(len(self.path) + 1):
-                    # TODO find another solution than +1
                     S_pj, should_be_reversed = self.calculatePathRewardWithNewTask(j, n)
                     c_ijn = S_pj - S_p
                     if c[j] < c_ijn:
