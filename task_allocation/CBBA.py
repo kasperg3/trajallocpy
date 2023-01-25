@@ -62,24 +62,23 @@ class agent:
     def receive_message(self, Y):
         self.Y = Y
 
-    def euclideanDist(self, p0, p1):
-        return np.linalg.norm(p0 - p1)
-
     def getTravelCost(self, start, end):
         # Travelcost in seconds (m/(m/s)) = s
         return np.linalg.norm(end - start) / self.velocity
 
     def getTimeDiscountedReward(self, cost, task):
-        return (self.Lambda ** (cost)) * task.reward
+        return self.Lambda ** (cost) * task.reward
 
     # S_i calculation of the agent
     def calculatePathReward(self):
         S_p = 0
         if len(self.path) > 0:
-            travel_cost = self.getTravelCost(self.state.squeeze(), self.path[0].start)
+            travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[self.path[0]].start)
             for p_idx in range(len(self.path) - 1):
-                travel_cost += self.getTravelCost(self.path[p_idx].end, self.path[p_idx + 1].start)
-                S_p += self.getTimeDiscountedReward(travel_cost, self.path[p_idx])
+                travel_cost += self.getTravelCost(
+                    self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start
+                )
+                S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[self.path[p_idx]])
         return S_p
 
     def getMinTravelCost(self, point, task):
@@ -99,24 +98,27 @@ class agent:
         assert temp_path != self.path
         is_reversed = False
         S_p = 0
-        if len(temp_path) > 0:
-            # travel cost to first task
-            travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
+        travel_cost = 0
+        # travel cost to first task
+        S_p += self.getTimeDiscountedReward(
+            self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start),
+            self.tasks[temp_path[0]],
+        )
 
-            for p_idx in range(len(temp_path) - 1):
-                if p_idx == n:
-                    # minimize the travelcost when trying to insert a new task
-                    temp_cost, is_reversed = self.getMinTravelCost(
-                        self.tasks[temp_path[p_idx]].end,
-                        self.tasks[temp_path[p_idx + 1]],
-                    )
-                    travel_cost += temp_cost
-                else:
-                    travel_cost += self.getTravelCost(
-                        self.tasks[temp_path[p_idx]].end,
-                        self.tasks[temp_path[p_idx + 1]].start,
-                    )
-                S_p += self.getTimeDiscountedReward(travel_cost, temp_path[p_idx])
+        for p_idx in range(len(temp_path) - 1):
+            if p_idx == n:
+                # minimize the travelcost when trying to insert a new task
+                temp_cost, is_reversed = self.getMinTravelCost(
+                    self.tasks[temp_path[p_idx]].end,
+                    self.tasks[temp_path[p_idx + 1]],
+                )
+                travel_cost += temp_cost
+            else:
+                travel_cost += self.getTravelCost(
+                    self.tasks[temp_path[p_idx]].end,
+                    self.tasks[temp_path[p_idx + 1]].start,
+                )
+            S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
         return S_p, is_reversed
 
     def getCij(self):
@@ -125,9 +127,11 @@ class agent:
         """
         # Calculate Sp_i
         S_p = self.calculatePathReward()
-        best_pos = np.zeros(self.task_num)
+        # init
+        best_pos = np.zeros(self.task_num, dtype=int)
         c = np.zeros(self.task_num)
         reverse = np.zeros(self.task_num)
+        # try all tasks
         for j in range(self.task_num):
             if j in self.bundle:  # If already in bundle list
                 c[j] = 0  # Minimum Score
@@ -138,7 +142,7 @@ class agent:
                     # TODO find another solution than +1
                     S_pj, should_be_reversed = self.calculatePathRewardWithNewTask(j, n)
                     c_ijn = S_pj - S_p
-                    if c[j] <= c_ijn:
+                    if c[j] < c_ijn:
                         c[j] = c_ijn  # Store the cost
                         best_pos[j] = n
                         reverse[j] = should_be_reversed
@@ -156,16 +160,14 @@ class agent:
                 break
             c[~h] = 0
             J_i = np.argmax(c)
-
             n_J = best_pos[J_i]
 
             # TODO when inserting the task make sure to update the start/end
             # TODO create a copy of the task list in each robot, this way it is possible change the direction of each individual task
-            # use deepcopy to create unique tasklists for each agent when
 
             # reverse the task with max reward if necesarry
             if reverse[J_i]:
-                self.tasks[J_i].reverse
+                self.tasks[J_i].reverse()
 
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
@@ -329,12 +331,17 @@ class agent:
         if n_bar < len(self.bundle):
             del self.bundle[n_bar:]
 
+        self.path = []
+        for task in self.bundle:
+            self.path.append(task)
+
         self.time_step += 1
 
         converged = False
         if old_p == self.path:
             converged = True
 
+        # return converged
         return converged
 
     def __update(self, j, y_kj, z_kj):

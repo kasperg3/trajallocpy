@@ -58,9 +58,7 @@ class runner:
 
         # Plot the search area and restricted area
         plotter.plotAreas([self.coverage_problem.getSearchArea()], color=(0, 0, 1, 0.3))
-        plotter.plotAreas(
-            self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.3)
-        )
+        plotter.plotAreas(self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.3))
         starttime = timeit.default_timer()
 
         while True:
@@ -70,6 +68,13 @@ class runner:
             # Phase 1: Auction Process
             for robot in self.robot_list:
                 robot.build_bundle()
+
+            print("Bundle")
+            for robot in self.robot_list:
+                print(robot.bundle)
+            print("Path")
+            for robot in self.robot_list:
+                print(robot.path)
 
             # Plot
             if self.plot:
@@ -87,11 +92,10 @@ class runner:
 
                 (connected,) = np.where(g == 1)
                 connected = list(connected)
+                connected.remove(robot_id)
+
                 if len(connected) > 0:
-                    Y = {
-                        neighbor_id: message_pool[neighbor_id]
-                        for neighbor_id in connected
-                    }
+                    Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected}
                 else:
                     Y = None
 
@@ -111,6 +115,14 @@ class runner:
                     plotter.plotAgents(robot, self.tasks, t)
 
                 plotter.pause(0.1)
+
+            print("Bundle")
+            for robot in self.robot_list:
+                print(robot.bundle)
+            print("Path")
+            for robot in self.robot_list:
+                print(robot.path)
+
             t += 1
 
             if sum(converged_list) == self.robot_num or t > self.max_t:

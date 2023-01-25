@@ -30,9 +30,7 @@ class Plotter:
                     )
 
         handles, labels = self.ax.get_legend_handles_labels()
-        communication_label = Line2D(
-            [0], [0], color="g", linestyle="--", label="communication"
-        )
+        communication_label = Line2D([0], [0], color="g", linestyle="--", label="communication")
         handles.append(communication_label)
         self.ax.legend(handles=handles)
         self.assign_plots = []
@@ -112,7 +110,7 @@ def loadCoverageProblem(path) -> CoverageProblem.CoverageProblem:
     tasks = []
     i = 0
     for s in sweeps:
-        tasks.append(Task.Task(start=s[0], end=s[1], task_id=i))
+        tasks.append(Task.Task(start=np.array(s[0]), end=np.array(s[1]), task_id=i))
         i = i + 1
     return CoverageProblem.CoverageProblem(
         search_area=search, restricted_area=restricted, tasks=tasks
