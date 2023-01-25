@@ -69,7 +69,7 @@ class runner:
             print("Iteration {}".format(t))
             # Phase 1: Auction Process
             for robot in self.robot_list:
-                robot.build_bundle(self.tasks)
+                robot.build_bundle()
 
             # Plot
             if self.plot:

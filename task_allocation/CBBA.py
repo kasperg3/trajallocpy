@@ -4,6 +4,7 @@ import random
 import numpy as np
 
 from task_allocation import Task
+import logging as log
 
 
 class agent:
@@ -26,9 +27,7 @@ class agent:
         # Local Winning Agent List
         self.winning_agents = np.ones(self.task_num, dtype=np.int8) * self.id
         # Local Winning Bid List
-        self.winning_bids = np.array(
-            [0 for _ in range(self.task_num)], dtype=np.float64
-        )
+        self.winning_bids = np.array([0 for _ in range(self.task_num)], dtype=np.float64)
         # Bundle
         self.bundle = []
         # Path
@@ -66,44 +65,58 @@ class agent:
     def euclideanDist(self, p0, p1):
         return np.linalg.norm(p0 - p1)
 
-    def getMinDistance(self, robot_state, task):
-        distArray = [
-            self.euclideanDist(robot_state, task.start),
-            self.euclideanDist(robot_state, task.end),
-        ]
-        minIndex = np.min(distArray)
-        return (minIndex, distArray[minIndex])
-
     def getTravelCost(self, start, end):
-        # TODO use task type to determine the
-        return np.linalg.norm(end - start) / self.vel
+        # Travelcost in seconds (m/(m/s)) = s
+        return np.linalg.norm(end - start) / self.velocity
 
     def getTimeDiscountedReward(self, cost, task):
-        (self.Lambda ** (cost / self.vel)) * task.reward
+        return (self.Lambda ** (cost)) * task.reward
 
     # S_i calculation of the agent
     def calculatePathReward(self):
         S_p = 0
         if len(self.path) > 0:
-            for p_idx in range(len(self.path)):
-                if p_idx == 0:
-                    # The first task has to calculate the distance to the start position
-                    travel_cost = self.getTravelCost(
-                        self.state.squeeze(), self.path[p_idx].start
-                    )
-                    S_p += self.getTimeDiscountedReward(travel_cost, self.path[p_idx])
-                else:
-                    travel_cost = self.getTravelCost(
-                        self.path[p_idx - 1].end, self.path[p_idx].start
-                    )
-                    S_p += self.getTimeDiscountedReward(travel_cost, self.path[p_idx])
+            travel_cost = self.getTravelCost(self.state.squeeze(), self.path[0].start)
+            for p_idx in range(len(self.path) - 1):
+                travel_cost += self.getTravelCost(self.path[p_idx].end, self.path[p_idx + 1].start)
+                S_p += self.getTimeDiscountedReward(travel_cost, self.path[p_idx])
         return S_p
+
+    def getMinTravelCost(self, point, task):
+        distArray = [
+            self.getTravelCost(point, task.start),
+            self.getTravelCost(point, task.end),
+        ]
+        minIndex = np.argmin(distArray)
+        shouldBeReversed = minIndex == 1
+        return distArray[minIndex], shouldBeReversed
 
     # Calculate the path reward with task j at index n
     def calculatePathRewardWithNewTask(self, j, n):
-        S_p = 0
+        temp_path = list(self.path)
+        temp_path.insert(n, j)
+
+        assert temp_path != self.path
         is_reversed = False
-        # TODO implement this and add debugging
+        S_p = 0
+        if len(temp_path) > 0:
+            # travel cost to first task
+            travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
+
+            for p_idx in range(len(temp_path) - 1):
+                if p_idx == n:
+                    # minimize the travelcost when trying to insert a new task
+                    temp_cost, is_reversed = self.getMinTravelCost(
+                        self.tasks[temp_path[p_idx]].end,
+                        self.tasks[temp_path[p_idx + 1]],
+                    )
+                    travel_cost += temp_cost
+                else:
+                    travel_cost += self.getTravelCost(
+                        self.tasks[temp_path[p_idx]].end,
+                        self.tasks[temp_path[p_idx + 1]].start,
+                    )
+                S_p += self.getTimeDiscountedReward(travel_cost, temp_path[p_idx])
         return S_p, is_reversed
 
     def getCij(self):
@@ -115,16 +128,16 @@ class agent:
         best_pos = np.zeros(self.task_num)
         c = np.zeros(self.task_num)
         reverse = np.zeros(self.task_num)
-        # TODO Calculate c_ij for each task j
         for j in range(self.task_num):
             if j in self.bundle:  # If already in bundle list
                 c[j] = 0  # Minimum Score
             else:
+                # TODO make sure at least one task to be added to the task
                 # for each j calculate the path reward at each location in the local path
                 for n in range(len(self.path) + 1):
-                    c_ijn, should_be_reversed = (
-                        self.calculatePathRewardWithNewTask(self.tasks, j, n) - S_p
-                    )
+                    # TODO find another solution than +1
+                    S_pj, should_be_reversed = self.calculatePathRewardWithNewTask(j, n)
+                    c_ijn = S_pj - S_p
                     if c[j] <= c_ijn:
                         c[j] = c_ijn  # Store the cost
                         best_pos[j] = n
@@ -134,10 +147,12 @@ class agent:
 
     def build_bundle(self):
         while len(self.bundle) < self.L_t:
-            best_pos, c, reverse = self.getCij(self.tasks)
+            best_pos, c, reverse = self.getCij()
+            # TODO first iteration has no valid tasks, make sure that this handled!
             h = c > self.winning_bids
 
             if sum(h) == 0:  # No valid task
+                log.info("No valid tasks for agent %i, not building bundle", self.agent_num)
                 break
             c[~h] = 0
             J_i = np.argmax(c)
@@ -259,9 +274,7 @@ class agent:
                     # Rule 12
                     elif z_ij != -1:
                         n = z_ij
-                        if (s_k[m] > self.timestamps[m]) and (
-                            s_k[n] > self.timestamps[n]
-                        ):
+                        if (s_k[m] > self.timestamps[m]) and (s_k[n] > self.timestamps[n]):
                             self.__update(j, y_kj, z_kj)
                         elif (s_k[m] > self.timestamps[m]) and (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
@@ -270,9 +283,7 @@ class agent:
                         ):  # Tie Breaker
                             if m < n:
                                 self.__update(j, y_kj, z_kj)
-                        elif (s_k[n] > self.timestamps[n]) and (
-                            self.timestamps[m] > s_k[m]
-                        ):
+                        elif (s_k[n] > self.timestamps[n]) and (self.timestamps[m] > s_k[m]):
                             self.__update(j, y_kj, z_kj)
                     # Rule 13
                     elif z_ij == -1:
