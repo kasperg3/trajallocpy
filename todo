@@ -1,26 +1,11 @@
-Support plotting of:
-    Search area 
-    restricted area
-    agents moving
-    sweeps/tasks
-    
-Improvements:
-    Return a set of edges for each agent
-    support position initialization of agents
-    Implement very simple point based version using only the midpoint of the tasks
-    Convert from point task to line task
-        Calculate the cost of adding a line task between two other line tasks
-        Calculate a distance matrix of task graph using duplicated tasks to represent 
-    Graph based shortest distance
 
 External:
     Create a Ros2 node and import this repo
+    Package it in a docker and send to maria
 
-
-TODO: 
-    task direction/start+end:
-        When the bundle is empty add the task closest to the agent, and swap the start/end if needed, store this in the path+bundle
-    Add debugging
+# To be done
+* Convert lat/lon into utm and back when returning the solution
+* random agent placement within the area
 
 
 Experiments:
@@ -28,5 +13,10 @@ Experiments:
         CBBA with point tasks
         CBBA with line tasks
         Clustered line tasks using a snake pattern
+    metrics:
+        convergence time
+        Total path length
+        Agent average distance
+
 
     

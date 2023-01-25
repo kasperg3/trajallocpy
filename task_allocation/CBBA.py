@@ -14,7 +14,11 @@ class agent:
         self.task_idx = [j for j in range(self.task_num)]
 
         self.agent_num = agent_num
-        self.color = (0, 0, 0)
+        self.color = (
+            random.uniform(0, 1),
+            random.uniform(0, 1),
+            random.uniform(0, 1),
+        )
         self.velocity = 1
 
         # Agent ID
@@ -45,6 +49,12 @@ class agent:
             self.set_state(state.squeeze())
         # socre function parameters
         self.Lambda = 0.95
+
+    def getPath(self):
+        return self.path
+
+    def getBundle(self):
+        return self.bundle
 
     def tau(self, j):
         pass
@@ -158,6 +168,7 @@ class agent:
         return (best_pos, c, reverse)
 
     def build_bundle(self):
+
         while len(self.bundle) < self.L_t:
             best_pos, c, reverse = self.getCij()
             h = c > self.winning_bids

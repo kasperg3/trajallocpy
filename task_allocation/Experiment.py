@@ -71,10 +71,10 @@ class runner:
 
             print("Bundle")
             for robot in self.robot_list:
-                print(robot.bundle)
+                print(robot.getBundle())
             print("Path")
             for robot in self.robot_list:
-                print(robot.path)
+                print(robot.getPath())
 
             # Plot
             if self.plot:
@@ -118,10 +118,10 @@ class runner:
 
             print("Bundle")
             for robot in self.robot_list:
-                print(robot.bundle)
+                print(robot.getBundle())
             print("Path")
             for robot in self.robot_list:
-                print(robot.path)
+                print(robot.getPath())
 
             t += 1
 
@@ -137,7 +137,7 @@ class runner:
 
         print("Robot Routes")
         for robot in self.robot_list:
-            print(robot.path)
+            print(robot.getPath())
 
         print("Execution time:", timeit.default_timer() - starttime)
         if self.plot:

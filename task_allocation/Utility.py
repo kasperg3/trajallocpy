@@ -37,9 +37,18 @@ class Plotter:
 
     def plotAgents(self, robot, task, iteration):
         if len(robot.path) > 0:
-            sweeps = [t.start for t in task[robot.path]]
-            self.x_data = [robot.state[0]] + [s[0] for s in sweeps]
-            self.y_data = [robot.state[1]] + [s[1] for s in sweeps]
+            task_x = []
+            task_y = []
+            task_x.append(robot.state[0])
+            task_y.append(robot.state[1])
+            for s in task[robot.path]:
+                task_x.append(s.start[0])
+                task_x.append(s.end[0])
+                task_y.append(s.start[1])
+                task_y.append(s.end[1])
+
+            self.x_data = task_x
+            self.y_data = task_y
         else:
             self.x_data = [robot.state[0]]
             self.y_data = [robot.state[1]]
