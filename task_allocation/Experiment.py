@@ -24,7 +24,7 @@ class runner:
         self.robot_num = self.coverage_problem.getNumberOfRobots()
 
         # TODO this should be based able to be based on distance/batterylife
-        task_capacity = self.task_num
+        task_capacity = 5
 
         # TODO do not use the first task as initial state
         initial_state = np.array(self.tasks[0].start)

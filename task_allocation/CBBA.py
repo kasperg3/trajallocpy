@@ -14,11 +14,7 @@ class agent:
         self.task_idx = [j for j in range(self.task_num)]
 
         self.agent_num = agent_num
-        self.color = (
-            random.uniform(0, 1),
-            random.uniform(0, 1),
-            random.uniform(0, 1),
-        )
+        self.color = (0, 0, 0)
         self.velocity = 1
 
         # Agent ID
@@ -152,7 +148,6 @@ class agent:
     def build_bundle(self):
         while len(self.bundle) < self.L_t:
             best_pos, c, reverse = self.getCij()
-            # TODO first iteration has no valid tasks, make sure that this handled!
             h = c > self.winning_bids
 
             if sum(h) == 0:  # No valid task
@@ -161,9 +156,6 @@ class agent:
             c[~h] = 0
             J_i = np.argmax(c)
             n_J = best_pos[J_i]
-
-            # TODO when inserting the task make sure to update the start/end
-            # TODO create a copy of the task list in each robot, this way it is possible change the direction of each individual task
 
             # reverse the task with max reward if necesarry
             if reverse[J_i]:
@@ -319,8 +311,8 @@ class agent:
         for n in range(len(self.bundle)):
             b_n = self.bundle[n]
             if self.winning_agents[b_n] != self.id:
-                n_bar = n
-                break
+                if n_bar > n:
+                    n_bar = n  # Find the minimum n in the agents bundle
 
         b_idx1 = copy.deepcopy(self.bundle[n_bar + 1 :])
 
@@ -328,12 +320,10 @@ class agent:
             self.winning_bids[b_idx1] = 0
             self.winning_agents[b_idx1] = -1
 
-        if n_bar < len(self.bundle):
-            del self.bundle[n_bar:]
+        tasks_to_delete = self.bundle[n_bar:]
+        del self.bundle[n_bar:]
 
-        self.path = []
-        for task in self.bundle:
-            self.path.append(task)
+        self.path = [ele for ele in self.path if ele not in tasks_to_delete]
 
         self.time_step += 1
 
@@ -341,7 +331,8 @@ class agent:
         if old_p == self.path:
             converged = True
 
-        # return converged
+        # TODO add a max convergence time
+
         return converged
 
     def __update(self, j, y_kj, z_kj):
