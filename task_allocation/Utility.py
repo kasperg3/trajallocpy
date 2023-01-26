@@ -4,7 +4,10 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Polygon
 from task_allocation import CoverageProblem
 import json
-from task_allocation import Task
+from task_allocation import Task, CBBA
+import logging as log
+
+import utm
 
 
 class Plotter:
@@ -16,10 +19,10 @@ class Plotter:
 
         # Plot agents
         robot_pos = np.array([r.state.tolist() for r in robot_list])
-        self.ax.plot(robot_pos[0][0], robot_pos[0][1], "b*", label="Robot")
 
-        # Plot communication paths
-        for i in range(len(robot_list) - 1):
+        # Plot agent information
+        for i in range(len(robot_list)):
+            # Plot communication graph path
             for j in range(i + 1, len(robot_list)):
                 if communication_graph[i][j] == 1:
                     self.ax.plot(
@@ -28,6 +31,8 @@ class Plotter:
                         "g--",
                         linewidth=1,
                     )
+            # Plot agent position
+            self.ax.plot(robot_pos[i][0], robot_pos[i][1], "b*", label="Robot")
 
         handles, labels = self.ax.get_legend_handles_labels()
         communication_label = Line2D([0], [0], color="g", linestyle="--", label="communication")
@@ -35,23 +40,17 @@ class Plotter:
         self.ax.legend(handles=handles)
         self.assign_plots = []
 
-    def plotAgents(self, robot, task, iteration):
-        if len(robot.path) > 0:
-            task_x = []
-            task_y = []
-            task_x.append(robot.state[0])
-            task_y.append(robot.state[1])
-            for s in task[robot.path]:
-                task_x.append(s.start[0])
-                task_x.append(s.end[0])
-                task_y.append(s.start[1])
-                task_y.append(s.end[1])
+    def plotAgents(self, robot: CBBA.agent, task, iteration):
+        task_x = [robot.state[0]]
+        task_y = [robot.state[1]]
+        for s in robot.getPathTasks():
+            task_x.append(s.start[0])
+            task_x.append(s.end[0])
+            task_y.append(s.start[1])
+            task_y.append(s.end[1])
 
-            self.x_data = task_x
-            self.y_data = task_y
-        else:
-            self.x_data = [robot.state[0]]
-            self.y_data = [robot.state[1]]
+        self.x_data = task_x
+        self.y_data = task_y
 
         if iteration == 0:
             (assign_line,) = self.ax.plot(
@@ -78,12 +77,14 @@ class Plotter:
         for a in areas:
             y = []
             for p in a:
-                y.append([p["longitude"], p["latitude"]])
+                easting, northing, _, _ = utm.from_latlon(
+                    p["longitude"], p["latitude"], force_zone_number=40, force_zone_letter="U"
+                )
+                y.append([easting, northing])
             p = Polygon(y, facecolor=color)
             self.ax.add_patch(p)
 
     def plotTasks(self, tasks):
-        # TODO Should be able to plot 2 and 1 dimentional tasks
         for t in tasks:
             self.ax.plot(
                 [
@@ -99,7 +100,7 @@ class Plotter:
             )
 
 
-def loadCoverageProblem(path) -> CoverageProblem.CoverageProblem:
+def loadCoverageProblem(path, nr) -> CoverageProblem.CoverageProblem:
 
     # Opening JSON file
     f = open(path)
@@ -109,18 +110,24 @@ def loadCoverageProblem(path) -> CoverageProblem.CoverageProblem:
     data = json.load(f)
     f.close()
 
-    # TODO convert all the coordinates to UTM for accurate calculations!!!!
+    # convert all the coordinates to utm coordinates
     search = data["search_area"]
     restricted = data["restricted_areas"]
-    sweep = data["sweeps"]
-    test = [[s["longitude"], s["latitude"]] for s in sweep]
 
+    # Convert the sweeps
+    sweep = data["sweeps"]
+    test = [
+        utm.from_latlon(s["longitude"], s["latitude"], force_zone_number=40, force_zone_letter="U")
+        for s in sweep
+    ]
     sweeps = list(zip(test[::2], test[1::2]))
     tasks = []
     i = 0
     for s in sweeps:
-        tasks.append(Task.Task(start=np.array(s[0]), end=np.array(s[1]), task_id=i))
+        tasks.append(Task.Task(start=np.array(s[0][:2]), end=np.array(s[1][:2]), task_id=i))
         i = i + 1
+    log.info("Loaded %i tasks from file %s", i, "path")
+
     return CoverageProblem.CoverageProblem(
-        search_area=search, restricted_area=restricted, tasks=tasks
+        search_area=search, restricted_area=restricted, tasks=tasks, number_of_robots=nr
     )

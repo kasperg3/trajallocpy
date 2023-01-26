@@ -5,7 +5,7 @@
 from task_allocation import CoverageProblem, CBBA, Utility
 import numpy as np
 import timeit
-
+import logging as log
 import os
 
 
@@ -24,27 +24,64 @@ class runner:
         self.robot_num = self.coverage_problem.getNumberOfRobots()
 
         # TODO this should be based able to be based on distance/batterylife
-        task_capacity = 10
+        task_capacity = self.task_num  # self.task_num
 
         # TODO do not use the first task as initial state
-        initial_state = np.array(self.tasks[0].start)
+        # TODO randomly distribute the agents within the allowed area
+        min_easting = 100000000
+        min_northing = 100000000
+        max_easting = 0
+        max_northing = 0
+        for t in self.tasks:
+            temp = min([t.end[0], t.start[0]])
+            if min_easting > temp:
+                min_easting = temp
+            temp = min([t.end[1], t.start[1]])
+            if min_northing > temp:
+                min_northing = temp
+            temp = max([t.end[0], t.start[0]])
+            if max_easting < temp:
+                max_easting = temp
+            temp = max([t.end[1], t.start[1]])
+            if max_northing < temp:
+                max_northing = temp
+
         if agents is None:
-            self.robot_list = [
-                CBBA.agent(
-                    id=i,
-                    tasks=self.tasks,
-                    agent_num=self.robot_num,
-                    L_t=task_capacity,
-                    state=initial_state,
+            self.robot_list = []
+            for i in range(self.robot_num):
+                initial_state = np.array(
+                    [
+                        np.random.uniform(min_easting, max_easting),
+                        np.random.uniform(min_northing, max_northing),
+                    ]
                 )
-                for i in range(self.robot_num)
-            ]
+                self.robot_list.append(
+                    CBBA.agent(
+                        id=i,
+                        tasks=self.tasks,
+                        agent_num=self.robot_num,
+                        L_t=task_capacity,
+                        state=initial_state,
+                    )
+                )
         else:
             self.robot_list = agents
 
         self.communication_graph = coverage_problem.getCommunicationGraph()
         self.max_t = max_iterations
         self.plot = enable_plotting
+
+    def evaluateSolution(self):
+        print("Execution time: ", self.end_time - self.start_time)
+        average_travel_length = 0
+        average_total_path_length = 0
+
+        for r in self.robot_list:
+            average_travel_length += r.getTotalPathCost()
+            average_total_path_length += r.getTotalPathCost(True)
+
+        print("Average Travel Length:", average_travel_length / len(self.robot_list))
+        print("Average Total Path Length:", average_total_path_length / len(self.robot_list))
 
     def run(self, profiling_enabled=False):
         if profiling_enabled:
@@ -57,9 +94,9 @@ class runner:
         plotter = Utility.Plotter(self.tasks, self.robot_list, self.communication_graph)
 
         # Plot the search area and restricted area
-        plotter.plotAreas([self.coverage_problem.getSearchArea()], color=(0, 0, 1, 0.3))
-        plotter.plotAreas(self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.3))
-        starttime = timeit.default_timer()
+        plotter.plotAreas([self.coverage_problem.getSearchArea()], color=(0, 0, 1, 0.2))
+        plotter.plotAreas(self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.2))
+        self.start_time = timeit.default_timer()
 
         while True:
             converged_list = []
@@ -139,6 +176,8 @@ class runner:
         for robot in self.robot_list:
             print(robot.getPath())
 
-        print("Execution time:", timeit.default_timer() - starttime)
+        self.end_time = timeit.default_timer()
+
+        self.evaluateSolution()
         if self.plot:
             plotter.show()

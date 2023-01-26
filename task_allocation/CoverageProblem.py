@@ -4,17 +4,14 @@ from typing import List
 
 
 class CoverageProblem:
-    def __init__(
-        self, restricted_area, search_area, tasks: List[Task.Task], number_of_robots=4
-    ):
-        # TODO convert area dict to np array
-        # TODO convert all lon/lat to utm coordinates
+    def __init__(self, restricted_area, search_area, tasks: List[Task.Task], number_of_robots=4):
         self.__restricted_area = restricted_area
         self.__search_area = search_area
         self.__n_robots = number_of_robots
         # Initialize Fully connected communication network
         self.__com_graph = np.ones((number_of_robots, number_of_robots))
         self.__tasks = tasks
+        np.random.shuffle(self.__tasks)
 
     def getRestrictedAreas(self):
         return self.__restricted_area
@@ -35,5 +32,5 @@ class CoverageProblem:
     def getNumberOfRobots(self):
         return self.__n_robots
 
-    def __convert_geodetic_to_UTM(coordinate):
-        pass
+    def setNumberOfRobots(self, n):
+        self.__n_robots = n

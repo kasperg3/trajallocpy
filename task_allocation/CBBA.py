@@ -43,12 +43,15 @@ class agent:
         # initialize state
         if state is None:
             self.set_state(
-                np.random.uniform(low=0, high=0.1, size=(1, 2)).squeeze()
+                np.random.uniform(low=0, high=1, size=(1, 2)).squeeze()
             )  # Agent State (Position)
         else:
             self.set_state(state.squeeze())
         # socre function parameters
         self.Lambda = 0.95
+
+    def getPathTasks(self):
+        return self.tasks[self.path]
 
     def getPath(self):
         return self.path
@@ -67,6 +70,19 @@ class agent:
 
     def receive_message(self, Y):
         self.Y = Y
+
+    def getTotalPathCost(self, include_task_length=False):
+        finalTaskList = self.getPathTasks()
+        total_dist = np.linalg.norm(self.state.squeeze() - finalTaskList[0].start)
+        for t_index in range(len(finalTaskList) - 1):
+            total_dist += np.linalg.norm(
+                finalTaskList[t_index].end - finalTaskList[t_index + 1].start
+            )
+            if include_task_length:
+                total_dist += np.linalg.norm(
+                    finalTaskList[t_index].start - finalTaskList[t_index].end
+                )
+        return total_dist
 
     def getTravelCost(self, start, end):
         # Travelcost in seconds (m/(m/s)) = s
@@ -89,7 +105,7 @@ class agent:
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[self.path[p_idx]])
         return S_p
 
-    def getMinTravelCost(self, point, task):
+    def getMinTravelCost(self, point, task: Task.Task):
         distArray = [
             self.getTravelCost(point, task.start),
             self.getTravelCost(point, task.end),
@@ -103,6 +119,7 @@ class agent:
         temp_path = list(self.path)
         temp_path.insert(n, j)
 
+        # TODO this is the code for normal cbba
         # S_p = 0
         # travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
         # S_p = self.getTimeDiscountedReward(
@@ -115,6 +132,7 @@ class agent:
         #     )
         #     S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
         # return S_p, False
+
         assert temp_path != self.path
         is_reversed = False
         # travel cost to first task
@@ -353,8 +371,6 @@ class agent:
         converged = False
         if old_p == self.path:
             converged = True
-
-        # TODO add a max convergence time
 
         return converged
 
