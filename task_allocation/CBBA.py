@@ -48,7 +48,7 @@ class agent:
         else:
             self.set_state(state.squeeze())
         # socre function parameters
-        self.Lambda = 0.95
+        self.Lambda = 0.99
 
     def getPathTasks(self):
         return self.tasks[self.path]
@@ -133,7 +133,6 @@ class agent:
         #     S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
         # return S_p, False
 
-        assert temp_path != self.path
         is_reversed = False
         # travel cost to first task
         travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
@@ -178,7 +177,7 @@ class agent:
                 for n in range(len(self.path) + 1):
                     S_pj, should_be_reversed = self.calculatePathRewardWithNewTask(j, n)
                     c_ijn = S_pj - S_p
-                    if c[j] < c_ijn:
+                    if c[j] <= c_ijn:
                         c[j] = c_ijn  # Store the cost
                         best_pos[j] = n
                         reverse[j] = should_be_reversed
@@ -186,8 +185,7 @@ class agent:
         return (best_pos, c, reverse)
 
     def build_bundle(self):
-
-        while len(self.bundle) < self.L_t:
+        while len(self.bundle) <= self.L_t:
             best_pos, c, reverse = self.getCij()
             h = c > self.winning_bids
 

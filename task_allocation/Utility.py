@@ -124,7 +124,10 @@ def loadCoverageProblem(path, nr) -> CoverageProblem.CoverageProblem:
     tasks = []
     i = 0
     for s in sweeps:
-        tasks.append(Task.Task(start=np.array(s[0][:2]), end=np.array(s[1][:2]), task_id=i))
+        if np.random.choice(2, 1):
+            tasks.append(Task.Task(start=np.array(s[0][:2]), end=np.array(s[1][:2]), task_id=i))
+        else:
+            tasks.append(Task.Task(start=np.array(s[1][:2]), end=np.array(s[0][:2]), task_id=i))
         i = i + 1
     log.info("Loaded %i tasks from file %s", i, "path")
 

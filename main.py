@@ -1,5 +1,7 @@
 from task_allocation import Experiment, Utility
+import numpy as np
 
+np.random.seed(123423)
 # import from csv
 cp = Utility.loadCoverageProblem("data/OdenseSO.json", nr=3)
 
@@ -13,4 +15,4 @@ exp = Experiment.runner(coverage_problem=cp, enable_plotting=True)
 
 # add another agent
 
-exp.run()
+exp.solve()

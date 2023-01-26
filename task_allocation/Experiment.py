@@ -83,7 +83,7 @@ class runner:
         print("Average Travel Length:", average_travel_length / len(self.robot_list))
         print("Average Total Path Length:", average_total_path_length / len(self.robot_list))
 
-    def run(self, profiling_enabled=False):
+    def solve(self, profiling_enabled=False):
         if profiling_enabled:
             import cProfile, pstats, io
             from pstats import SortKey
