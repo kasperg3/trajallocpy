@@ -8,17 +8,20 @@ import logging as log
 
 
 class agent:
-    def __init__(self, id=None, agent_num=None, L_t=None, state=None, tasks=None):
+    def __init__(self, id=None, agent_num=None, L_t=None, state=None, tasks=None, color=None):
         self.tasks = copy.deepcopy(tasks)
         self.task_num = len(tasks)
         self.task_idx = [j for j in range(self.task_num)]
 
         self.agent_num = agent_num
-        self.color = (
-            random.uniform(0, 1),
-            random.uniform(0, 1),
-            random.uniform(0, 1),
-        )
+        if color == None:
+            self.color = (
+                random.uniform(0, 1),
+                random.uniform(0, 1),
+                random.uniform(0, 1),
+            )
+        else:
+            self.color = color
         self.velocity = 1
 
         # Agent ID
@@ -73,15 +76,17 @@ class agent:
 
     def getTotalPathCost(self, include_task_length=False):
         finalTaskList = self.getPathTasks()
-        total_dist = np.linalg.norm(self.state.squeeze() - finalTaskList[0].start)
-        for t_index in range(len(finalTaskList) - 1):
-            total_dist += np.linalg.norm(
-                finalTaskList[t_index].end - finalTaskList[t_index + 1].start
-            )
-            if include_task_length:
+        total_dist = 0
+        if len(finalTaskList) != 0:
+            total_dist = np.linalg.norm(self.state.squeeze() - finalTaskList[0].start)
+            for t_index in range(len(finalTaskList) - 1):
                 total_dist += np.linalg.norm(
-                    finalTaskList[t_index].start - finalTaskList[t_index].end
+                    finalTaskList[t_index].end - finalTaskList[t_index + 1].start
                 )
+                if include_task_length:
+                    total_dist += np.linalg.norm(
+                        finalTaskList[t_index].start - finalTaskList[t_index].end
+                    )
         return total_dist
 
     def getTravelCost(self, start, end):
@@ -95,9 +100,8 @@ class agent:
     def calculatePathReward(self):
         S_p = 0
         if len(self.path) > 0:
-            # TODO find a better solution for when there only is a single entry
             travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[self.path[0]].start)
-            S_p += self.Lambda**travel_cost * self.tasks[self.path[0]].reward
+            S_p += self.Lambda ** (travel_cost) * self.tasks[self.path[0]].reward
             for p_idx in range(len(self.path) - 1):
                 travel_cost += self.getTravelCost(
                     self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start
@@ -133,6 +137,8 @@ class agent:
         #     S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
         # return S_p, False
 
+        # is_reversed = np.array([False for _ in range(self.task_num)])
+
         is_reversed = False
         # travel cost to first task
         travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
@@ -140,6 +146,18 @@ class agent:
             travel_cost,
             self.tasks[temp_path[0]],
         )
+        # # minimize the travelcost when trying to insert a new task
+        # if is_reversed[p_idx] == 1:
+        #     temp_task = self.tasks[temp_path[p_idx]].start
+        # else:
+        #     temp_task = self.tasks[temp_path[p_idx]].end
+
+        # temp_cost, is_reversed = self.getMinTravelCost(
+        #     temp_task,
+        #     self.tasks[temp_path[p_idx + 1]],
+        # )
+        # is_reversed[p_idx] = is_reversed
+        # travel_cost += temp_cost
 
         for p_idx in range(len(temp_path) - 1):
             if p_idx == n:

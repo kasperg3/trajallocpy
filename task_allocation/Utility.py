@@ -58,7 +58,7 @@ class Plotter:
                 self.y_data,
                 linestyle="solid",
                 color=robot.color,
-                linewidth=1,
+                linewidth=1.2,
             )
             self.assign_plots.append(assign_line)
         else:
@@ -98,6 +98,10 @@ class Plotter:
                 "b--",
                 linewidth=1,
             )
+
+
+# TODO Load the datasets from the github: https://github.com/UNCCharlotte-CS-Robotics/AreaCoverage-dataset
+# Convert to jsons and store each dataset/folder in a single file
 
 
 def loadCoverageProblem(path, nr) -> CoverageProblem.CoverageProblem:

@@ -82,6 +82,9 @@ class runner:
 
         print("Average Travel Length:", average_travel_length / len(self.robot_list))
         print("Average Total Path Length:", average_total_path_length / len(self.robot_list))
+        return average_travel_length / len(self.robot_list), (
+            average_total_path_length / len(self.robot_list)
+        )
 
     def solve(self, profiling_enabled=False):
         if profiling_enabled:
@@ -178,6 +181,9 @@ class runner:
 
         self.end_time = timeit.default_timer()
 
-        self.evaluateSolution()
+        average_travel_length, average_total_path_length = self.evaluateSolution()
         if self.plot:
             plotter.show()
+
+        # TODO return a pandas dataframe instead
+        return average_travel_length, average_total_path_length
