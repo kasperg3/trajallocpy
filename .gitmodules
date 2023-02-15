@@ -1,0 +1,3 @@
+[submodule "data/AreaCoverage-dataset"]
+	path = data/AreaCoverage-dataset
+	url = https://github.com/UNCCharlotte-CS-Robotics/AreaCoverage-dataset.git
