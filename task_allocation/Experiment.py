@@ -97,8 +97,10 @@ class runner:
         plotter = Utility.Plotter(self.tasks, self.robot_list, self.communication_graph)
 
         # Plot the search area and restricted area
-        plotter.plotAreas([self.coverage_problem.getSearchArea()], color=(0, 0, 1, 0.2))
-        plotter.plotAreas(self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.2))
+        plotter.plotAreas([self.coverage_problem.getSearchArea()], color=(0, 0, 0, 0.5))
+        plotter.plotAreas(
+            self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.2), fill=True
+        )
         self.start_time = timeit.default_timer()
 
         while True:

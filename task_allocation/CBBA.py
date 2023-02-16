@@ -51,7 +51,7 @@ class agent:
         else:
             self.set_state(state.squeeze())
         # socre function parameters
-        self.Lambda = 0.99
+        self.Lambda = 0.95
 
     def getPathTasks(self):
         return self.tasks[self.path]

@@ -9,6 +9,9 @@ import logging as log
 
 import utm
 
+import csv
+import os
+
 
 class Plotter:
     def __init__(self, tasks, robot_list, communication_graph):
@@ -73,15 +76,13 @@ class Plotter:
     def pause(self, wait_time):
         plt.pause(wait_time)
 
-    def plotAreas(self, areas, color, is_filled=False):
+    def plotAreas(self, areas, color, fill=False):
         for a in areas:
             y = []
             for p in a:
-                easting, northing, _, _ = utm.from_latlon(
-                    p["longitude"], p["latitude"], force_zone_number=40, force_zone_letter="U"
-                )
-                y.append([easting, northing])
+                y.append([p[0], p[1]])
             p = Polygon(y, facecolor=color)
+            p.set_fill(fill)
             self.ax.add_patch(p)
 
     def plotTasks(self, tasks):
@@ -100,8 +101,90 @@ class Plotter:
             )
 
 
-# TODO Load the datasets from the github: https://github.com/UNCCharlotte-CS-Robotics/AreaCoverage-dataset
-# Convert to jsons and store each dataset/folder in a single file
+def loadDataset(directory, route_data_name, holes_name, outer_poly_name):
+    csv_files = []
+    for filename in os.listdir(directory):
+        filepath = os.path.join(directory, filename)
+        # Check if it is a directory
+        if os.path.isdir(filepath):
+            csv_files += loadDataset(filepath, route_data_name, holes_name, outer_poly_name)
+        elif (
+            os.path.isfile(filepath)
+            and filepath.endswith(route_data_name)
+            or filepath.endswith(holes_name)
+            or filepath.endswith(outer_poly_name)
+        ):
+            csv_files.append(filepath)
+    return csv_files
+
+
+def loadRoutePlan(csvFilePath):
+    with open(csvFilePath, "r") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=" ")
+        rows = []
+        for row in csv_reader:
+            rows.append(row)
+        lines = []
+        for i in range(len(rows)):
+            row = rows[i]
+            if row[2] == "1":
+                next_row = rows[i + 1]
+                lines.append(
+                    [
+                        [float(next_row[0]), float(next_row[1])],
+                        [float(row[0]), float(row[1])],
+                    ]
+                )
+        edgeDict = []
+    for s in lines:
+        edgeDict.append({"start": s[0], "end": s[1]})
+    return {"lines": edgeDict}
+
+
+def loadPolygonFile(polygon_file, holes_file):
+    # Add the polygon
+    with open(polygon_file, "r") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=" ")
+        polygon = []
+        for row in csv_reader:
+            polygon.append([float(row[0]), float(row[1])])
+
+    # add the holes
+    with open(holes_file, "r") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=" ")
+        hole = []
+        hole_list = []
+        for row in csv_reader:
+            if not row:
+                hole_list.append(hole)
+                hole = []
+            else:
+                hole.append([float(row[0]), float(row[1])])
+
+        # Add the final hole
+        hole_list.append(hole)
+
+    polygon_with_holes_dict = {"polygon": polygon, "holes": hole_list}
+
+    return polygon_with_holes_dict
+
+
+def loadCoverageProblemFromDict(data, nr):
+    polygon = data["polygon"]
+    holes = data["holes"]
+    lines = data["lines"]
+    tasks = []
+    # Convert tasks
+    for i in range(len(lines)):
+        s = lines[i]
+        if np.random.choice(2, 1):
+            tasks.append(Task.Task(start=np.array(s["start"]), end=np.array(s["end"]), task_id=i))
+        else:
+            tasks.append(Task.Task(start=np.array(s["end"]), end=np.array(s["start"]), task_id=i))
+
+    return CoverageProblem.CoverageProblem(
+        search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr
+    )
 
 
 def loadCoverageProblem(path, nr) -> CoverageProblem.CoverageProblem:
