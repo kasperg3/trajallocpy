@@ -88,6 +88,7 @@ class runner:
 
     def solve(self, profiling_enabled=False):
         if profiling_enabled:
+            print("Profiling enabled!")
             import cProfile, pstats, io
             from pstats import SortKey
 
@@ -171,11 +172,12 @@ class runner:
                 break
 
         if profiling_enabled:
-            pr.disable()
+            print("Profiling finished:")
             s = io.StringIO()
             sortby = SortKey.CUMULATIVE
             ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
             ps.print_stats(100)
+            pr.disable()
 
         print("Robot Routes")
         for robot in self.robot_list:

@@ -32,12 +32,14 @@ def convert_dataset():
             )
 
         task_dict = Utility.loadRoutePlan(file_names[0])
+        if len(task_dict["lines"]) > 40:
+            continue
         # For each dataset convert it to a json, save it and load it to a coverage problem
         polygon_dict = Utility.loadPolygonFile(file_names[1], file_names[2])
         combined_dict = {**task_dict, **polygon_dict}
         cp = Utility.loadCoverageProblemFromDict(combined_dict, 3)
         exp = Experiment.runner(coverage_problem=cp, enable_plotting=True)
-        exp.solve()
+        exp.solve(profiling_enabled=False)
 
 
 if __name__ == "__main__":

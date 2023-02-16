@@ -53,6 +53,12 @@ class agent:
         # socre function parameters
         self.Lambda = 0.95
 
+        # Cache to enhance performance:
+        self.memo = {}
+
+        # mem = Memory(location=".", verbose=0, bytes_limit=1024)
+        # self.getTravelCost = mem.cache(self.getTravelCost)
+
     def getPathTasks(self):
         return self.tasks[self.path]
 
@@ -91,6 +97,18 @@ class agent:
 
     def getTravelCost(self, start, end):
         # Travelcost in seconds (m/(m/s)) = s
+        # TODO this cache is slower than the normal calculation...
+        # key1 = tuple(np.concatenate((start, end)))
+        # key2 = tuple(np.concatenate((end, start)))
+        # if key1 in self.memo:
+        #     return self.memo[key1]
+        # elif key2 in self.memo:
+        #     return self.memo[key2]
+        # else:
+        #     distance = np.linalg.norm(end - start) / self.velocity
+        #     self.memo[key1] = distance
+        #     self.memo[key2] = distance
+        #     return distance
         return np.linalg.norm(end - start) / self.velocity
 
     def getTimeDiscountedReward(self, cost, task):
@@ -115,7 +133,9 @@ class agent:
             self.getTravelCost(point, task.end),
         ]
         minIndex = np.argmin(distArray)
-        shouldBeReversed = minIndex == 1
+        shouldBeReversed = False
+        if distArray[0] > distArray[1]:
+            shouldBeReversed = True
         return distArray[minIndex], shouldBeReversed
 
     # Calculate the path reward with task j at index n

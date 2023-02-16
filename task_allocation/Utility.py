@@ -6,8 +6,8 @@ from task_allocation import CoverageProblem
 import json
 from task_allocation import Task, CBBA
 import logging as log
+from functools import lru_cache, wraps
 
-import utm
 
 import csv
 import os
@@ -169,7 +169,7 @@ def loadPolygonFile(polygon_file, holes_file):
     return polygon_with_holes_dict
 
 
-def loadCoverageProblemFromDict(data, nr):
+def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
     polygon = data["polygon"]
     holes = data["holes"]
     lines = data["lines"]
