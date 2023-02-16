@@ -1,13 +1,13 @@
 from task_allocation import Experiment, Utility
 import numpy as np
 
-np.random.seed(8986413)
+# np.random.seed(8986413)
 # import from csv
 cp = Utility.loadCoverageProblem("data/SDUAreaCoverage/OdenseSO.json", nr=3)
 
 # stage the experiment
 for i in range(1):
-    exp = Experiment.runner(coverage_problem=cp, enable_plotting=False)
+    exp = Experiment.runner(coverage_problem=cp, enable_plotting=True)
     exp.solve()
 
 # Make sure to document the following datapoints:

@@ -123,7 +123,7 @@ class agent:
         temp_path = list(self.path)
         temp_path.insert(n, j)
 
-        # TODO this is the code for normal cbba
+        # TODO this is the code for single point cbba
         # S_p = 0
         # travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
         # S_p = self.getTimeDiscountedReward(
@@ -137,33 +137,34 @@ class agent:
         #     S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
         # return S_p, False
 
-        # is_reversed = np.array([False for _ in range(self.task_num)])
-
-        is_reversed = False
         # travel cost to first task
         travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
         S_p = self.getTimeDiscountedReward(
             travel_cost,
             self.tasks[temp_path[0]],
         )
-        # # minimize the travelcost when trying to insert a new task
-        # if is_reversed[p_idx] == 1:
-        #     temp_task = self.tasks[temp_path[p_idx]].start
-        # else:
-        #     temp_task = self.tasks[temp_path[p_idx]].end
 
-        # temp_cost, is_reversed = self.getMinTravelCost(
-        #     temp_task,
-        #     self.tasks[temp_path[p_idx + 1]],
-        # )
-        # is_reversed[p_idx] = is_reversed
-        # travel_cost += temp_cost
+        is_reversed = False
+        is_reversed_test = np.zeros((len(temp_path)))
 
         for p_idx in range(len(temp_path) - 1):
-            if p_idx == n:
-                # minimize the travelcost when trying to insert a new task
+            if p_idx == n - 1:
+                # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
                 temp_cost, is_reversed = self.getMinTravelCost(
                     self.tasks[temp_path[p_idx]].end,
+                    self.tasks[temp_path[p_idx + 1]],
+                )
+                is_reversed_test[p_idx] = is_reversed
+                travel_cost += temp_cost
+            elif p_idx >= n:
+                # minimize the travelcost of the remaining tasks
+                if is_reversed_test[p_idx] == 1:
+                    temp_point = self.tasks[temp_path[p_idx]].start
+                else:
+                    temp_point = self.tasks[temp_path[p_idx]].end
+
+                temp_cost, is_reversed_test[p_idx] = self.getMinTravelCost(
+                    temp_point,
                     self.tasks[temp_path[p_idx + 1]],
                 )
                 travel_cost += temp_cost
