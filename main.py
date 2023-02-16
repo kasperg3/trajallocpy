@@ -1,7 +1,9 @@
 from task_allocation import Experiment, Utility
 import numpy as np
 
-# np.random.seed(8986413)
+seed = 8986413
+np.random.seed(seed)
+
 # import from csv
 cp = Utility.loadCoverageProblem("data/SDUAreaCoverage/OdenseSO.json", nr=3)
 
