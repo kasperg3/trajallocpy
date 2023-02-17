@@ -111,8 +111,8 @@ def loadDataset(directory, route_data_name, holes_name, outer_poly_name):
         elif (
             os.path.isfile(filepath)
             and filepath.endswith(route_data_name)
-            or filepath.endswith(holes_name)
             or filepath.endswith(outer_poly_name)
+            or filepath.endswith(holes_name)
         ):
             csv_files.append(filepath)
     return csv_files
@@ -150,19 +150,20 @@ def loadPolygonFile(polygon_file, holes_file):
             polygon.append([float(row[0]), float(row[1])])
 
     # add the holes
-    with open(holes_file, "r") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=" ")
-        hole = []
-        hole_list = []
-        for row in csv_reader:
-            if not row:
-                hole_list.append(hole)
-                hole = []
-            else:
-                hole.append([float(row[0]), float(row[1])])
+    hole_list = []
+    if holes_file:
+        with open(holes_file, "r") as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=" ")
+            hole = []
+            for row in csv_reader:
+                if not row:
+                    hole_list.append(hole)
+                    hole = []
+                else:
+                    hole.append([float(row[0]), float(row[1])])
 
-        # Add the final hole
-        hole_list.append(hole)
+            # Add the final hole
+            hole_list.append(hole)
 
     polygon_with_holes_dict = {"polygon": polygon, "holes": hole_list}
 

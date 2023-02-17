@@ -107,7 +107,7 @@ class runner:
         while True:
             converged_list = []
 
-            print("Iteration {}".format(t))
+            print("Iteration {}".format(t + 1))
             # Phase 1: Auction Process
             for robot in self.robot_list:
                 robot.build_bundle()
@@ -168,7 +168,7 @@ class runner:
 
             t += 1
 
-            if sum(converged_list) == self.robot_num or t > self.max_t:
+            if sum(converged_list) == self.robot_num or t >= self.max_t:
                 break
 
         if profiling_enabled:

@@ -5,6 +5,7 @@ import numpy as np
 
 from task_allocation import Task
 import logging as log
+import math
 
 
 class agent:
@@ -97,19 +98,11 @@ class agent:
 
     def getTravelCost(self, start, end):
         # Travelcost in seconds (m/(m/s)) = s
-        # TODO this cache is slower than the normal calculation...
-        # key1 = tuple(np.concatenate((start, end)))
-        # key2 = tuple(np.concatenate((end, start)))
-        # if key1 in self.memo:
-        #     return self.memo[key1]
-        # elif key2 in self.memo:
-        #     return self.memo[key2]
-        # else:
-        #     distance = np.linalg.norm(end - start) / self.velocity
-        #     self.memo[key1] = distance
-        #     self.memo[key2] = distance
-        #     return distance
-        return np.linalg.norm(end - start) / self.velocity
+        # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
+        dist = [(a - b) ** 2 for a, b in zip(start, end)]
+        dist = math.sqrt(sum(dist))
+        return dist / self.velocity
+        # return np.linalg.norm(start - end) / self.velocity # Old and less efficient
 
     def getTimeDiscountedReward(self, cost, task):
         return self.Lambda ** (cost) * task.reward
