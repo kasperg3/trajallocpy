@@ -75,7 +75,8 @@ class runner:
         print("Execution time: ", self.end_time - self.start_time)
         average_travel_length = 0
         average_total_path_length = 0
-
+        # TODO add metrics:
+        # dataset_name, Total path length, n_iterations, time_spent
         for r in self.robot_list:
             average_travel_length += r.getTotalPathCost()
             average_total_path_length += r.getTotalPathCost(True)
@@ -185,9 +186,8 @@ class runner:
 
         self.end_time = timeit.default_timer()
 
-        average_travel_length, average_total_path_length = self.evaluateSolution()
+        self.evaluateSolution()
         if self.plot:
             plotter.show()
 
         # TODO return a pandas dataframe instead
-        return average_travel_length, average_total_path_length

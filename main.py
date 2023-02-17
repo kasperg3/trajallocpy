@@ -32,7 +32,7 @@ def loadAC300Dataset():
             )
 
         task_dict = Utility.loadRoutePlan(file_names[0])
-        # if len(task_dict["lines"]) > 40:
+        # if len(task_dict["lines"]) > 60:
         #     continue
         print(len(task_dict["lines"]))
         # For each dataset convert it to a json, save it and load it to a coverage problem
@@ -55,7 +55,7 @@ def loadH2Dataset():
             file_names = Utility.loadDataset(
                 filepath, "mem_mlc_route_data0", "holes", "outer_polygon"
             )
-        print(file_names)
+
         tasks_file = file_names[0]
         polygon_file = file_names[1]
         holes_file = "" if len(file_names) < 3 else file_names[2]
@@ -67,9 +67,9 @@ def loadH2Dataset():
         cp = Utility.loadCoverageProblemFromDict(combined_dict, 3)
         exp = Experiment.runner(coverage_problem=cp, enable_plotting=False)
         exp.solve(profiling_enabled=False)
+        # TODO save the results and store them in a dict
 
 
 if __name__ == "__main__":
     loadH2Dataset()
     # loadAC300Dataset()
-    # run_experiment()

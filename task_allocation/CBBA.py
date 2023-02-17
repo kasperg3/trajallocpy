@@ -36,7 +36,7 @@ class agent:
         self.bundle = []
         # Path
         self.path = []
-        # Maximum Task Number #TODO add an option to have non integer task limits
+        # Maximum Task Number TODO add an option to have non integer task limits
         self.L_t = L_t
 
         # Local Clock
@@ -52,7 +52,7 @@ class agent:
         else:
             self.set_state(state.squeeze())
         # socre function parameters
-        self.Lambda = 0.95
+        self.Lambda = 0.93
 
         # Cache to enhance performance:
         self.memo = {}
@@ -136,20 +136,6 @@ class agent:
         temp_path = list(self.path)
         temp_path.insert(n, j)
 
-        # TODO this is the code for single point cbba
-        # S_p = 0
-        # travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
-        # S_p = self.getTimeDiscountedReward(
-        #     travel_cost,
-        #     self.tasks[temp_path[0]],
-        # )
-        # for p_idx in range(len(temp_path) - 1):
-        #     travel_cost += self.getTravelCost(
-        #         self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start
-        #     )
-        #     S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
-        # return S_p, False
-
         # travel cost to first task
         travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
         S_p = self.getTimeDiscountedReward(
@@ -157,9 +143,15 @@ class agent:
             self.tasks[temp_path[0]],
         )
 
-        is_reversed = False
-        is_reversed_test = np.zeros((len(temp_path)))
+        # TODO this is the code for single point cbba
+        # for p_idx in range(len(temp_path) - 1):
+        #     travel_cost += self.getTravelCost(
+        #         self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start
+        #     )
+        #     S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
+        # return S_p, False
 
+        is_reversed = False
         for p_idx in range(len(temp_path) - 1):
             if p_idx == n - 1:
                 # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
@@ -167,7 +159,6 @@ class agent:
                     self.tasks[temp_path[p_idx]].end,
                     self.tasks[temp_path[p_idx + 1]],
                 )
-                is_reversed_test[p_idx] = is_reversed
                 travel_cost += temp_cost
             else:
                 travel_cost += self.getTravelCost(
@@ -175,6 +166,8 @@ class agent:
                     self.tasks[temp_path[p_idx + 1]].start,
                 )
             S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
+
+        # TODO add an option to return to return to start point
         return S_p, is_reversed
 
     def getCij(self):
