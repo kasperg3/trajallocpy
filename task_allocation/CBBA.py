@@ -52,7 +52,7 @@ class agent:
         else:
             self.set_state(state.squeeze())
         # socre function parameters
-        self.Lambda = 0.93
+        self.Lambda = 0.9
 
         # Cache to enhance performance:
         self.memo = {}
@@ -185,7 +185,6 @@ class agent:
             if j in self.bundle:  # If already in bundle list
                 c[j] = 0  # Minimum Score
             else:
-                # TODO make sure at least one task to be added to the task
                 # for each j calculate the path reward at each location in the local path
                 for n in range(len(self.path) + 1):
                     S_pj, should_be_reversed = self.calculatePathRewardWithNewTask(j, n)

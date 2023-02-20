@@ -61,7 +61,7 @@ class Plotter:
                 self.y_data,
                 linestyle="solid",
                 color=robot.color,
-                linewidth=1.2,
+                linewidth=1.5,
             )
             self.assign_plots.append(assign_line)
         else:

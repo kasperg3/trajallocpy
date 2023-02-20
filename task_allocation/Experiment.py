@@ -73,19 +73,17 @@ class runner:
 
     def evaluateSolution(self):
         print("Execution time: ", self.end_time - self.start_time)
-        average_travel_length = 0
-        average_total_path_length = 0
+        travel_length = 0
+        total_path_length = 0
         # TODO add metrics:
         # dataset_name, Total path length, n_iterations, time_spent
         for r in self.robot_list:
-            average_travel_length += r.getTotalPathCost()
-            average_total_path_length += r.getTotalPathCost(True)
+            travel_length += r.getTotalPathCost()
+            total_path_length += r.getTotalPathCost(True)
 
-        print("Average Travel Length:", average_travel_length / len(self.robot_list))
-        print("Average Total Path Length:", average_total_path_length / len(self.robot_list))
-        return average_travel_length / len(self.robot_list), (
-            average_total_path_length / len(self.robot_list)
-        )
+        print("Travel Length:", travel_length)
+        print("Total Path Length:", total_path_length)
+        return travel_length, total_path_length
 
     def solve(self, profiling_enabled=False):
         if profiling_enabled:
