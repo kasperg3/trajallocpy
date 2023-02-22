@@ -52,6 +52,6 @@ if __name__ == "__main__":
         polygon_dict = Utility.loadPolygonFile(file_names[1], holes_file)
         combined_dict = {**task_dict, **polygon_dict}
         cp = Utility.loadCoverageProblemFromDict(combined_dict, 3)
-        exp = Experiment.runner(coverage_problem=cp, enable_plotting=True, max_iterations=200)
+        exp = Experiment.runner(coverage_problem=cp, enable_plotting=False, max_iterations=200)
         exp.solve(profiling_enabled=False)
         totalRouteLength, sumOfTaskLengths, iterations, computeTime = exp.evaluateSolution()
