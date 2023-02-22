@@ -9,11 +9,20 @@ import math
 
 
 class agent:
-    def __init__(self, id=None, agent_num=None, L_t=None, state=None, tasks=None, color=None):
+    def __init__(
+        self,
+        id=None,
+        agent_num=None,
+        L_t=None,
+        state=None,
+        tasks=None,
+        color=None,
+        point_estimation=False,
+    ):
         self.tasks = copy.deepcopy(tasks)
         self.task_num = len(tasks)
         self.task_idx = [j for j in range(self.task_num)]
-
+        self.use_single_point_estimation = point_estimation
         self.agent_num = agent_num
         if color == None:
             self.color = (
@@ -23,7 +32,8 @@ class agent:
             )
         else:
             self.color = color
-        self.velocity = 1
+        self.max_velocity = 3
+        self.max_acceleration = 1
 
         # Agent ID
         self.id = id
@@ -36,8 +46,11 @@ class agent:
         self.bundle = []
         # Path
         self.path = []
-        # Maximum Task Number TODO add an option to have non integer task limits
-        self.L_t = L_t
+        # Maximum task capacity
+        if L_t == None:
+            self.L_t = 1000000000
+        else:
+            self.L_t = L_t
 
         # Local Clock
         self.time_step = 0
@@ -81,6 +94,21 @@ class agent:
     def receive_message(self, Y):
         self.Y = Y
 
+    def getTotalTravelCost(self, task_list):
+        total_cost = 0
+        if len(task_list) != 0:
+            # Add the cost of travelling to the first task
+            total_cost = self.getTravelCost(self.state.squeeze(), task_list[0].start)
+            for t_index in range(len(task_list) - 1):
+                total_cost += self.getTravelCost(
+                    task_list[t_index].end, task_list[t_index + 1].start
+                )
+            for t_index in range(len(task_list)):
+                total_cost += self.getTravelCost(task_list[t_index].start, task_list[t_index].end)
+            # Add the cost of returning home
+            total_cost += self.getTravelCost(self.state.squeeze(), task_list[-1].end)
+        return total_cost
+
     # This is only used for evaluations!
     def getTotalPathCost(self):
         finalTaskList = self.getPathTasks()
@@ -105,11 +133,20 @@ class agent:
         return total_dist, total_task_length
 
     def getTravelCost(self, start, end):
-        # Travelcost in seconds (m/(m/s)) = s
+        # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
         dist = [(a - b) ** 2 for a, b in zip(start, end)]
         dist = math.sqrt(sum(dist))
-        return dist / self.velocity  # the cost of travelling in seconds!
+        result = dist / self.max_velocity
+        # Velocity ramp
+        d_a = (self.max_velocity**2) / self.max_acceleration
+
+        if dist < d_a:
+            result = math.sqrt((4 * dist) / self.max_acceleration)
+        else:
+            result = self.max_velocity / self.max_acceleration + dist / self.max_velocity
+
+        return result  # the cost of travelling in seconds!
         # return np.linalg.norm(start - end) / self.velocity # Old and less efficient
 
     def getTimeDiscountedReward(self, cost, task):
@@ -140,7 +177,7 @@ class agent:
         return distArray[minIndex], shouldBeReversed
 
     # Calculate the path reward with task j at index n
-    def calculatePathRewardWithNewTask(self, j, n, use_single_point_estimation=False):
+    def calculatePathRewardWithNewTask(self, j, n):
         temp_path = list(self.path)
         temp_path.insert(n, j)
         is_reversed = False
@@ -151,8 +188,8 @@ class agent:
             self.tasks[temp_path[0]],
         )
 
-        # use_single_point_estimation = True
-        if use_single_point_estimation:
+        # Use a single point instead of greedily optimising the direction
+        if self.use_single_point_estimation:
             for p_idx in range(len(temp_path) - 1):
                 travel_cost += self.getTravelCost(
                     self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start
@@ -210,13 +247,13 @@ class agent:
         return (best_pos, c, reverse)
 
     def build_bundle(self):
-        while len(self.bundle) <= self.L_t:
+        while self.getTotalTravelCost(self.getPathTasks()) <= self.L_t:
             best_pos, c, reverse = self.getCij()
             h = c > self.winning_bids
 
             if sum(h) == 0:  # No valid task
-                log.info("No valid tasks for agent %i, not building bundle", self.agent_num)
                 break
+
             c[~h] = 0
             J_i = np.argmax(c)
             n_J = best_pos[J_i]

@@ -17,6 +17,8 @@ class runner:
         max_iterations=100,
         agents=None,
         initial_state=None,
+        task_capacity=None,
+        use_point_estimation=False,
     ):
         # Task definition
         self.coverage_problem = coverage_problem
@@ -25,7 +27,6 @@ class runner:
         self.robot_num = self.coverage_problem.getNumberOfRobots()
 
         # TODO this should be based able to be based on distance/batterylife
-        task_capacity = self.task_num  # self.task_num
 
         min_x = 100000000
         min_y = 100000000
@@ -62,6 +63,7 @@ class runner:
                         agent_num=self.robot_num,
                         L_t=task_capacity,
                         state=initial_state,
+                        point_estimation=use_point_estimation,
                     )
                 )
         else:
@@ -74,23 +76,33 @@ class runner:
     def evaluateSolution(self):
         travel_length = 0
         total_path_length = 0
-        # TODO add metrics:
-        # dataset_name, Total path length, n_iterations, time_spent
         total_task_length = 0
+        total_task_cost = 0
+        route_list = []
         for r in self.robot_list:
             travel_length, task_length = r.getTotalPathCost()
             total_path_length += travel_length
             total_task_length += task_length
+            total_task_cost += r.getTotalTravelCost(r.getPathTasks())
+            route = [r.state.squeeze()]
+            for task in r.getPathTasks():
+                route.append(task.start)
+                route.append(task.end)
+            route.append(r.state.squeeze())
+            route_list.append(route)
 
         print("Execution time: ", self.end_time - self.start_time)
         print("Total Path Length:", total_path_length)
+        print("Total path cost:", total_task_cost)
         print("Total task Length:", total_task_length)
         print("Iterations: ", self.iterations)
         return (
             total_path_length,
             total_task_length,
+            total_task_cost,
             self.iterations,
             self.end_time - self.start_time,
+            route_list,
         )
 
     def solve(self, profiling_enabled=False, debug=False):
@@ -127,11 +139,11 @@ class runner:
                     print(robot.getPath())
 
             # Plot
-            # if self.plot:
-            #     plotter.setTitle("Time Step:{}, Bundle Construct".format(t))
-            #     for robot in self.robot_list:
-            #         plotter.plotAgents(robot, self.tasks, t)
-            #     plotter.pause(0.1)
+            if self.plot:
+                plotter.setTitle("Time Step:{}, Bundle Construct".format(t))
+                for robot in self.robot_list:
+                    plotter.plotAgents(robot, self.tasks, t)
+                plotter.pause(0.1)
 
             # Communication stage
             # Send winning bid list to neighbors (depend on env)
@@ -159,12 +171,12 @@ class runner:
                     converged_list.append(converged)
 
             # Plot
-            # if self.plot:
-            #     plotter.setTitle("Time Step:{}, Consensus".format(t))
-            #     for robot in self.robot_list:
-            #         plotter.plotAgents(robot, self.tasks, t)
+            if self.plot:
+                plotter.setTitle("Time Step:{}, Consensus".format(t))
+                for robot in self.robot_list:
+                    plotter.plotAgents(robot, self.tasks, t)
 
-            #     plotter.pause(0.1)
+                plotter.pause(0.1)
             if debug:
                 print("Bundle")
                 for robot in self.robot_list:
