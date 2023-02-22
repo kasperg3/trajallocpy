@@ -1,5 +1,5 @@
 {
-    "search_area": [
+    "polygon": [
         {
             "latitude": 55.385207,
             "longitude": 10.470668
@@ -53,7 +53,7 @@
             "longitude": 10.469319
         }
     ],
-    "restricted_areas": [
+    "holes": [
         [
             {
                 "latitude": 55.382043,
@@ -73,7 +73,7 @@
             }
         ]
     ],
-    "sweeps": [
+    "lines": [
         {
             "latitude": 55.38195912539462,
             "longitude": 10.464395467691698

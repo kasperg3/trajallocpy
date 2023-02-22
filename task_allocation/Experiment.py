@@ -16,6 +16,7 @@ class runner:
         enable_plotting=False,
         max_iterations=100,
         agents=None,
+        initial_state=None,
     ):
         # Task definition
         self.coverage_problem = coverage_problem
@@ -26,35 +27,35 @@ class runner:
         # TODO this should be based able to be based on distance/batterylife
         task_capacity = self.task_num  # self.task_num
 
-        # TODO do not use the first task as initial state
-        # TODO randomly distribute the agents within the allowed area
-        min_easting = 100000000
-        min_northing = 100000000
-        max_easting = 0
-        max_northing = 0
+        min_x = 100000000
+        min_y = 100000000
+        max_x = 0
+        max_y = 0
         for t in self.tasks:
             temp = min([t.end[0], t.start[0]])
-            if min_easting > temp:
-                min_easting = temp
+            if min_x > temp:
+                min_x = temp
             temp = min([t.end[1], t.start[1]])
-            if min_northing > temp:
-                min_northing = temp
+            if min_y > temp:
+                min_y = temp
             temp = max([t.end[0], t.start[0]])
-            if max_easting < temp:
-                max_easting = temp
+            if max_x < temp:
+                max_x = temp
             temp = max([t.end[1], t.start[1]])
-            if max_northing < temp:
-                max_northing = temp
+            if max_y < temp:
+                max_y = temp
 
         if agents is None:
-            self.robot_list = []
-            for i in range(self.robot_num):
+            if initial_state is None:
                 initial_state = np.array(
                     [
-                        np.random.uniform(min_easting, max_easting),
-                        np.random.uniform(min_northing, max_northing),
+                        np.random.uniform(min_x, max_x),
+                        np.random.uniform(min_y, max_y),
                     ]
                 )
+                print(initial_state)
+            self.robot_list = []
+            for i in range(self.robot_num):
                 self.robot_list.append(
                     CBBA.agent(
                         id=i,
@@ -72,20 +73,28 @@ class runner:
         self.plot = enable_plotting
 
     def evaluateSolution(self):
-        print("Execution time: ", self.end_time - self.start_time)
         travel_length = 0
         total_path_length = 0
         # TODO add metrics:
         # dataset_name, Total path length, n_iterations, time_spent
+        total_task_length = 0
         for r in self.robot_list:
-            travel_length += r.getTotalPathCost()
-            total_path_length += r.getTotalPathCost(True)
+            travel_length, task_length = r.getTotalPathCost()
+            total_path_length += travel_length
+            total_task_length += task_length
 
-        print("Travel Length:", travel_length)
+        print("Execution time: ", self.end_time - self.start_time)
         print("Total Path Length:", total_path_length)
-        return travel_length, total_path_length
+        print("Total task Length:", total_task_length)
+        print("Iterations: ", self.iterations)
+        return (
+            total_path_length,
+            total_task_length,
+            self.iterations,
+            self.end_time - self.start_time,
+        )
 
-    def solve(self, profiling_enabled=False):
+    def solve(self, profiling_enabled=False, debug=False):
         if profiling_enabled:
             print("Profiling enabled!")
             import cProfile, pstats, io
@@ -110,13 +119,13 @@ class runner:
             # Phase 1: Auction Process
             for robot in self.robot_list:
                 robot.build_bundle()
-
-            print("Bundle")
-            for robot in self.robot_list:
-                print(robot.getBundle())
-            print("Path")
-            for robot in self.robot_list:
-                print(robot.getPath())
+            if debug:
+                print("Bundle")
+                for robot in self.robot_list:
+                    print(robot.getBundle())
+                print("Path")
+                for robot in self.robot_list:
+                    print(robot.getPath())
 
             # Plot
             if self.plot:
@@ -157,18 +166,19 @@ class runner:
                     plotter.plotAgents(robot, self.tasks, t)
 
                 plotter.pause(0.1)
-
-            print("Bundle")
-            for robot in self.robot_list:
-                print(robot.getBundle())
-            print("Path")
-            for robot in self.robot_list:
-                print(robot.getPath())
+            if debug:
+                print("Bundle")
+                for robot in self.robot_list:
+                    print(robot.getBundle())
+                print("Path")
+                for robot in self.robot_list:
+                    print(robot.getPath())
 
             t += 1
 
             if sum(converged_list) == self.robot_num or t >= self.max_t:
                 break
+        self.iterations = t
 
         if profiling_enabled:
             print("Profiling finished:")
@@ -183,9 +193,5 @@ class runner:
             print(robot.getPath())
 
         self.end_time = timeit.default_timer()
-
-        self.evaluateSolution()
         if self.plot:
             plotter.show()
-
-        # TODO return a pandas dataframe instead

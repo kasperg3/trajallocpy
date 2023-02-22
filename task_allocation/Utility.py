@@ -175,7 +175,7 @@ def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
     holes = data["holes"]
     lines = data["lines"]
     tasks = []
-    # Convert tasks
+    # Convert tasks and shuffle the start and end points
     for i in range(len(lines)):
         s = lines[i]
         if np.random.choice(2, 1):
