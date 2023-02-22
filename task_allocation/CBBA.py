@@ -48,7 +48,7 @@ class agent:
         self.path = []
         # Maximum task capacity
         if L_t == None:
-            self.L_t = 1000000000
+            self.L_t = 999999
         else:
             self.L_t = L_t
 
