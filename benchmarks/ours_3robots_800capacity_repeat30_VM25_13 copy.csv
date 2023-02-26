@@ -1,5 +1,0 @@
-dataset_name,totalRouteLength,sumOfTaskLengths,totalRouteCosts,iterations,computeTime,num_tasks,number_of_agents
-data/AreaCoverage-dataset/VM25/13/mem_r1/mem_r1_route_data0,1381.1633687526082,1134.0,724.5187218771523,175,895.1214273499936,57,3
-data/AreaCoverage-dataset/VM25/13/mem_r1/mem_r1_route_data0,1427.31502398304,1134.0,747.1215369810188,115,695.1370390049997,57,3
-data/AreaCoverage-dataset/VM25/13/mem_r1/mem_r1_route_data0,1315.4186251074789,1134.0,702.8050355549734,50,266.75718503100506,57,3
-data/AreaCoverage-dataset/VM25/13/mem_r1/mem_r1_route_data0,1335.2373441001705,1134.0,709.8118178962916,121,764.1992580729857,57,3
