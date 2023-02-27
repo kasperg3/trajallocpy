@@ -79,6 +79,7 @@ class runner:
         total_task_length = 0
         total_task_cost = 0
         route_list = []
+        max_path_cost = 0
         for r in self.robot_list:
             travel_length, task_length = r.getTotalPathCost()
             total_path_length += travel_length
@@ -91,10 +92,15 @@ class runner:
             route.append(r.state.squeeze())
             route_list.append(route)
 
+            # Save the highest route cost
+            if travel_length > max_path_cost:
+                max_path_cost = travel_length
+
         print("Execution time: ", self.end_time - self.start_time)
         print("Total Path Length:", total_path_length)
         print("Total path cost:", total_task_cost)
         print("Total task Length:", total_task_length)
+        print("Highes route cost:", max_path_cost)
         print("Iterations: ", self.iterations)
         return (
             total_path_length,
@@ -103,6 +109,7 @@ class runner:
             self.iterations,
             self.end_time - self.start_time,
             route_list,
+            max_path_cost,
         )
 
     def solve(self, profiling_enabled=False, debug=False):

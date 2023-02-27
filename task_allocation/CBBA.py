@@ -272,7 +272,6 @@ class agent:
             self.winning_agents[J_i] = self.id
 
     def update_task(self):
-        old_p = copy.deepcopy(self.path)
         id_list = list(self.Y.keys())
         id_list.insert(0, self.id)
 
@@ -432,7 +431,8 @@ class agent:
         self.time_step += 1
 
         converged = False
-        if old_p == self.path:
+        # The agent has converged to a solution of no conflicts has been detected
+        if len(tasks_to_delete) == 0:
             converged = True
 
         return converged

@@ -37,6 +37,7 @@ def saveResults(experiment_title, results):
         "totalRouteLength",
         "sumOfTaskLengths",
         "totalRouteCosts",
+        "maxRouteCost",
         "iterations",
         "computeTime",
         "num_tasks",
@@ -69,8 +70,8 @@ def main(
     files = findDatasetFiles(dataset_name, route_filename)
     for file_names in files:
         task_dict = Utility.loadRoutePlan(file_names[0])
-        # if len(task_dict["lines"]) > 50:
-        #     continue
+        if len(task_dict["lines"]) > 100:
+            continue
         print("Number of tasks", len(task_dict["lines"]))
         # For each dataset convert it to a json, save it and load it to a coverage problem
         holes_file = "" if len(file_names) < 3 else file_names[2]
@@ -94,6 +95,7 @@ def main(
             iterations,
             computeTime,
             route_list,
+            maxRouteCost,
         ) = exp.evaluateSolution()
 
         results.append(
@@ -102,6 +104,7 @@ def main(
                 totalRouteLength,
                 sumOfTaskLengths,
                 totalRouteCosts,
+                maxRouteCost,
                 iterations,
                 computeTime,
                 len(task_dict["lines"]),
@@ -146,14 +149,14 @@ if __name__ == "__main__":
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_naive_2robots_1200capacity_AC300 --n_robots=2 --capacity=1200 --point_estimation=True
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_1robots_infcapacity_AC300 --n_robots=1
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_naive_1robots_infcapacity_AC300 --n_robots=1 --point_estimation=True
-    # experiment_title = "vm25_Test"
+    # experiment_title = "AC300_test"
     # main(
-    #     dataset_name="VM25",
-    #     route_filename="mem_r1_route_data0",
+    #     dataset_name="AC300",
+    #     route_filename="mem_inf_route_data0",
     #     experiment_title=experiment_title,
-    #     number_of_agents=2,
-    #     capacity=None,
-    #     point_estimation=True,
+    #     number_of_agents=10,
+    #     capacity=200,
+    #     point_estimation=False,
     #     show_plots=False,
     #     debug=True,
     # )
