@@ -76,6 +76,9 @@ class agent:
     def getPathTasks(self):
         return self.tasks[self.path]
 
+    def getBundleTasks(self):
+        return self.tasks[self.bundle]
+
     def getPath(self):
         return self.path
 
@@ -247,7 +250,7 @@ class agent:
         return (best_pos, c, reverse)
 
     def build_bundle(self):
-        while self.getTotalTravelCost(self.getPathTasks()) <= self.L_t:
+        while self.getTotalTravelCost(self.getBundleTasks()) <= self.L_t:
             best_pos, c, reverse = self.getCij()
             h = c > self.winning_bids
 
