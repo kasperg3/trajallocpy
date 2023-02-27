@@ -139,11 +139,11 @@ class runner:
                     print(robot.getPath())
 
             # Plot
-            # if self.plot:
-            #     plotter.setTitle("Time Step:{}, Bundle Construct".format(t))
-            #     for robot in self.robot_list:
-            #         plotter.plotAgents(robot, self.tasks, t)
-            #     plotter.pause(0.1)
+            if self.plot:
+                plotter.setTitle("Time Step:{}, Bundle Construct".format(t))
+                for robot in self.robot_list:
+                    plotter.plotAgents(robot, self.tasks, t)
+                plotter.pause(0.1)
 
             # Communication stage
             # Send winning bid list to neighbors (depend on env)
@@ -171,12 +171,12 @@ class runner:
                     converged_list.append(converged)
 
             # Plot
-            # if self.plot:
-            #     plotter.setTitle("Time Step:{}, Consensus".format(t))
-            #     for robot in self.robot_list:
-            #         plotter.plotAgents(robot, self.tasks, t)
+            if self.plot:
+                plotter.setTitle("Time Step:{}, Consensus".format(t))
+                for robot in self.robot_list:
+                    plotter.plotAgents(robot, self.tasks, t)
+                plotter.pause(0.1)
 
-            #     plotter.pause(0.1)
             if debug:
                 print("Bundle")
                 for robot in self.robot_list:

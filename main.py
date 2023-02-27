@@ -60,6 +60,7 @@ def main(
     capacity=None,
     point_estimation=False,
     show_plots=True,
+    debug=False,
 ):
     seed = 135239
     np.random.seed(seed)
@@ -83,7 +84,7 @@ def main(
             task_capacity=capacity,
             use_point_estimation=point_estimation,
         )
-        exp.solve(profiling_enabled=False)
+        exp.solve(profiling_enabled=False, debug=debug)
 
         # Save the results in a csv file
         (
@@ -145,16 +146,14 @@ if __name__ == "__main__":
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_naive_2robots_1200capacity_AC300 --n_robots=2 --capacity=1200 --point_estimation=True
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_1robots_infcapacity_AC300 --n_robots=1
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_naive_1robots_infcapacity_AC300 --n_robots=1 --point_estimation=True
-    # experiment_title = "ours_3robots_AC300"
+    # experiment_title = "vm25_Test"
     # main(
-    #     "AC300",
-    #     "mem_inf_route_data0",
-    #     experiment_title,
-    #     number_of_agents=1,
+    #     dataset_name="VM25",
+    #     route_filename="mem_r1_route_data0",
+    #     experiment_title=experiment_title,
+    #     number_of_agents=2,
     #     capacity=None,
     #     point_estimation=True,
     #     show_plots=False,
+    #     debug=True,
     # )
-    # # main("H2", "mem_mlc_route_data0", 3)
-    # main("RAL_main", "mem_mlc_route_data0", 3)
-    # main("VM25", "mem_r1_route_data0", 3)
