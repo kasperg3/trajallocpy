@@ -1,0 +1,9157 @@
+Namespace(dataset='AC300', route_file_name='mem_inf_route_data0', experiment_name='trajectory_4robots_500capacity_AC300', n_robots=4, capacity=500, point_estimation=False, show_plots=False)
+Number of tasks 93
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Robot Routes
+[73, 7, 38, 88, 87, 54, 18, 66, 92, 89, 53, 55, 52, 3, 78, 30, 28, 86, 31, 85, 43, 59, 6, 56, 40, 84, 16, 35, 80, 8, 91, 39, 90, 57, 45]
+[34, 68, 14, 62, 81, 50, 20, 13, 42, 67, 46, 77, 74, 29, 41, 17, 15, 0, 76, 2, 79, 12, 51, 22]
+[69, 24, 25, 63, 27, 26, 71, 5, 72, 47, 9, 1, 23]
+[48, 83, 75, 70, 44, 65, 58, 21, 37, 19, 36, 33, 32, 4]
+Execution time:  123.1855311889667
+Total Path Length: 4123.599303835373
+Total path cost: 1815.8262339504552
+Total task Length: 3282.615339337006
+Highes route cost: 1266.94099956284
+Iterations:  36
+Number of tasks 96
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Robot Routes
+[0, 37, 95, 21, 69, 12, 45, 57, 88, 84, 3, 22, 31, 77, 16, 28, 86, 64, 46, 39, 4, 73, 74]
+[85, 7, 89, 20, 79, 59, 11, 49, 42, 70, 68, 71, 91, 35, 75, 60, 32, 34, 56, 9, 50, 23, 58, 63]
+[61, 19, 62, 30, 93, 10, 81, 55, 15, 17, 83, 53, 29, 54, 66, 67, 33, 38, 76, 6, 80, 2, 36, 13, 87]
+[52, 44, 94, 40, 78, 43, 82, 24, 8, 72, 14, 90, 65, 1, 18, 5, 26, 92, 27, 41, 25, 47]
+Execution time:  239.23306509194663
+Total Path Length: 4100.628964407913
+Total path cost: 1878.807988956797
+Total task Length: 3064.702743536618
+Highes route cost: 1201.338097922136
+Iterations:  60
+Number of tasks 57
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Robot Routes
+[4, 34, 51, 38, 46, 7, 33, 45, 41, 17, 43, 30, 22, 15, 50, 6]
+[19, 52, 31, 2, 42, 40, 49, 27, 48, 53, 12, 26, 5, 56]
+[11, 35, 54, 21, 25, 9, 37, 3, 10, 0, 55, 28, 32]
+[18, 20, 1, 13, 16, 47, 14, 24, 23, 39, 29, 8, 36, 44]
+Execution time:  30.308326177007984
+Total Path Length: 4342.84260771652
+Total path cost: 1782.9651096118519
+Total task Length: 3370.9453911934534
+Highes route cost: 1247.9538014408686
+Iterations:  49
+Number of tasks 67
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Robot Routes
+[39, 6, 54, 59, 33, 14, 37, 35, 30, 15, 42, 64, 60, 25, 1, 36]
+[51, 16, 26, 27, 34, 5, 3, 9, 32, 12, 2, 49, 22, 53, 4, 52, 29, 61, 41]
+[38, 0, 31, 62, 43, 17, 24, 10, 20, 50, 46, 65, 7, 55, 23, 44, 21, 57, 58, 40, 45]
+[18, 19, 13, 66, 48, 8, 28, 11, 56, 47, 63]
+Execution time:  23.701416589028668
+Total Path Length: 4204.803200200533
+Total path cost: 1789.2900131594279
+Total task Length: 3279.0504020165763
+Highes route cost: 1215.6922138388197
+Iterations:  19
+Number of tasks 75
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Robot Routes
+[3, 45, 46, 48, 0, 6, 13, 64, 10, 52, 57, 32, 70, 59, 7, 27, 29, 38, 21, 14, 18, 55, 28, 39]
+[69, 72, 71, 34, 20, 2, 49, 9, 53, 17, 50, 44, 63, 35, 40, 66, 37, 26, 56, 22, 23, 67, 65, 30, 16]
+[4, 33, 25, 73, 19, 58, 8, 42, 60, 24, 74, 15]
+[41, 36, 1, 61, 62, 43, 31, 47, 5, 68, 54, 11, 51, 12]
+Execution time:  67.12187261896906
+Total Path Length: 4566.110861276295
+Total path cost: 1951.0944674119082
+Total task Length: 3352.664150463098
+Highes route cost: 1348.8532351320532
+Iterations:  34
+Number of tasks 43
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Robot Routes
+[30, 15, 40, 1, 5, 7, 26, 9, 14, 25, 31, 2, 17]
+[21, 13, 34, 8, 27, 3, 42, 35, 29, 19]
+[20, 36, 0, 24, 16, 10, 37, 22, 4, 33]
+[38, 28, 11, 12, 6, 41, 32, 39, 18, 23]
+Execution time:  17.09611521102488
+Total Path Length: 4206.646334282689
+Total path cost: 1664.8759138661744
+Total task Length: 3384.100899736056
+Highes route cost: 1113.599530345469
+Iterations:  45
+Number of tasks 97
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Robot Routes
+[36, 80, 24, 11, 76, 4, 69, 93, 10, 13, 47, 89, 68, 83, 82, 0, 37, 25, 32, 71]
+[26, 50, 3, 84, 73, 64, 39, 60, 28, 57, 40, 94, 61, 88, 42, 87, 35, 91, 79]
+[31, 16, 59, 72, 44, 74, 48, 49, 66, 45, 78, 27, 85, 14, 19, 67, 30, 8, 81, 9, 23, 58, 33, 15, 46, 29, 55, 12, 95]
+[75, 43, 20, 5, 53, 92, 7, 6, 1, 38, 21, 52, 77, 70, 41, 96, 90]
+Execution time:  114.81110222497955
+Total Path Length: 3685.4864881913727
+Total path cost: 1692.8300188074174
+Total task Length: 2811.840524280609
+Highes route cost: 1038.4917264625526
+Iterations:  36
+Number of tasks 65
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Robot Routes
+[55, 61, 41, 19, 0, 2, 56, 54, 30, 60, 34, 3, 48, 18, 6, 20, 25, 8, 43, 42]
+[14, 23, 7, 36, 35, 52, 27, 59, 44, 40, 13, 37, 57, 50]
+[9, 10, 32, 1, 38, 22, 4, 11, 45, 29, 15, 12, 28, 31, 16, 49, 64]
+[17, 33, 63, 58, 51, 21, 26, 62, 24, 39, 47, 46, 5, 53]
+Execution time:  44.57113948900951
+Total Path Length: 4123.6398011191795
+Total path cost: 1746.1210244948988
+Total task Length: 3351.7382079826393
+Highes route cost: 1167.3925211995431
+Iterations:  39
+Number of tasks 68
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Robot Routes
+[46, 16, 14, 34, 54, 42, 17, 27, 50, 23, 62, 35, 63, 57, 24, 64]
+[21, 48, 3, 59, 40, 19, 52, 2, 55, 12, 33, 0, 18, 10, 6, 30, 20, 15, 39]
+[22, 11, 37, 47, 60, 65, 67, 25, 31, 43, 51, 8, 44]
+[7, 1, 5, 53, 58, 36, 45, 56, 9, 61, 41, 13, 26, 4, 32, 49, 28, 29]
+Execution time:  42.74412491801195
+Total Path Length: 4378.362090853664
+Total path cost: 1827.1414219755054
+Total task Length: 3332.9133178718025
+Highes route cost: 1120.4572225288
+Iterations:  37
+Number of tasks 62
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[8, 24, 7, 59, 37, 4, 19, 9, 38, 31, 25, 36, 35, 12]
+[54, 1, 45, 41, 2, 50, 3, 6, 42, 61, 16, 27, 44, 60, 40]
+[52, 20, 34, 26, 23, 5, 47, 30, 51, 49, 33]
+[46, 28, 14, 39, 10, 58, 11, 29, 21, 43, 18, 57, 55, 0, 22, 32, 56, 17, 53, 15, 48, 13]
+Execution time:  12.99823472002754
+Total Path Length: 4237.66838038274
+Total path cost: 1769.8052285397937
+Total task Length: 3346.8142401354053
+Highes route cost: 1287.8579316801263
+Iterations:  23
+Number of tasks 66
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Robot Routes
+[15, 18, 32, 13, 4, 61, 0, 48, 59, 51, 42, 37, 14, 36, 27]
+[1, 43, 31, 26, 21, 20, 53, 38, 5, 6, 7, 58, 65]
+[24, 19, 3, 50, 25, 33, 44, 54, 55, 45, 23, 62, 56, 9]
+[35, 28, 22, 46, 64, 52, 40, 39, 57, 29, 30, 34, 2, 47, 63, 60, 8, 16, 41, 17, 49, 11, 12, 10]
+Execution time:  47.149447456002235
+Total Path Length: 4517.257720836311
+Total path cost: 1878.1113184454068
+Total task Length: 3436.1121593833973
+Highes route cost: 1288.0347875148113
+Iterations:  37
+Number of tasks 54
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[24, 2, 43, 23, 0, 35, 32, 49, 9, 1, 51, 19, 7, 50, 33, 28]
+[3, 41, 39, 37, 13, 38, 6, 4, 25, 18]
+[21, 30, 16, 14, 31, 15, 52, 42, 36, 45, 29, 34, 8, 44, 27, 48, 53, 46, 20]
+[40, 12, 22, 5, 11, 10, 17, 26, 47]
+Execution time:  17.274412303988356
+Total Path Length: 4037.671311675052
+Total path cost: 1655.8024844874728
+Total task Length: 3407.0482765774414
+Highes route cost: 1104.6207063943525
+Iterations:  26
+Number of tasks 54
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Robot Routes
+[0, 35, 2, 15, 8, 30, 36, 7, 41, 13, 23, 14, 42, 17]
+[50, 33, 16, 9, 6, 19, 53, 49, 34, 51, 29, 48, 25]
+[38, 27, 10, 5, 26, 31, 44, 24, 20, 37, 1, 12, 4]
+[21, 45, 28, 40, 32, 22, 52, 3, 11, 43, 46, 39, 18, 47]
+Execution time:  16.09043943497818
+Total Path Length: 4319.578452340727
+Total path cost: 1752.3901974509731
+Total task Length: 3399.7679912536687
+Highes route cost: 1184.9112651477813
+Iterations:  32
+Number of tasks 46
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Robot Routes
+[23, 37, 42, 14, 1, 38, 24, 36, 6, 31, 22, 32, 0, 2, 27, 28]
+[10, 43, 11, 30, 35, 41, 18, 3, 9, 29, 13, 16]
+[25, 15, 40, 26, 7, 4, 45, 20, 33]
+[8, 17, 34, 44, 21, 12, 39, 5, 19]
+Execution time:  14.601107663998846
+Total Path Length: 4272.314983716407
+Total path cost: 1697.0526028554584
+Total task Length: 3393.7474383223735
+Highes route cost: 1142.9213151962927
+Iterations:  37
+Number of tasks 97
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Robot Routes
+[32, 5, 56, 25, 7, 94, 96, 55, 0, 72, 45, 70, 39, 79, 9, 6, 1, 49, 57, 53, 36, 26, 2, 24, 59]
+[58, 3, 38, 82, 11, 8, 12, 89, 76, 29, 84, 64, 86, 66, 69, 21, 68, 90, 40, 87]
+[19, 67, 34, 27, 44, 93, 4, 75, 81, 91, 92, 14, 10, 31, 15, 50, 16, 37, 35, 63, 88]
+[47, 95, 18, 30, 61, 65, 85, 80, 17, 23, 74, 48, 52, 60, 73, 62, 13, 77, 41, 54, 71, 78, 46, 22, 20, 33, 28, 43, 51, 83]
+Execution time:  164.30109652900137
+Total Path Length: 4303.418694857268
+Total path cost: 1962.1756141731175
+Total task Length: 3305.030529465923
+Highes route cost: 1187.0754597957034
+Iterations:  32
+Number of tasks 87
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Robot Routes
+[22, 59, 49, 65, 82, 25, 11, 3, 57, 46, 36, 17, 2, 30, 74, 71, 60, 12, 8, 64, 42, 78, 41, 67, 48, 73, 76, 80, 79, 70, 24]
+[21, 83, 20, 35, 81, 40, 9, 38, 52, 44, 14, 86, 32, 15, 84, 61, 45, 13, 54]
+[63, 37, 28, 16, 62, 7, 19, 4, 29, 34, 66, 10, 69, 55, 1, 53, 58, 33, 18]
+[68, 23, 50, 56, 47, 77, 51, 0, 72, 39, 75, 5, 6, 85, 27, 31, 26, 43]
+Execution time:  62.54364218004048
+Total Path Length: 4258.097358819745
+Total path cost: 1884.8487009989349
+Total task Length: 3349.4706325172983
+Highes route cost: 1182.7045682508283
+Iterations:  18
+Number of tasks 59
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Robot Routes
+[12, 51, 30, 46, 57, 1, 34, 38, 28, 18]
+[35, 23, 8, 27, 25, 56, 32, 16, 55, 14, 42, 21, 36, 37]
+[22, 9, 44, 29, 49, 13, 10, 40, 39, 24, 17, 3, 15, 4, 45]
+[11, 7, 58, 20, 6, 48, 47, 19, 41, 33, 26, 31, 0, 54, 2, 52, 53, 43, 5, 50]
+Execution time:  27.251644710020628
+Total Path Length: 4263.400936035205
+Total path cost: 1756.1477363943725
+Total task Length: 3369.7336831625003
+Highes route cost: 1263.702799654555
+Iterations:  33
+Number of tasks 44
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Robot Routes
+[39, 22, 27, 29, 6, 4, 43, 5, 36, 3, 41, 20, 25]
+[19, 12, 18, 42, 35, 26, 32, 1, 40, 24]
+[21, 7, 13, 17, 8, 16, 11, 23, 30, 9]
+[0, 38, 33, 31, 14, 10, 15, 37, 2, 34, 28]
+Execution time:  9.992126656987239
+Total Path Length: 4285.158998868582
+Total path cost: 1691.1735082325088
+Total task Length: 3377.7506955412314
+Highes route cost: 1326.2055878139042
+Iterations:  28
+Number of tasks 89
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Robot Routes
+[70, 57, 5, 42, 61, 15, 76, 18, 69, 45, 31, 53, 48, 86, 83, 25, 63, 13, 28, 14, 34, 62, 81]
+[10, 26, 49, 30, 79, 35, 11, 33, 77, 50, 47, 7, 23, 66, 39, 82, 36, 22, 74, 3, 80, 20, 46, 44, 55, 78, 51, 16, 88, 72, 40, 54]
+[68, 52, 71, 60, 65, 87, 56, 9, 59, 27]
+[84, 32, 12, 29, 2, 8, 73, 17, 19, 41, 4, 0, 1, 38, 85, 21, 37, 24, 6]
+Execution time:  40.007050875981804
+Total Path Length: 3685.121334524978
+Total path cost: 1672.59361428513
+Total task Length: 3032.2944912962535
+Highes route cost: 1120.6887071206556
+Iterations:  19
+Number of tasks 43
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Robot Routes
+[40, 28, 16, 20, 0, 2, 30, 12, 8, 1, 6, 18]
+[25, 34, 26, 38, 4, 21, 13, 9, 42]
+[23, 36, 11, 3, 35, 22, 29, 15, 27, 37]
+[19, 10, 24, 14, 31, 17, 5, 41, 33, 32, 7, 39]
+Execution time:  16.614619779982604
+Total Path Length: 4311.666229568279
+Total path cost: 1697.2457098879636
+Total task Length: 3380.02517280171
+Highes route cost: 1202.557125515216
+Iterations:  43
+Number of tasks 79
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[36, 42, 51, 14, 68, 49, 32, 27, 60, 45, 24, 50, 15, 12, 25, 39, 19, 58, 37, 76, 20]
+[75, 71, 63, 56, 35, 33, 72, 70, 55, 8, 6, 7, 54, 78, 0, 13, 43, 31, 38]
+[62, 3, 57, 4, 41, 28, 1, 44, 18, 2, 69, 66, 67, 53, 46, 23, 21, 34, 48, 11, 73]
+[77, 10, 74, 61, 59, 30, 65, 17, 64, 52, 5, 47, 22, 16, 40, 26, 29, 9]
+Execution time:  45.41917161998572
+Total Path Length: 4146.373948015218
+Total path cost: 1830.4359667351732
+Total task Length: 3314.011313194689
+Highes route cost: 1135.5373066854766
+Iterations:  27
+Number of tasks 61
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[30, 27, 8, 57, 58, 24, 4, 48, 60, 54, 45, 36, 26]
+[55, 56, 16, 25, 23, 35, 42, 28, 11, 5, 22, 29, 15, 12, 17]
+[50, 10, 2, 7, 20, 34, 0, 13, 9, 31, 53, 44, 47, 52, 40, 59, 41, 38]
+[19, 18, 43, 21, 46, 14, 1, 6, 32, 33, 3, 37, 49, 39, 51]
+Execution time:  24.70536116498988
+Total Path Length: 4360.748648037702
+Total path cost: 1806.6737146570922
+Total task Length: 3345.349178656489
+Highes route cost: 1224.4888538497398
+Iterations:  23
+Number of tasks 45
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[7, 8, 39, 25, 1, 43, 26, 23, 4, 15, 12]
+[41, 13, 10, 40, 42, 18, 28, 44, 27, 0, 37, 20, 36, 19]
+[32, 17, 22, 29, 6, 30, 38, 16, 35, 2, 21, 14]
+[24, 5, 11, 9, 33, 31, 3, 34]
+Execution time:  7.65812477201689
+Total Path Length: 4045.0225415422865
+Total path cost: 1612.7826218050186
+Total task Length: 3323.498227965063
+Highes route cost: 1216.6070398045317
+Iterations:  21
+Number of tasks 72
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[31, 15, 9, 60, 38, 1, 5, 27, 47, 23, 42, 61, 55, 14, 32]
+[68, 71, 57, 58, 17, 29, 48, 16, 34, 56, 66, 62, 64, 54, 10, 26, 37]
+[59, 0, 13, 20, 8, 43, 52, 24, 44, 50, 28, 19, 65, 39, 21, 41, 2, 12]
+[18, 69, 25, 63, 4, 51, 70, 49, 11, 45, 3, 40, 53, 30, 6, 7, 22, 46, 33, 35, 67, 36]
+Execution time:  30.20378914498724
+Total Path Length: 4178.454593403988
+Total path cost: 1801.9408989359163
+Total task Length: 3323.7591513716575
+Highes route cost: 1173.6840646829537
+Iterations:  27
+Number of tasks 62
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Robot Routes
+[5, 14, 16, 55, 20, 1, 46, 42, 10, 7, 27, 28, 49, 59, 32, 0, 53, 18, 41, 40, 24, 31]
+[8, 9, 60, 3, 61, 58, 26, 45, 35, 39]
+[33, 48, 21, 23, 4, 52, 44, 25, 15, 2, 17, 38, 6, 30, 56, 47]
+[11, 51, 29, 37, 13, 19, 36, 12, 50, 54, 43, 57, 34, 22]
+Execution time:  51.26369130698731
+Total Path Length: 4323.965252805946
+Total path cost: 1784.3879956394755
+Total task Length: 3382.9252774897404
+Highes route cost: 1180.6572456149802
+Iterations:  35
+Number of tasks 98
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[1, 63, 83, 89, 41, 36, 39, 29, 72, 10, 37, 75, 64, 73, 79, 21]
+[71, 48, 8, 78, 74, 69, 20, 28, 16, 23, 59, 91, 9, 44, 55, 50, 5, 92, 96, 61, 11, 95, 7, 88, 66, 2]
+[3, 40, 25, 47, 51, 14, 65, 70, 42, 45, 94, 6, 53, 19, 34, 58, 56, 82, 0, 15, 57, 32, 54, 24, 27, 12]
+[76, 38, 46, 60, 18, 93, 4, 22, 17, 80, 84, 87, 31, 52, 33, 77, 62, 97, 30, 85, 43, 67, 68, 49]
+Execution time:  69.08149440505076
+Total Path Length: 3802.9106400211904
+Total path cost: 1771.7053003898177
+Total task Length: 3044.671247104309
+Highes route cost: 1051.7537950908006
+Iterations:  23
+Number of tasks 90
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Robot Routes
+[3, 4, 48, 62, 16, 29, 47, 78, 40, 26, 24, 82, 77, 41, 88, 39, 35, 52, 1, 30]
+[17, 18, 36, 10, 0, 33, 8, 69, 44, 86, 9, 54, 7, 68, 85, 31, 64, 15, 67, 87, 5, 72, 83, 37]
+[71, 84, 73, 76, 14, 65, 59, 56, 19, 23, 79, 50, 28, 80, 70, 43, 63, 13, 38, 58, 55, 57, 53]
+[66, 46, 45, 12, 2, 60, 74, 25, 21, 42, 75, 89, 51, 11, 27, 61, 34, 32, 20, 6, 49]
+Execution time:  102.26032395096263
+Total Path Length: 3967.4874001259604
+Total path cost: 1820.3843482251666
+Total task Length: 3066.0974061224692
+Highes route cost: 1083.5622948157934
+Iterations:  29
+Number of tasks 47
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[41, 2, 29, 25, 20, 14, 34, 21, 33, 30, 22, 32, 12]
+[0, 35, 8, 26, 42, 18, 23, 45, 17, 19, 46, 40, 13]
+[9, 28, 10, 11, 4, 1, 16, 37, 38, 3, 44, 15]
+[43, 36, 6, 31, 7, 39, 27, 24, 5]
+Execution time:  10.04885970999021
+Total Path Length: 4213.3092570763065
+Total path cost: 1677.4592720648068
+Total task Length: 3380.1106553703476
+Highes route cost: 1245.2302064907403
+Iterations:  26
+Number of tasks 60
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[53, 18, 48, 38, 41, 58, 55, 3, 49, 31, 54]
+[32, 5, 23, 19, 1, 8, 7, 57, 14, 2, 56, 10, 16, 29]
+[39, 17, 30, 37, 15, 21, 11, 35, 45, 25, 0, 27, 44, 4, 6, 26, 52]
+[36, 9, 34, 20, 59, 51, 50, 13, 28]
+Execution time:  92.94743543700315
+Total Path Length: 3534.7113751319857
+Total path cost: 1473.2372421571035
+Total task Length: 2829.8841566852334
+Highes route cost: 1034.0186008351286
+Iterations:  200
+Number of tasks 72
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Robot Routes
+[40, 38, 4, 16, 37, 60, 54, 48, 35, 45, 44, 71, 43]
+[21, 67, 49, 14, 58, 22, 65, 50, 46, 59, 6, 28, 68, 62, 31, 32, 66, 11, 55, 51, 56]
+[27, 7, 63, 33, 70, 5, 41, 36, 42, 34, 47, 8, 29, 64, 2, 18, 39, 10]
+[69, 3, 30, 20, 25, 1, 15, 57, 61, 23, 12, 17, 24, 9, 53, 52, 26, 0, 13, 19]
+Execution time:  42.26280578103615
+Total Path Length: 4369.154795131117
+Total path cost: 1856.5975595374612
+Total task Length: 3338.9341536453394
+Highes route cost: 1188.5836908516399
+Iterations:  31
+Number of tasks 87
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Robot Routes
+[55, 86, 75, 6, 19, 64, 32, 41, 0, 81, 71, 72, 5, 42, 73, 35, 77]
+[29, 38, 45, 56, 59, 78, 8, 3, 25, 9, 26, 10, 16, 2, 61, 22, 50, 80, 76, 62]
+[24, 83, 67, 43, 79, 47, 44, 48, 40, 23, 58, 36, 34, 30, 21, 51, 27, 49, 39, 1]
+[60, 57, 65, 66, 28, 54, 13, 74, 31, 84, 18, 33, 68, 17, 85, 7, 52, 4, 46, 20, 63, 15, 69, 37, 82, 11, 14]
+Execution time:  111.01862794399494
+Total Path Length: 4053.9911987003
+Total path cost: 1815.2654673118948
+Total task Length: 3014.7978880048827
+Highes route cost: 1120.0473140859067
+Iterations:  34
+Number of tasks 70
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Robot Routes
+[15, 9, 3, 31, 13, 25, 57, 40, 28, 43, 41, 20, 42, 27, 1, 2, 4, 29, 12]
+[37, 62, 53, 61, 30, 17, 52, 66, 10, 34, 6, 23, 11, 51, 32, 45, 44, 0, 55, 33, 26, 38, 39, 69]
+[35, 54, 64, 16, 68, 65, 22, 50, 58, 59, 8]
+[7, 14, 5, 47, 63, 56, 19, 36, 67, 21, 49, 18, 46, 24, 48, 60]
+Execution time:  55.24104128300678
+Total Path Length: 4318.821778831198
+Total path cost: 1832.294334275029
+Total task Length: 3437.539242798189
+Highes route cost: 1201.2076270712612
+Iterations:  39
+Number of tasks 89
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Robot Routes
+[57, 72, 17, 23, 47, 63, 3, 2, 31, 59, 29, 34, 73, 81, 10, 68, 44, 5, 20, 36, 27, 80]
+[19, 61, 51, 24, 26, 46, 71, 85, 43, 62, 40, 83, 77, 16, 35, 11, 82, 14, 54, 37]
+[76, 0, 79, 18, 6, 60, 22, 88, 39, 78, 67, 48, 1, 28, 50, 4]
+[87, 38, 42, 9, 55, 74, 65, 7, 30, 70, 8, 69, 86, 66, 75, 58, 64, 45, 13, 56, 41, 25, 84, 12, 32, 33, 53]
+Execution time:  44.92555612500291
+Total Path Length: 3920.5067440157654
+Total path cost: 1766.6697951185884
+Total task Length: 3002.2639083137597
+Highes route cost: 999.4049340935783
+Iterations:  16
+Number of tasks 49
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Robot Routes
+[41, 24, 12, 17, 11, 16, 9, 21, 31, 10, 13]
+[33, 26, 38, 7, 34, 5, 44, 19, 32, 15, 6]
+[14, 22, 47, 23, 35, 43, 29, 30, 42, 8, 1, 46, 39, 25]
+[48, 4, 20, 2, 28, 27, 3, 36, 37, 18, 40, 0, 45]
+Execution time:  8.498287445981987
+Total Path Length: 4236.086981852508
+Total path cost: 1701.95765261329
+Total task Length: 3382.4178917805666
+Highes route cost: 1206.0522723995405
+Iterations:  24
+Number of tasks 55
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Robot Routes
+[20, 33, 26, 18, 23, 37, 5, 15, 25, 10, 28, 44, 22, 16, 48, 47]
+[51, 1, 27, 14, 41, 52, 35, 34, 2, 40, 3, 12]
+[54, 32, 9, 38, 53, 45, 31, 50, 29, 30]
+[13, 19, 11, 8, 42, 17, 46, 4, 49, 7, 24, 43, 39, 36, 0, 6, 21]
+Execution time:  18.33146764698904
+Total Path Length: 4243.310312720767
+Total path cost: 1729.0144255443959
+Total task Length: 3382.8488299046103
+Highes route cost: 1390.274757285752
+Iterations:  25
+Number of tasks 65
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Robot Routes
+[63, 23, 54, 47, 12, 32, 8, 6, 55, 48, 62, 24, 45, 50, 59]
+[35, 56, 46, 39, 40, 33, 52, 2, 41, 38, 44, 53, 29, 25, 36, 60, 1, 18, 14]
+[30, 26, 49, 34, 16, 9, 19, 22, 11, 61, 57, 7]
+[15, 42, 51, 20, 64, 4, 10, 21, 28, 3, 31, 5, 43, 58, 27, 0, 17, 13, 37]
+Execution time:  25.41713435703423
+Total Path Length: 4257.43333469517
+Total path cost: 1779.6461180587075
+Total task Length: 3336.961236183178
+Highes route cost: 1274.7918742407883
+Iterations:  25
+Number of tasks 48
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Robot Routes
+[0, 22, 17, 35, 42, 45, 31, 39, 32, 34, 24, 27, 16, 20, 29, 10]
+[33, 3, 9, 4, 2, 15, 25, 13, 26, 47, 18, 1, 14, 19, 6]
+[46, 37, 23, 38, 43, 12, 11, 30]
+[36, 28, 21, 40, 5, 7, 8, 41, 44]
+Execution time:  5.64759921602672
+Total Path Length: 4121.1700166473365
+Total path cost: 1654.2782785249306
+Total task Length: 3370.9350100572856
+Highes route cost: 1178.2805232776889
+Iterations:  15
+Number of tasks 68
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[42, 5, 63, 15, 49, 33, 41, 43, 47, 56, 66, 55, 12, 48, 40, 24, 26, 18, 39]
+[28, 65, 32, 17, 21, 64, 31, 46, 8, 51, 27, 2, 38, 52, 7, 19, 9]
+[1, 60, 62, 14, 53, 61, 0, 37, 16, 45, 30]
+[57, 50, 3, 29, 20, 58, 11, 44, 34, 59, 67, 22, 54, 6, 25, 13, 23]
+Execution time:  23.813616836967412
+Total Path Length: 4078.020365398015
+Total path cost: 1731.6628450262194
+Total task Length: 3147.224977291135
+Highes route cost: 1170.7789761728798
+Iterations:  27
+Number of tasks 92
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Robot Routes
+[71, 54, 1, 20, 16, 18, 77, 86, 65, 9, 87, 45, 70, 66, 88, 6, 25, 43, 83, 7, 36]
+[40, 53, 30, 41, 33, 19, 38, 90, 49, 85, 79, 57, 76, 15, 12, 11, 80, 2, 91, 81, 48, 32, 73, 37, 67, 69]
+[23, 35, 56, 55, 62, 42, 61, 82, 28, 8, 29, 84, 78, 68, 89, 21, 24, 46, 75, 60, 17, 13]
+[59, 26, 44, 34, 22, 31, 14, 72, 39, 5, 64, 3, 10, 74, 52, 51, 4, 47, 50, 0, 27, 58, 63]
+Execution time:  93.24715228297282
+Total Path Length: 4373.871049314457
+Total path cost: 1976.7771814057498
+Total task Length: 3265.8770469787974
+Highes route cost: 1205.9953982681964
+Iterations:  36
+Number of tasks 62
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Robot Routes
+[4, 55, 25, 47, 54, 43, 50, 34, 37, 14, 52, 8, 1, 21, 33]
+[31, 44, 15, 0, 41, 29, 11, 36, 39, 16, 60, 58, 30, 24, 27, 7, 53]
+[22, 18, 20, 48, 49, 51, 38, 46, 5, 45, 57]
+[23, 28, 13, 12, 2, 32, 19, 17, 42, 6, 56, 9, 35, 61, 59, 3, 26, 40, 10]
+Execution time:  26.27587128104642
+Total Path Length: 3926.5176666261023
+Total path cost: 1660.370337351966
+Total task Length: 3291.4481093956365
+Highes route cost: 1157.2905686098993
+Iterations:  33
+Number of tasks 77
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Robot Routes
+[62, 21, 55, 49, 60, 40, 31, 25, 51, 38, 69, 67, 75, 18, 46, 32, 66, 24, 27, 76, 7]
+[13, 74, 1, 39, 61, 22, 30, 72, 68, 9, 14, 54, 6, 26, 29, 50, 36, 11]
+[20, 12, 17, 56, 41, 16, 57, 2, 37, 70, 5, 3, 33, 58, 48, 35, 65, 8, 71, 34, 0, 63, 10, 19]
+[53, 47, 44, 45, 52, 4, 59, 43, 15, 73, 64, 23, 28, 42]
+Execution time:  42.69824969896581
+Total Path Length: 4113.599947488621
+Total path cost: 1803.120614824833
+Total task Length: 3267.337926640095
+Highes route cost: 1156.9574071786515
+Iterations:  22
+Number of tasks 39
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[1, 37, 31, 29, 18, 34, 8, 10, 35, 2]
+[25, 24, 5, 9, 15, 7, 20, 27, 22, 6, 36]
+[33, 28, 4, 19, 38, 11, 23, 26]
+[3, 14, 32, 13, 0, 16, 17, 12, 30, 21]
+Execution time:  4.629878757987171
+Total Path Length: 3928.990362346159
+Total path cost: 1543.2526322856545
+Total task Length: 3401.600610983326
+Highes route cost: 1197.0427818980406
+Iterations:  21
+Number of tasks 39
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[1, 36, 10, 31, 23, 24, 0]
+[28, 26, 12, 32, 2, 7, 38, 35, 5]
+[9, 13, 6, 34, 11, 37, 18, 30, 14, 20, 4]
+[17, 29, 15, 16, 19, 21, 8, 22, 33, 3, 27, 25]
+Execution time:  6.443473288032692
+Total Path Length: 4050.0456849643847
+Total path cost: 1579.9461151636833
+Total task Length: 3409.253046742376
+Highes route cost: 1326.6392547024398
+Iterations:  27
+Number of tasks 46
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[34, 33, 10, 44, 45, 28, 21, 2, 43, 32]
+[39, 38, 36, 1, 23, 20, 4, 13, 0, 41, 31]
+[3, 40, 42, 24, 35]
+[27, 14, 8, 6, 26, 18, 30]
+Execution time:  83.58174458198482
+Total Path Length: 2675.628807014501
+Total path cost: 1090.3671579669908
+Total task Length: 2071.873630365354
+Highes route cost: 1178.1909428953131
+Iterations:  200
+Number of tasks 91
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Robot Routes
+[72, 17, 25, 87, 65, 85, 54, 52, 90, 47, 82, 35, 38, 53, 66, 8, 22, 50, 24, 76, 43, 33]
+[58, 13, 10, 37, 12, 71, 4, 48, 44, 80, 39, 26, 49, 84, 81, 23, 75, 67, 79, 2, 40, 34, 20, 27, 18, 21]
+[70, 60, 28, 56, 42, 88, 61, 32, 46, 51, 68, 45, 59, 73, 31, 1, 36, 15, 11, 30, 19, 14]
+[69, 41, 9, 63, 89, 16, 55, 6, 62, 57, 83, 0, 86, 78, 77, 64, 3, 29, 5, 7, 74]
+Execution time:  128.75623924500542
+Total Path Length: 4301.480105094242
+Total path cost: 1918.809943832905
+Total task Length: 3247.13855847171
+Highes route cost: 1167.880897384217
+Iterations:  45
+Number of tasks 38
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Robot Routes
+[31, 25, 5, 2, 37, 13, 1, 17, 10, 32]
+[14, 23, 19, 33, 21, 6, 27, 8, 22]
+[34, 28, 36, 4, 18, 15, 12, 20, 3, 16, 24]
+[29, 0, 30, 11, 9, 35, 26, 7]
+Execution time:  4.429056143970229
+Total Path Length: 4183.440279614959
+Total path cost: 1624.0264162650037
+Total task Length: 3399.6135963817605
+Highes route cost: 1276.0905937171772
+Iterations:  25
+Number of tasks 64
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Robot Routes
+[55, 5, 63, 9, 18, 53, 7, 38, 35, 56, 62, 12, 24, 43, 6, 0, 39, 61, 57, 58]
+[60, 34, 11, 25, 26, 27, 44, 22, 41, 28, 40, 17, 1, 33, 31, 48]
+[3, 37, 2, 8, 19, 4, 51, 42, 21, 49, 50]
+[10, 16, 23, 30, 47, 20, 46, 36, 15, 45, 32, 52, 59, 14, 29, 13]
+Execution time:  29.46008010802325
+Total Path Length: 4300.167901439537
+Total path cost: 1799.460440206708
+Total task Length: 3245.08648503278
+Highes route cost: 1175.3312921448812
+Iterations:  29
+Number of tasks 72
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Robot Routes
+[0, 71, 70, 21, 16, 69, 8, 49, 35, 17, 12, 46, 7, 30]
+[32, 65, 29, 47, 61, 3, 59, 42, 13, 60, 51, 22, 15, 68, 18, 11]
+[19, 10, 28, 31, 37, 43, 64, 41, 9, 27, 45, 6, 26, 39, 25, 53, 52, 23, 55, 24, 44, 33, 48, 1, 54]
+[62, 5, 34, 56, 63, 38, 14, 40, 67, 36, 4, 58, 66, 57, 20]
+Execution time:  58.26289153698599
+Total Path Length: 4396.239065455229
+Total path cost: 1855.4151170805173
+Total task Length: 3186.498380107935
+Highes route cost: 1199.8089003480054
+Iterations:  33
+Number of tasks 71
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Robot Routes
+[14, 41, 2, 43, 62, 6, 56, 39, 7, 53, 55, 66, 37, 48, 27, 5, 50, 58, 13]
+[24, 69, 45, 18, 47, 63, 10, 30, 64, 0]
+[20, 17, 16, 15, 3, 61, 49, 25, 67, 1, 42, 52, 8, 33, 28]
+[19, 11, 26, 59, 68, 57, 51, 38, 22, 65, 40, 36, 54, 70, 46, 32, 34, 21, 12, 44, 4, 23, 9]
+Execution time:  52.36874148098286
+Total Path Length: 4011.7413503699618
+Total path cost: 1700.304001607718
+Total task Length: 3102.0576773104253
+Highes route cost: 1124.4249920559223
+Iterations:  25
+Number of tasks 58
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[33, 49, 6, 56, 55, 16, 52, 9, 47, 32, 19]
+[43, 34, 5, 15, 36, 24, 13, 26, 12, 23, 17, 27, 20, 28, 40]
+[41, 39, 38, 51, 57, 4, 8, 18, 53, 35, 54, 46, 11, 42, 50, 10, 25, 7]
+[1, 30, 21, 48, 22, 2, 29, 31, 14, 0, 44, 37, 3, 45]
+Execution time:  14.19942463497864
+Total Path Length: 4340.317627843829
+Total path cost: 1770.403533049056
+Total task Length: 3412.117274067112
+Highes route cost: 1217.4291084175236
+Iterations:  27
+Number of tasks 90
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Robot Routes
+[67, 79, 71, 54, 56, 19, 37, 12, 8, 15, 5, 32, 66, 26, 88, 61, 74, 3, 87]
+[11, 42, 64, 49, 47, 14, 44, 75, 7, 13, 38, 9, 27, 20, 57, 35, 53, 18]
+[48, 33, 62, 59, 10, 58, 76, 68, 30, 50, 81, 31, 23, 4, 24, 22, 51, 78, 52, 72, 21, 40]
+[82, 39, 1, 73, 80, 85, 28, 29, 2, 25, 34, 45, 65, 60, 77, 36, 41]
+Execution time:  72.66306831903057
+Total Path Length: 3709.3808583882897
+Total path cost: 1646.7580011814134
+Total task Length: 2844.638790424013
+Highes route cost: 987.743487931029
+Iterations:  33
+Number of tasks 50
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Robot Routes
+[39, 10, 13, 2, 28, 27, 4, 40, 0, 23, 32, 29, 34]
+[25, 21, 18, 14, 35, 5, 30, 8, 16, 36, 26, 45]
+[38, 1, 9, 11, 20, 43, 37, 46, 49, 6, 17, 48, 3, 7, 19]
+[24, 12, 44, 15, 33, 42, 47, 22, 31, 41]
+Execution time:  25.978051076002885
+Total Path Length: 4237.955755052771
+Total path cost: 1692.9201245707438
+Total task Length: 3406.8754083635963
+Highes route cost: 1349.0555962169522
+Iterations:  42
+Number of tasks 71
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Robot Routes
+[69, 27, 17, 66, 39, 70, 67, 32, 2, 37, 13, 15, 5, 1, 51, 41, 10]
+[9, 19, 58, 7, 57, 28, 53, 20, 38, 34, 23, 59, 24, 4, 31, 14, 8, 35, 44]
+[0, 42, 61, 29, 6, 21, 33, 22, 65, 11, 36, 52, 43, 25, 40, 45]
+[60, 46, 47, 68, 16, 54, 26, 64, 55, 48, 12, 3, 63, 30, 18, 49, 50, 62, 56]
+Execution time:  17.027186250023078
+Total Path Length: 4345.468544221147
+Total path cost: 1854.55712654148
+Total task Length: 3300.4533896773264
+Highes route cost: 1300.4525928419469
+Iterations:  19
+Number of tasks 59
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Robot Routes
+[12, 6, 49, 34, 17, 43, 35, 11, 36, 58, 48, 8]
+[28, 9, 4, 20, 23, 26, 30, 14, 7, 33, 42, 16, 41, 52]
+[32, 25, 29, 56, 19, 51, 46, 13, 1, 37, 21, 44, 40, 31]
+[27, 39, 24, 47, 55, 15, 10, 0, 38, 57, 18, 2, 3, 45, 54, 22, 50, 5, 53]
+Execution time:  19.01356528699398
+Total Path Length: 4044.781634155316
+Total path cost: 1690.2502057908355
+Total task Length: 3126.942931141145
+Highes route cost: 1213.1953792200634
+Iterations:  24
+Number of tasks 86
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Robot Routes
+[54, 78, 65, 60, 63, 59, 73, 27, 4, 84, 41, 76, 37, 16, 22, 79, 25, 31, 10, 64, 17, 58, 77, 32, 9, 7, 56]
+[11, 82, 15, 70, 40, 38, 45, 36, 62, 71, 2, 46, 69, 66, 24, 74, 80, 1, 75, 55, 29]
+[61, 14, 34, 43, 20, 5, 3, 53, 18, 0, 28, 51, 26, 13, 52, 12, 83, 50, 35, 57, 68, 49]
+[67, 85, 19, 81, 48, 23, 21, 44, 39, 6, 30, 33, 47, 72, 42, 8]
+Execution time:  50.78732491197297
+Total Path Length: 4121.618516974279
+Total path cost: 1837.747062898963
+Total task Length: 3295.469037818568
+Highes route cost: 1176.7216006706653
+Iterations:  22
+Number of tasks 48
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Robot Routes
+[12, 27, 42, 10, 15, 19, 36, 14, 47, 2, 4, 7, 46, 41, 22]
+[18, 11, 40, 20, 16, 5, 13, 25, 26, 37, 9, 17]
+[6, 28, 0, 43, 38, 39, 45, 33, 35, 1, 8]
+[21, 29, 3, 32, 44, 34, 24, 23, 31, 30]
+Execution time:  21.99887034902349
+Total Path Length: 4027.1843107345544
+Total path cost: 1627.0309734892828
+Total task Length: 3362.4022147084315
+Highes route cost: 1363.174540603417
+Iterations:  39
+Number of tasks 64
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Robot Routes
+[17, 23, 44, 9, 41, 31, 11, 25, 50, 37, 48, 3, 47, 38, 18, 52, 58, 27]
+[1, 0, 49, 2, 14, 53, 10, 39, 34, 5, 40, 19, 51, 21, 55]
+[6, 43, 61, 12, 63, 45, 46, 56, 22, 35, 4, 36]
+[28, 24, 60, 16, 54, 29, 59, 15, 8, 32, 33, 20, 26, 42, 30, 13, 57, 7, 62]
+Execution time:  16.222169774991926
+Total Path Length: 4326.63257920151
+Total path cost: 1809.1136034873923
+Total task Length: 3278.1780659260994
+Highes route cost: 1270.9070468036596
+Iterations:  18
+Number of tasks 94
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Robot Routes
+[43, 88, 91, 27, 70, 11, 52, 76, 53, 54, 66, 47, 84, 56, 68, 42, 10, 30, 92, 81, 51, 17, 83, 75]
+[80, 67, 79, 63, 37, 85, 25, 62, 22, 69, 1, 93, 15, 48, 7]
+[19, 64, 50, 14, 0, 3, 39, 12, 61, 57, 8, 9, 28, 4, 44, 2, 23, 29, 87, 31, 36, 38, 35, 73, 49, 58, 33]
+[86, 18, 90, 40, 77, 74, 16, 45, 55, 72, 46, 24, 32, 41, 60, 21, 89, 5, 6, 20, 34, 59, 78, 65, 26, 71]
+Execution time:  101.29112690401962
+Total Path Length: 4158.733832409161
+Total path cost: 1896.3043880648124
+Total task Length: 3179.5916177168347
+Highes route cost: 1156.7051082355465
+Iterations:  25
+Number of tasks 74
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Robot Routes
+[7, 33, 19, 10, 24, 60, 62, 37, 43, 32, 39, 13, 59, 42, 61, 22, 47, 12, 2, 55, 4, 70, 8]
+[72, 31, 0, 17, 1, 6, 69, 57, 49, 65, 38, 67, 16, 28, 40]
+[41, 11, 64, 9, 48, 63, 14, 66, 68, 50, 45, 3, 34, 18, 51, 15, 71, 23]
+[53, 73, 52, 21, 46, 20, 29, 58, 44, 54, 25, 56, 26, 5, 27, 30, 36, 35]
+Execution time:  106.08328630699543
+Total Path Length: 4236.6603194319
+Total path cost: 1833.6900062370753
+Total task Length: 3269.1576681352276
+Highes route cost: 1242.0984902055786
+Iterations:  66
+Number of tasks 60
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Robot Routes
+[2, 32, 54, 29, 48, 44, 50, 56, 40, 59, 1, 30, 12, 31, 27, 0]
+[52, 26, 9, 57, 53, 38, 33, 20, 13, 46]
+[55, 51, 4, 17, 8, 11, 45, 19, 18, 24, 6]
+[43, 3, 10, 15, 22, 39, 36, 7, 34, 14, 28, 23, 49, 47, 16, 58, 37, 42, 35, 21, 41, 5, 25]
+Execution time:  33.51879930397263
+Total Path Length: 4350.327573230548
+Total path cost: 1776.9600338267505
+Total task Length: 3417.0643634746075
+Highes route cost: 1253.5232821659768
+Iterations:  36
+Number of tasks 71
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[41, 49, 4, 53, 65, 15, 13, 64, 52, 22, 40, 38, 46, 42, 62, 18, 11, 37, 70]
+[17, 69, 36, 35, 55, 7, 51, 34, 21, 16, 68, 32]
+[29, 27, 8, 14, 60, 33, 48, 1, 0, 44, 67, 45, 30, 61, 43, 9, 3]
+[20, 10, 47, 28, 54, 26, 25, 63, 19, 56, 24, 23, 39, 5, 57, 2, 31, 59, 50, 58, 12, 6]
+Execution time:  132.33770809596172
+Total Path Length: 4275.040095316235
+Total path cost: 1815.0980543029386
+Total task Length: 3272.492459727255
+Highes route cost: 1137.1862586880818
+Iterations:  200
+Number of tasks 46
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[37, 30, 34, 36, 39, 45, 19, 13, 0, 9, 29, 44]
+[10, 24, 38, 5]
+[35, 41, 15, 31]
+[32, 21, 25, 3, 4, 23, 43, 1, 16, 11, 18, 40, 2, 42, 7, 17]
+Execution time:  56.11284010403324
+Total Path Length: 3076.7152871615344
+Total path cost: 1234.1338450766075
+Total task Length: 2472.2071105680843
+Highes route cost: 1170.9009180120815
+Iterations:  200
+Number of tasks 67
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Robot Routes
+[19, 15, 45, 13, 65, 42, 32, 24, 10, 62, 4, 53, 5, 59, 54, 40]
+[12, 3, 44, 1, 31, 17, 34, 38, 20, 56, 0, 50, 18, 48, 36, 51, 25, 57, 21, 33, 26]
+[61, 29, 35, 64, 46, 43, 41, 7, 55, 37, 39, 16, 9, 23, 14, 52]
+[49, 22, 2, 27, 28, 63, 30, 11, 66, 6, 8, 58, 47, 60]
+Execution time:  35.97555683396058
+Total Path Length: 4324.39421222212
+Total path cost: 1827.6865202064778
+Total task Length: 3366.805703229241
+Highes route cost: 1268.528939663594
+Iterations:  42
+Number of tasks 63
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Robot Routes
+[33, 56, 37, 25, 42, 27, 55, 26, 5, 53, 35, 30, 38, 57, 49, 21, 1, 0, 14]
+[23, 36, 2, 3, 47, 7, 4, 29, 52, 28]
+[46, 59, 10, 54, 41, 61, 45, 19, 34, 50, 51, 24, 16, 60]
+[48, 12, 13, 40, 6, 18, 9, 44, 15, 62, 22, 11, 58, 39, 32, 17, 20, 8, 43, 31]
+Execution time:  50.15089520299807
+Total Path Length: 4242.765808279436
+Total path cost: 1775.5922981593644
+Total task Length: 3364.229221596156
+Highes route cost: 1138.0553990268463
+Iterations:  42
+Number of tasks 74
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Robot Routes
+[68, 57, 10, 1, 8, 41, 3, 30, 14, 17, 6, 19, 29, 33, 49, 4, 22, 66, 24]
+[47, 43, 42, 58, 31, 46, 38, 61, 59, 34, 67, 16, 13, 72, 54]
+[60, 26, 71, 35, 11, 9, 56, 52, 50, 5, 51, 39, 64, 27, 37, 20, 2, 62, 18, 63, 28, 25, 40, 45, 44, 12, 36, 73, 15, 70]
+[65, 23, 7, 32, 48, 0, 53, 69, 21, 55]
+Execution time:  63.77534250199096
+Total Path Length: 4410.947028008548
+Total path cost: 1866.778802939144
+Total task Length: 3395.6994291661294
+Highes route cost: 1365.0314120973796
+Iterations:  42
+Number of tasks 67
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[25, 41, 15, 38, 9, 17, 66, 62, 57, 2, 14, 31, 63]
+[44, 30, 64, 20, 23, 59, 27, 28, 52, 48, 3, 45, 55, 54, 18, 56, 33, 53]
+[51, 40, 7, 39, 61, 35, 37, 1, 36, 16, 19, 42, 0, 60, 58, 21, 43, 26, 29]
+[49, 24, 32, 6, 12, 47, 5, 13, 8, 11, 10, 65, 4, 46, 50, 34, 22]
+Execution time:  42.75640774599742
+Total Path Length: 4029.733759897521
+Total path cost: 1730.3401108093462
+Total task Length: 3181.278494119697
+Highes route cost: 1208.1875715660985
+Iterations:  23
+Number of tasks 61
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[36, 35, 22, 24, 4, 1, 23, 6, 38, 16, 43, 5, 27, 55, 10]
+[29, 8, 12, 32, 44, 0, 41, 49, 59, 21, 50, 40, 33, 18, 17]
+[45, 7, 52, 58, 25, 47, 37, 19, 54, 46, 28, 34, 31, 11, 48, 13, 42]
+[60, 39, 14, 57, 20, 51, 30, 56, 3, 9, 26, 2, 15, 53]
+Execution time:  37.037260271958075
+Total Path Length: 4225.410746481884
+Total path cost: 1753.7127340012275
+Total task Length: 3346.1732897984666
+Highes route cost: 1101.4761830330788
+Iterations:  27
+Number of tasks 72
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Robot Routes
+[31, 21, 35, 55, 29, 2, 49, 53, 41, 42, 18, 37, 5, 39, 14, 19]
+[69, 46, 25, 54, 27, 15, 45, 66, 4, 43, 1, 8, 24, 10, 62, 63, 34, 36, 58, 59, 28, 7]
+[17, 48, 67, 23, 61, 32, 38, 64, 9, 16, 6, 65, 56, 51, 3, 11, 40, 68, 12, 20]
+[70, 71, 52, 30, 50, 0, 44, 60, 26, 47, 22, 57, 33, 13]
+Execution time:  140.7909931509639
+Total Path Length: 4369.835519601289
+Total path cost: 1844.2281391157885
+Total task Length: 3441.1898745529174
+Highes route cost: 1171.2671271180134
+Iterations:  82
+Number of tasks 92
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Robot Routes
+[23, 44, 63, 60, 89, 64, 80, 31, 37, 67, 52, 43, 28, 26, 39, 42, 74, 57]
+[79, 32, 16, 4, 70, 18, 61, 77, 33, 8, 12, 88, 5, 58, 13, 34, 78, 17, 10, 90, 24, 50, 21, 71]
+[45, 76, 40, 29, 2, 15, 35, 46, 53, 85, 82, 65, 54, 9, 62, 48, 84, 56, 1, 87, 11, 68, 69, 47]
+[30, 91, 81, 6, 0, 66, 75, 25, 59, 41, 73, 27, 3, 38, 51, 86]
+Execution time:  70.16324743296718
+Total Path Length: 3805.7178219939956
+Total path cost: 1699.4633523544203
+Total task Length: 3014.8584239401243
+Highes route cost: 1149.2289064538986
+Iterations:  28
+Number of tasks 48
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[14, 22, 19, 33, 18, 42, 10, 21, 1, 30]
+[41, 2, 44, 13, 0, 3, 7, 26, 43, 31]
+[24, 25, 46, 35, 11, 45, 12, 16, 37, 15, 36, 47, 32, 17, 4, 9, 38]
+[39, 29, 20, 5, 6, 27, 28, 8, 40, 23, 34]
+Execution time:  8.622144324006513
+Total Path Length: 4228.6593187575245
+Total path cost: 1688.0640229116275
+Total task Length: 3388.227783759162
+Highes route cost: 1362.7600703375165
+Iterations:  23
+Number of tasks 49
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Robot Routes
+[20, 0, 14, 36, 33, 30, 22, 9, 40, 35, 5, 8, 11]
+[47, 25, 28, 38, 1, 17, 34, 37, 31, 12, 19, 41]
+[23, 44, 2, 26, 15, 18, 48, 42, 3, 32, 4]
+[43, 6, 46, 10, 24, 21, 7, 13, 45, 27, 16, 39, 29]
+Execution time:  10.066326248052064
+Total Path Length: 4110.478521047288
+Total path cost: 1660.2150131454723
+Total task Length: 3374.271146446499
+Highes route cost: 1250.3669302397648
+Iterations:  22
+Number of tasks 87
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Robot Routes
+[2, 43, 56, 0, 82, 72, 81, 49, 27, 70, 75, 57, 28, 26, 4, 25, 11, 36, 22, 30, 16, 47, 77, 69, 9, 40, 34, 54, 84, 3]
+[51, 31, 41, 17, 15, 32, 79, 60, 61, 18, 85, 50, 38, 46]
+[64, 45, 12, 86, 66, 80, 5, 21, 8, 37, 58, 6, 14, 63, 44, 7, 68, 76, 73]
+[53, 13, 59, 42, 39, 78, 67, 29, 48, 19, 23, 62, 74, 83, 65, 55, 33, 52, 10, 20, 1, 71]
+Execution time:  86.17736708000302
+Total Path Length: 4065.994995332211
+Total path cost: 1814.9475795973667
+Total task Length: 3260.2701256215614
+Highes route cost: 1051.7617034797763
+Iterations:  28
+Number of tasks 50
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Robot Routes
+[24, 22, 8, 46, 11, 13, 20, 21, 6, 0]
+[26, 5, 39, 48, 16, 47, 2, 36, 34, 42, 28, 45, 15]
+[38, 14, 3, 31, 43, 7, 40, 12, 49, 44, 4, 32, 29, 33, 30, 18]
+[23, 1, 17, 10, 9, 37, 25, 27, 19, 35, 41]
+Execution time:  17.928304980043322
+Total Path Length: 4243.124275163289
+Total path cost: 1699.9719042093243
+Total task Length: 3398.806899047441
+Highes route cost: 1182.3380742412364
+Iterations:  38
+Number of tasks 73
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Robot Routes
+[40, 18, 54, 29, 50, 7, 12, 35, 10, 1, 61, 13, 70, 49, 23, 19, 55, 36, 48]
+[34, 21, 52, 65, 6, 17, 43, 63, 5, 72, 4, 45, 56, 51, 57, 41, 39, 24]
+[31, 33, 53, 16, 37, 44, 47, 66, 67, 28, 59, 27, 30, 58, 3, 14, 38, 71]
+[42, 25, 26, 8, 32, 9, 62, 22, 2, 15, 68, 69, 0, 11, 20, 60, 64, 46]
+Execution time:  61.03030049800873
+Total Path Length: 4475.1392015849515
+Total path cost: 1911.8341940017076
+Total task Length: 3414.7275009678497
+Highes route cost: 1176.9934587929802
+Iterations:  41
+Number of tasks 94
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[1, 93, 28, 50, 31, 7, 80, 38]
+[10, 47, 51, 79, 57, 68, 76, 3, 33, 82, 42, 71]
+[16, 72, 26, 20, 45, 4, 62, 54, 2]
+[65, 48, 46, 40, 17, 36, 44, 6, 64, 27, 84, 23, 13, 87, 89, 60, 37, 22, 32, 14, 9, 53, 66, 39, 78, 21, 59, 77, 0, 41, 75]
+Execution time:  594.2359209299902
+Total Path Length: 2586.6580808841904
+Total path cost: 1191.6917478147427
+Total task Length: 1999.6364479219556
+Highes route cost: 979.3385756030829
+Iterations:  200
+Number of tasks 89
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Robot Routes
+[35, 77, 36, 19, 21, 12, 42, 64, 73, 33, 68, 5, 46, 74, 52, 84, 66, 50, 6, 48]
+[85, 17, 79, 31, 26, 2, 71, 49, 13, 40, 41, 23, 22, 58, 39, 24, 44, 27, 29, 67, 8, 30, 60, 86]
+[15, 20, 57, 63, 83, 61, 80, 88, 51, 72, 18, 10, 82, 55, 4, 45, 25, 53, 47, 65, 37]
+[1, 3, 62, 70, 11, 14, 69, 54, 59, 28, 87, 38, 0, 9, 81, 34, 76, 43, 78, 32, 56, 16, 75]
+Execution time:  97.1069637730252
+Total Path Length: 4212.626781393583
+Total path cost: 1890.0236690645593
+Total task Length: 3280.379239936736
+Highes route cost: 1142.5518276449823
+Iterations:  40
+Number of tasks 39
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Robot Routes
+[27, 22, 19, 18, 7, 15, 4, 20, 31, 24]
+[28, 21, 6, 2, 29, 12, 8, 3, 10, 23, 32]
+[33, 34, 30, 35, 37, 9, 14, 0]
+[5, 25, 38, 26, 16, 17, 13, 11, 36, 1]
+Execution time:  8.054412817000411
+Total Path Length: 4060.4707521531204
+Total path cost: 1588.196593673319
+Total task Length: 3405.976305610159
+Highes route cost: 1096.7644653946254
+Iterations:  34
+Number of tasks 78
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Robot Routes
+[49, 17, 13, 25, 12, 77, 18, 69, 5, 26, 23, 0, 76, 40, 62, 20, 46, 29, 51, 57, 4, 21]
+[48, 43, 64, 11, 47, 68, 44, 72, 33, 73, 54, 30, 75, 9, 41, 22, 74]
+[60, 66, 59, 1, 45, 14, 58, 2, 27, 42, 15, 38, 50, 28, 36, 6, 71, 19, 67, 34]
+[52, 7, 10, 55, 39, 3, 63, 65, 35, 16, 32, 70, 61, 53, 8, 24, 31, 37, 56]
+Execution time:  30.408414000994526
+Total Path Length: 4233.774749388944
+Total path cost: 1842.492834792268
+Total task Length: 3295.3179611851606
+Highes route cost: 1162.6889490438175
+Iterations:  24
+Number of tasks 64
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[40, 56, 54, 10, 0, 19, 31, 28, 3, 24, 20, 38, 62, 26, 16, 39, 34, 17, 8]
+[23, 37, 7, 49, 60, 42, 2, 52, 15]
+[9, 29, 36, 6, 32, 18, 27, 53, 59, 43, 47, 13, 57, 41, 48]
+[45, 35, 33, 30, 1, 21, 14, 51, 61, 4, 55, 44, 63, 11, 25, 5, 50, 12, 22, 58, 46]
+Execution time:  23.83545910200337
+Total Path Length: 4360.734962538792
+Total path cost: 1823.475779404534
+Total task Length: 3378.781753169421
+Highes route cost: 1097.8135397979088
+Iterations:  26
+Number of tasks 98
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[47, 25, 61, 30, 82, 26, 55, 91, 28, 0, 63]
+[60, 51, 50, 24, 75, 73, 71, 86, 22, 12, 95, 76, 70, 81, 78, 39, 38, 40, 48, 64, 85, 18, 42, 80, 17, 32, 43, 62, 4, 68, 19, 2, 8, 37, 65, 87, 57, 15, 13]
+[20, 6, 90, 35, 29, 1, 7, 97, 14, 53, 59, 36, 34, 10, 58, 45, 5, 77, 27, 66]
+[94, 54, 79, 84, 33, 92, 3, 16, 21, 67, 69, 88, 49, 93, 46, 89, 52, 9, 11, 96, 44, 41, 72, 56, 74, 31]
+Execution time:  76.12621645501349
+Total Path Length: 4149.734737726573
+Total path cost: 1899.8009573331342
+Total task Length: 3123.8379809927233
+Highes route cost: 1144.7561824451377
+Iterations:  23
+Number of tasks 38
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Robot Routes
+[32, 34, 8, 26, 33, 31, 19, 0, 29, 16, 25, 22]
+[11, 36, 14, 17, 24, 6]
+[5, 27, 15, 10, 4, 2, 21, 1, 9, 7]
+[37, 13, 12, 20, 30, 35, 23, 3, 28, 18]
+Execution time:  2.9216954220319167
+Total Path Length: 4186.421220791539
+Total path cost: 1620.867731664837
+Total task Length: 3401.8257475079936
+Highes route cost: 1316.9368491407672
+Iterations:  19
+Number of tasks 82
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Robot Routes
+[15, 36, 65, 34, 55, 46, 40, 31, 5, 33, 71, 14, 44, 77, 6, 19, 16, 29, 50, 57, 0, 73, 20]
+[51, 41, 24, 26, 80, 21, 61, 42, 78, 72, 13, 54, 75, 76, 49, 7, 53, 69]
+[30, 1, 38, 59, 56, 43, 39, 27, 63, 45, 3, 68, 25, 66, 52, 70, 37, 11]
+[58, 81, 12, 22, 35, 10, 62, 28, 23, 79, 9, 8, 48, 18, 64, 47, 17, 2, 67, 60, 4, 74, 32]
+Execution time:  49.0961224110215
+Total Path Length: 4431.410810343301
+Total path cost: 1926.2351219234015
+Total task Length: 3305.1812281140865
+Highes route cost: 1180.6073437466034
+Iterations:  30
+Number of tasks 62
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Robot Routes
+[60, 49, 18, 25, 15, 16, 14, 47, 51, 4, 27, 10, 0]
+[58, 50, 22, 36, 31, 6, 44, 11, 13, 5, 56, 21, 30, 41, 45, 1, 19]
+[34, 32, 39, 57, 8, 43, 38, 9, 28, 40, 33, 17, 12, 26, 55, 59, 61, 37]
+[20, 7, 53, 48, 52, 46, 35, 2, 3, 29, 42, 24, 23, 54]
+Execution time:  38.436216876027174
+Total Path Length: 4135.678481719663
+Total path cost: 1717.9486793949388
+Total task Length: 3394.374281269038
+Highes route cost: 1296.7317279202662
+Iterations:  39
+Number of tasks 83
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Robot Routes
+[64, 15, 1, 40, 79, 18, 29, 51, 78, 7, 41, 10, 59, 77, 37, 71, 42, 57, 62, 30, 22, 45, 0, 2]
+[35, 21, 76, 70, 36, 43, 14, 58, 49, 34, 68, 39, 26, 53, 33, 11, 20, 61, 3, 5]
+[4, 24, 69, 52, 55, 16, 74, 9, 47, 80, 28, 25, 46, 12, 63, 27, 13, 67, 48, 32, 73, 44]
+[38, 60, 75, 72, 19, 31, 56, 6, 81, 17, 82]
+Execution time:  35.71883538697148
+Total Path Length: 3853.437099820473
+Total path cost: 1706.1399798468028
+Total task Length: 2957.2008068824643
+Highes route cost: 1043.0535719861623
+Iterations:  29
+Number of tasks 48
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[30, 29, 16, 10, 9, 32, 39, 43, 4, 38, 47, 37, 41, 31, 17, 5]
+[36, 35, 19, 0, 33, 28, 40, 42, 12, 44]
+[15, 24, 14, 8, 45, 27, 6, 20, 23, 13]
+[21, 26, 1, 34, 2, 18, 3, 46, 25, 11, 7, 22]
+Execution time:  7.738810909970198
+Total Path Length: 4316.155452774043
+Total path cost: 1719.2028409433842
+Total task Length: 3411.073370505164
+Highes route cost: 1223.3418633794874
+Iterations:  26
+Number of tasks 80
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Robot Routes
+[45, 63, 17, 11, 19, 66, 57, 68, 28, 1, 47, 31, 59, 25, 3, 49, 6, 58]
+[13, 44, 62, 76, 64, 69, 7, 4, 8, 55, 42, 34, 14, 77, 48, 51, 72, 26, 16]
+[39, 52, 32, 78, 67, 56, 10, 21, 33, 24, 65, 30, 71, 2, 29, 22, 43, 70, 75, 79, 73, 46, 74, 27, 54, 12]
+[9, 23, 0, 50, 18, 38, 60, 37, 53, 41, 36, 5, 35, 20, 40, 61]
+Execution time:  67.74508206697647
+Total Path Length: 4134.228171947909
+Total path cost: 1827.3791383915955
+Total task Length: 3199.369464419082
+Highes route cost: 1126.8301523539667
+Iterations:  35
+Number of tasks 53
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Robot Routes
+[9, 0, 39, 21, 22, 44, 25, 31, 28, 13, 20, 3, 34, 10]
+[1, 41, 33, 40, 16, 27, 2, 30, 26, 5, 42, 15, 4, 51]
+[29, 47, 14, 49, 36, 52, 12, 45, 18, 19, 24, 38]
+[48, 35, 46, 23, 32, 37, 17, 11, 7, 43, 50, 6, 8]
+Execution time:  21.13800357101718
+Total Path Length: 4101.436750429619
+Total path cost: 1679.287791012715
+Total task Length: 3300.7518242695155
+Highes route cost: 1138.0536576309842
+Iterations:  50
+Number of tasks 61
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Robot Routes
+[40, 49, 29, 60, 14, 24, 38, 4, 13, 5, 47, 54, 1, 6, 12, 34]
+[7, 51, 18, 59, 35, 22, 11, 58, 20, 37, 19, 41, 36, 46, 10, 27]
+[56, 50, 31, 55, 42, 52, 53, 30, 43, 3, 39, 33, 16, 21, 32, 8, 45]
+[48, 17, 26, 25, 15, 28, 2, 57, 0, 23, 9, 44]
+Execution time:  24.890626274980605
+Total Path Length: 4534.887093639186
+Total path cost: 1862.116689070317
+Total task Length: 3397.2009389154737
+Highes route cost: 1261.9828079595627
+Iterations:  36
+Number of tasks 41
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Robot Routes
+[39, 27, 33, 35, 17, 6, 14, 30]
+[38, 20, 22, 16, 25, 29, 15, 11, 24, 34, 31, 40]
+[23, 12, 0, 9, 1, 26, 4, 8, 18, 36, 5, 32, 7]
+[13, 21, 28, 3, 37, 19, 2, 10]
+Execution time:  4.891653401020449
+Total Path Length: 4202.8190902533215
+Total path cost: 1645.7253172658266
+Total task Length: 3363.357736527747
+Highes route cost: 1222.8296210652895
+Iterations:  24
+Number of tasks 94
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Robot Routes
+[93, 27, 14, 77, 38, 26, 49, 9, 36, 73, 75, 4, 79, 53, 10, 56, 80, 15, 72, 46, 51, 13, 1, 25, 58, 91, 48]
+[6, 84, 70, 81, 55, 69, 22, 29, 64, 40, 78, 50, 76, 5, 43, 32]
+[39, 65, 7, 3, 74, 19, 52, 63, 31, 37, 68, 54, 30, 44, 66, 21, 34, 24, 33, 67, 86, 18, 82, 59, 12, 85]
+[8, 23, 71, 20, 2, 87, 16, 60, 57, 92, 11, 61, 17, 35, 83, 88, 47, 42]
+Execution time:  98.03820105997147
+Total Path Length: 4100.992686143263
+Total path cost: 1838.120369988758
+Total task Length: 3077.7166634889354
+Highes route cost: 1221.7914247602453
+Iterations:  37
+Number of tasks 70
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[21, 33, 6, 39, 23, 11, 66, 18, 17, 20, 61, 14, 9, 51, 48, 43, 64]
+[27, 19, 38, 10, 7, 3, 26, 2, 34, 13, 16, 41, 25, 31, 52, 36, 1]
+[67, 44, 47, 60, 49, 37, 15, 58, 55, 12, 46, 40, 8]
+[29, 22, 35, 65, 63, 62, 0, 54, 69, 5, 24, 4, 68, 56, 32, 50, 30, 59, 53, 57]
+Execution time:  26.51888734201202
+Total Path Length: 4147.710771497072
+Total path cost: 1755.0502646801478
+Total task Length: 3212.817361199559
+Highes route cost: 1125.8063950188516
+Iterations:  26
+Number of tasks 57
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Robot Routes
+[32, 17, 54, 30, 0, 14, 11, 47, 27, 16]
+[26, 56, 24, 8, 5, 19, 18, 3, 10, 4, 41, 35, 29, 7, 13, 50, 36]
+[49, 45, 22, 21, 52, 25, 48, 39, 42, 6, 23, 15, 12, 55, 2]
+[46, 9, 38, 31, 43, 34, 1, 44, 40, 37, 51, 53, 28, 33, 20]
+Execution time:  20.248299703001976
+Total Path Length: 4074.7596135859994
+Total path cost: 1690.5085216254242
+Total task Length: 3301.504825793283
+Highes route cost: 1130.3781087246134
+Iterations:  30
+Number of tasks 81
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Robot Routes
+[7, 52, 44, 58, 31, 79, 50, 66, 20, 55, 14, 5, 4, 69, 16, 2, 78, 40, 23, 8, 65, 26, 1, 56, 73, 21]
+[75, 35, 27, 11, 41, 22, 0, 72, 29, 17, 62, 76, 34, 47, 74, 46, 70, 45, 60, 25, 59]
+[51, 28, 33, 18, 48, 15, 19, 12, 10, 32, 6, 9, 71, 68, 49]
+[13, 30, 67, 42, 37, 80, 63, 3, 53, 38, 54, 77, 36, 57, 39, 24, 43, 64, 61]
+Execution time:  47.21283204801148
+Total Path Length: 4220.066822836343
+Total path cost: 1859.370675681646
+Total task Length: 3334.287789552375
+Highes route cost: 1214.995399193097
+Iterations:  38
+Number of tasks 53
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[33, 8, 26, 15, 22, 23, 48, 21, 42, 7, 19, 1]
+[36, 41, 46, 24, 2, 32, 5, 38, 18, 0, 30]
+[44, 13, 9, 25, 11, 40, 47, 29, 28, 14, 52, 20, 50, 27, 35, 6]
+[10, 34, 16, 4, 51, 49, 12, 43, 17, 31, 39, 3, 37, 45]
+Execution time:  16.185210838972125
+Total Path Length: 4163.009143865335
+Total path cost: 1694.8915023460756
+Total task Length: 3341.752421988029
+Highes route cost: 1301.8352098027033
+Iterations:  21
+Number of tasks 57
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Robot Routes
+[53, 32, 38, 51, 49, 39, 19, 15, 43, 36, 42]
+[50, 29, 18, 22, 40, 10, 28, 3, 24]
+[46, 21, 6, 0, 11, 31, 56, 26, 7, 34, 1, 14, 52, 5, 41, 4, 55, 17, 2, 37, 44]
+[30, 54, 47, 48, 9, 33, 25, 35, 23, 16, 8, 45, 13, 27, 12, 20]
+Execution time:  20.58020599797601
+Total Path Length: 4008.0509159048415
+Total path cost: 1662.016247435074
+Total task Length: 3379.285732619988
+Highes route cost: 1315.5933153062276
+Iterations:  32
+Number of tasks 69
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Robot Routes
+[17, 14, 0, 33, 54, 29, 63, 5, 7, 59, 24, 13, 23, 27, 42]
+[12, 65, 28, 50, 43, 46, 6, 61, 3, 47, 1, 16, 31]
+[10, 35, 60, 48, 66, 64, 22, 45, 19, 25, 8, 30, 41, 52, 58, 9, 40, 67, 34, 57, 53, 11, 36]
+[44, 18, 62, 49, 39, 32, 38, 2, 20, 55, 15, 26, 4, 37, 56, 51, 68, 21]
+Execution time:  31.405323369021062
+Total Path Length: 4232.98041039349
+Total path cost: 1783.4663439286242
+Total task Length: 3354.6741376834084
+Highes route cost: 1144.6688538345459
+Iterations:  34
+Number of tasks 78
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Robot Routes
+[76, 25, 48, 29, 26, 31, 66, 41, 22, 77, 45, 64, 37, 30, 36, 49, 35, 73, 0]
+[56, 42, 61, 68, 28, 40, 6, 43, 71, 65, 60, 75, 14, 51, 46, 11, 19, 58, 27, 13, 9, 23]
+[4, 50, 20, 52, 8, 15, 18, 54, 16, 44, 12, 3, 32, 47, 63, 59, 10, 53, 34, 74, 24]
+[55, 57, 33, 5, 39, 72, 21, 1, 67, 2]
+Execution time:  30.753041488991585
+Total Path Length: 3869.139400492106
+Total path cost: 1686.7654148057889
+Total task Length: 2973.0245617216697
+Highes route cost: 1159.6909622407472
+Iterations:  20
+Number of tasks 77
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Robot Routes
+[67, 21, 33, 36, 1, 35, 65, 50, 8, 69, 59, 23, 63, 47, 72, 2, 73]
+[51, 19, 38, 75, 66, 46, 53, 9, 6, 56, 13, 68, 61, 62, 11, 76, 18, 4, 10, 48, 43, 57]
+[39, 27, 25, 31, 0, 24, 17, 28, 5, 70, 60, 52, 49]
+[58, 74, 44, 45, 16, 40, 26, 14, 12, 64, 37, 54, 29, 3, 34, 30, 22, 32, 42, 20, 41, 7, 71]
+Execution time:  32.204501859960146
+Total Path Length: 4186.254128892908
+Total path cost: 1818.026070502941
+Total task Length: 3206.539001321256
+Highes route cost: 1245.5065535292988
+Iterations:  25
+Number of tasks 44
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Robot Routes
+[10, 2, 28, 14, 42, 35, 8, 36, 32, 38, 22, 24]
+[31, 40, 12, 0, 26, 25, 37, 21, 43, 20, 33, 1, 15]
+[18, 13, 41, 6, 30, 19, 16, 23]
+[5, 39, 3, 4, 17, 27, 7, 29, 11, 34, 9]
+Execution time:  11.991018854023423
+Total Path Length: 4206.720985036038
+Total path cost: 1668.0137888224729
+Total task Length: 3377.776572260197
+Highes route cost: 1150.6528338707085
+Iterations:  35
+Number of tasks 74
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Robot Routes
+[11, 44, 57, 29, 64, 35, 58, 0, 61, 10, 66, 18, 27, 53, 41, 65, 43, 55]
+[56, 15, 72, 16, 14, 20, 31, 70, 38, 2, 37, 46, 62, 42, 24, 5, 68]
+[22, 8, 39, 51, 17, 23, 7, 26, 47, 1, 12, 28, 32, 49, 19, 30, 21, 3, 73, 54, 33]
+[71, 9, 36, 34, 48, 40, 59, 4, 6, 13, 50, 25, 67, 60, 45, 52, 69, 63]
+Execution time:  45.093714066024404
+Total Path Length: 4409.052056999874
+Total path cost: 1887.223532018052
+Total task Length: 3346.1860404601366
+Highes route cost: 1145.1862716924106
+Iterations:  33
+Number of tasks 81
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[74, 14, 51, 13, 69, 19, 71, 46, 70, 48, 55, 65, 67, 30, 36, 3, 1, 2, 44, 66, 9, 42, 4]
+[25, 57, 75, 12, 38, 0, 7, 76, 53, 49, 64]
+[40, 77, 8, 21, 35, 60, 62]
+[56, 78, 54, 61, 22, 68, 50, 73, 39, 32, 52, 31, 45, 80, 28, 43, 17, 79, 63, 20, 34, 33, 23, 58, 37]
+Execution time:  135.5012066239724
+Total Path Length: 3697.7131077626627
+Total path cost: 1595.6290881062955
+Total task Length: 2727.044619120163
+Highes route cost: 1124.9015013738046
+Iterations:  200
+Number of tasks 80
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Robot Routes
+[14, 52, 49, 55, 69, 29, 58, 27, 10, 77, 74, 28, 23, 18, 43, 37, 57, 26, 0, 7, 63]
+[15, 79, 1, 39, 68, 19, 64, 17, 72, 73, 32, 53, 60, 41, 8, 24, 76, 62]
+[3, 38, 16, 36, 30, 25, 51, 20, 44, 21, 13, 48, 70, 59, 6, 31, 9, 2, 34, 66, 67, 42]
+[47, 4, 50, 33, 22, 5, 71, 11, 12, 35, 61, 65, 56, 54, 75, 40, 45, 46]
+Execution time:  66.94512764399406
+Total Path Length: 4407.924030122593
+Total path cost: 1903.1722607001907
+Total task Length: 3216.031436496247
+Highes route cost: 1314.3258744059904
+Iterations:  37
+Number of tasks 89
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Robot Routes
+[24, 83, 72, 31, 1, 68, 69, 40, 34, 28, 23, 2, 22, 33, 54, 81]
+[18, 14, 70, 87, 67, 38, 56, 48, 16, 9, 19, 82, 86, 17, 43, 65, 60, 44, 11, 62, 47, 12, 75, 45]
+[20, 46, 55, 35, 73, 84, 6, 71, 74, 79, 53, 27, 7, 85, 57, 77, 64, 80, 66]
+[32, 26, 8, 88, 39, 61, 5, 25, 21, 52, 58, 78, 50, 0, 3, 30, 59, 4, 41, 29, 63, 36, 10, 76, 37, 49, 42, 13, 51]
+Execution time:  48.22828371502692
+Total Path Length: 4119.033859255213
+Total path cost: 1829.7073449975408
+Total task Length: 3238.2074730058034
+Highes route cost: 1169.3979527076347
+Iterations:  20
+Number of tasks 100
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[6, 14, 38, 90, 65, 39, 49, 42, 33, 80, 76, 22, 55, 82, 75, 85, 32, 78, 4, 31]
+[81, 79, 24, 45, 94, 0, 20, 19, 8, 69, 40, 2, 99, 89, 48, 86, 21, 97, 30, 52, 23, 71, 51, 77]
+[28, 18, 96, 58, 60, 73, 63, 12, 9, 57, 29, 54, 84, 3, 56, 50, 88, 13]
+[16, 1, 37, 27, 25, 36, 41, 59, 92, 53, 35, 46, 11, 98, 87, 91, 47, 34, 74, 26, 43, 67, 15, 64, 72, 61, 70, 95, 68]
+Execution time:  54.892200891976245
+Total Path Length: 3870.0589950127
+Total path cost: 1792.8182374815642
+Total task Length: 2857.4298004690227
+Highes route cost: 1076.9801846104715
+Iterations:  27
+Number of tasks 80
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[78, 14, 39, 77, 6, 66, 42, 2, 22, 35, 30, 69, 62, 37, 1, 15, 73, 47]
+[65, 13, 51, 32, 67, 36, 27, 70, 43, 3, 24, 63, 79, 34, 11, 5, 9, 57, 29]
+[55, 61, 45, 12, 54, 49, 40, 52, 23, 17, 26, 60, 18, 38, 53, 64, 75, 16, 68, 71, 25, 19, 21]
+[33, 59, 58, 8, 31, 28, 20, 41, 46, 44, 0, 7, 74, 10, 48, 72, 56, 4, 50, 76]
+Execution time:  48.1156920499634
+Total Path Length: 4240.1091741783075
+Total path cost: 1870.5539499999813
+Total task Length: 3287.182076966483
+Highes route cost: 1139.283646982727
+Iterations:  23
+Number of tasks 46
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[37, 1, 41, 26, 22, 12, 13, 23, 20, 15, 43, 36, 17, 6]
+[0, 14, 21, 30, 24, 16, 28, 31, 39, 25]
+[7, 38, 9, 34, 29, 42, 35, 10, 27, 33, 8, 45, 11, 3]
+[32, 4, 19, 44, 40, 5, 2, 18]
+Execution time:  6.367322883976158
+Total Path Length: 4058.428075387148
+Total path cost: 1625.9835816664477
+Total task Length: 3393.2149873390613
+Highes route cost: 1212.1389073775235
+Iterations:  21
+Number of tasks 83
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Robot Routes
+[41, 49, 1, 50, 57, 44, 25, 65, 76, 32, 46, 51, 56, 16, 53, 22, 69, 31, 58, 7, 3, 26, 2]
+[23, 68, 75, 71, 78, 61, 63, 35, 19, 81, 18, 60, 77, 45, 0]
+[9, 12, 40, 73, 11, 17, 38, 70, 20, 27, 30, 36, 80, 39, 54, 13, 29, 21, 4]
+[42, 28, 47, 6, 64, 5, 34, 82, 14, 62, 55, 67, 59, 10, 79, 24, 48, 15, 8, 66, 74, 52, 37]
+Execution time:  94.20269013603684
+Total Path Length: 3891.9198426784287
+Total path cost: 1716.0031479469556
+Total task Length: 3102.681659540486
+Highes route cost: 1031.7198705626079
+Iterations:  47
+Number of tasks 100
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[85, 9, 37, 36, 35, 6, 68, 86, 79, 63, 53, 28, 49, 77, 91, 5, 55, 42, 24, 25]
+[87, 43, 60, 69, 76, 22, 93, 94, 98, 96, 38, 0, 82, 73, 8, 50, 65, 46, 15, 88, 57, 84, 62, 52, 74, 59, 26, 11, 33, 66, 12, 39, 16, 31, 78]
+[40, 99, 19, 89, 1, 54, 32, 58, 30, 3, 44, 18, 45, 67, 56, 27, 97]
+[81, 13, 90, 10, 92, 21, 83, 72, 47, 34, 75, 48, 17, 14, 23, 80, 51, 7, 20, 29, 64]
+Execution time:  62.87959572399268
+Total Path Length: 3952.236695971966
+Total path cost: 1812.7697763621252
+Total task Length: 2950.0571871761363
+Highes route cost: 1064.779877854604
+Iterations:  23
+Number of tasks 77
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[44, 14, 30, 69, 63, 51, 16, 26, 7, 46, 20, 6, 28, 56, 40, 55, 25, 47, 61, 32, 21, 24]
+[18, 43, 15, 67, 19, 53, 10, 70, 35, 4, 64, 76, 22, 9, 29, 13, 0, 12, 8, 36, 33, 71]
+[57, 54, 37, 73, 62, 23, 58, 17, 68, 3, 66, 59, 34, 74, 2, 45, 27, 31, 1, 75, 42, 52]
+[39, 48, 65, 60, 5, 41, 49, 38, 72, 50]
+Execution time:  38.82049378199736
+Total Path Length: 4218.266607051688
+Total path cost: 1834.8530424144822
+Total task Length: 3228.5683855506445
+Highes route cost: 1252.539846689339
+Iterations:  27
+Number of tasks 68
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Robot Routes
+[57, 59, 48, 45, 39, 41, 37, 15, 10, 42, 60, 50, 35, 25, 43, 47, 17, 13, 31, 0, 7, 56, 6]
+[49, 12, 3, 18, 9, 30, 26, 23, 38, 28, 36, 21, 32, 64, 22]
+[53, 33, 67, 8, 4, 34, 14, 55, 51, 1, 61, 11, 16]
+[54, 24, 44, 52, 19, 5, 29, 20, 65, 40, 58, 63, 66, 46, 62, 2]
+Execution time:  13.542256439977791
+Total Path Length: 4046.1624578270257
+Total path cost: 1730.3423813959394
+Total task Length: 3252.1842651720735
+Highes route cost: 1053.5574869449147
+Iterations:  17
+Number of tasks 82
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Robot Routes
+[12, 32, 45, 24, 49, 26, 65, 43, 28, 37, 22, 4, 67, 51, 25, 69, 13]
+[14, 77, 38, 79, 41, 46, 74, 54, 76, 71, 36, 30, 6, 27, 58, 56, 8, 42]
+[15, 57, 78, 64, 80, 35, 7, 29, 1, 9, 10, 50, 44, 17, 81, 66, 53]
+[52, 20, 75, 31, 63, 34, 21, 18, 16, 61, 62, 73, 11, 40, 5, 3, 72, 68, 59, 33, 23, 2, 39, 47, 48, 0, 19]
+Execution time:  38.98779404803645
+Total Path Length: 4061.1180128917686
+Total path cost: 1799.4743902054897
+Total task Length: 3023.7077952928494
+Highes route cost: 1219.0427748225643
+Iterations:  28
+Number of tasks 80
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Robot Routes
+[0, 17, 29, 75, 5, 21, 72, 19, 79, 32, 61, 45, 13]
+[49, 27, 70, 7, 43, 28, 14, 24, 55, 77, 66, 58, 78, 26, 67, 44, 9, 59, 33, 15, 52, 1, 18, 16, 4, 34]
+[56, 74, 42, 11, 41, 8, 40, 23, 30, 48, 64, 62, 68, 39, 73, 71, 65, 2, 37, 10, 60, 12]
+[25, 63, 3, 22, 50, 35, 31, 57, 51, 53, 47, 20, 46, 54, 69, 76, 6, 38]
+Execution time:  41.207002122013364
+Total Path Length: 4113.43205090557
+Total path cost: 1819.2981924603748
+Total task Length: 3179.7199605578207
+Highes route cost: 1131.359608613405
+Iterations:  33
+Number of tasks 92
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[21, 41, 42, 17, 79, 56, 90, 39, 12, 26, 75, 71, 73, 67, 30, 7, 22, 10, 6, 11, 43, 80]
+[76, 47, 58, 62, 8, 2, 88, 36, 81, 9, 57, 59, 32, 20, 70, 64, 68, 4, 60, 61, 46]
+[89, 83, 84, 25, 19, 86, 5, 35, 72, 27, 78, 49, 66, 91, 0, 69]
+[87, 51, 53, 48, 31, 44, 33, 18, 63, 14, 13, 74, 55, 37, 16, 3, 15, 85, 50, 24, 40, 38]
+Execution time:  81.29801829799544
+Total Path Length: 3842.0276233492614
+Total path cost: 1726.451075510737
+Total task Length: 2839.7269002420658
+Highes route cost: 1029.3989693009573
+Iterations:  26
+Number of tasks 89
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Robot Routes
+[7, 16, 25, 5, 81, 77, 61, 82, 17, 43, 15, 0, 37, 26, 52, 66, 45, 19, 64, 40]
+[62, 54, 84, 3, 47, 46, 76, 34, 72, 18, 86, 80, 65, 49, 78, 68, 20, 53, 58, 30, 14, 73]
+[71, 1, 9, 13, 48, 51, 28, 33, 88, 50, 36, 38, 42, 21, 74, 67, 27, 70, 2, 60, 69, 41, 87, 79]
+[59, 75, 56, 11, 10, 85, 22, 32, 12, 31, 29, 4, 57, 39, 6, 44, 23, 8, 83, 55, 63]
+Execution time:  179.79181134299142
+Total Path Length: 4153.111123361235
+Total path cost: 1865.4842698911443
+Total task Length: 3107.3059042763907
+Highes route cost: 1219.851519178008
+Iterations:  53
+Number of tasks 80
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Robot Routes
+[24, 43, 10, 65, 28, 14, 50, 17, 31, 60, 15, 34, 20]
+[54, 39, 70, 3, 53, 49, 73, 67, 26, 32, 58, 38, 22, 75, 4, 13, 62, 18, 77, 68, 1, 51, 64]
+[5, 27, 56, 2, 45, 16, 46, 21, 29, 63, 78, 33, 36, 44, 11, 7, 61, 6, 48, 25, 12, 0]
+[66, 35, 76, 71, 69, 59, 57, 40, 37, 55, 8, 72, 52, 19, 41, 47, 9, 30, 79, 42, 23]
+Execution time:  68.61911430797772
+Total Path Length: 4243.450653879484
+Total path cost: 1851.4650035635586
+Total task Length: 3233.244450543833
+Highes route cost: 1237.6805115652817
+Iterations:  37
+Number of tasks 75
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[36, 49, 3, 65, 22, 37, 13, 11, 60, 2, 28, 39, 30]
+[66, 5, 44, 74, 21, 58, 42, 10, 25, 27, 46, 57, 6, 45, 33, 71, 72, 32]
+[62, 47, 69, 7, 4, 38, 31, 8, 34, 64, 20, 14, 24, 51, 19, 29, 9]
+[0, 52, 56, 40, 73, 63, 55, 43, 70, 23, 1, 67, 54, 41, 17, 61, 12, 26, 35, 16, 15, 59, 50, 68, 18, 53, 48]
+Execution time:  26.092087527969852
+Total Path Length: 4021.0630545408903
+Total path cost: 1766.1192103510577
+Total task Length: 3102.2096637912646
+Highes route cost: 1159.6162393870802
+Iterations:  21
+Number of tasks 43
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Robot Routes
+[39, 20, 3, 13, 30, 24, 21, 2, 11, 1, 42]
+[10, 14, 12, 36, 23, 15, 17, 33, 7, 31, 29]
+[32, 37, 28, 27, 25, 8, 16, 40, 35, 38]
+[18, 9, 41, 6, 4, 0, 34, 26, 5, 22, 19]
+Execution time:  5.808698643988464
+Total Path Length: 4058.81499370483
+Total path cost: 1603.625350781967
+Total task Length: 3419.7275816655574
+Highes route cost: 1120.387074293776
+Iterations:  19
+Number of tasks 44
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Robot Routes
+[43, 26, 35, 21, 34, 1, 40, 4, 8, 22, 19]
+[12, 14, 27, 11, 25, 41, 28, 9, 37, 13, 31, 2, 10, 15]
+[30, 23, 18, 0, 20, 32, 24, 33, 39]
+[5, 29, 6, 42, 36, 38, 3, 7, 16, 17]
+Execution time:  11.492461353016552
+Total Path Length: 4208.641606101031
+Total path cost: 1666.646653279417
+Total task Length: 3365.416854599071
+Highes route cost: 1277.9253673098408
+Iterations:  43
+Number of tasks 86
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Robot Routes
+[17, 51, 18, 29, 77, 32, 54, 53, 0, 9, 61, 27, 25, 71, 44]
+[41, 81, 62, 14, 31, 75, 35, 83, 56, 47, 7, 36, 48, 49, 13, 34, 8, 24, 40, 2, 80]
+[65, 46, 64, 66, 50, 42, 21, 74, 57, 43, 45, 23, 84, 78, 70, 16, 39, 5, 15, 63, 12, 19]
+[72, 10, 33, 79, 11, 28, 26, 38, 73, 60, 3, 82, 4, 68, 1, 20, 85, 6, 69, 55, 59, 30, 37, 67, 76, 52, 58, 22]
+Execution time:  76.58188991202042
+Total Path Length: 4213.193767354639
+Total path cost: 1865.4617835843073
+Total task Length: 3340.730402338429
+Highes route cost: 1181.8613290084993
+Iterations:  32
+Number of tasks 53
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[39, 5, 13, 45, 4, 51, 14, 0, 34, 30, 43, 40, 8, 36, 27, 32]
+[47, 25, 24, 15, 52, 41, 33, 50, 49, 21, 6, 38, 29]
+[37, 42, 19, 17, 3, 44, 10, 1, 2, 16, 12]
+[28, 9, 23, 31, 18, 20, 11, 48, 7, 26, 35, 22, 46]
+Execution time:  12.79863801097963
+Total Path Length: 4229.014067002991
+Total path cost: 1719.196091041674
+Total task Length: 3391.1457064116003
+Highes route cost: 1149.6558586335311
+Iterations:  26
+Number of tasks 60
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Robot Routes
+[21, 45, 12, 18, 40, 10, 53, 39, 54, 34, 33, 20, 22, 36]
+[57, 50, 51, 41, 23, 44, 19, 56, 14, 16, 35, 9, 26, 30, 58]
+[37, 4, 13, 7, 8, 52, 32, 43, 24, 46, 38, 3, 27, 28]
+[17, 47, 0, 15, 5, 59, 6, 31, 48, 29, 11, 42, 49, 2, 1, 25, 55]
+Execution time:  13.099939003994223
+Total Path Length: 4166.129917538172
+Total path cost: 1734.0002762120869
+Total task Length: 3295.217073665186
+Highes route cost: 1153.1761663723569
+Iterations:  24
+Number of tasks 48
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Robot Routes
+[16, 40, 17, 34, 18, 20, 8, 3, 39, 25]
+[6, 15, 30, 21, 45, 13, 27, 2, 38, 46]
+[4, 10, 5, 42, 9, 44, 37, 19, 1, 23, 0, 35, 12, 26, 14]
+[28, 43, 31, 32, 36, 47, 22, 11, 33, 41, 7, 24, 29]
+Execution time:  14.319937776017468
+Total Path Length: 4251.370781369594
+Total path cost: 1687.9254310547835
+Total task Length: 3382.99320348748
+Highes route cost: 1260.1981207691215
+Iterations:  40
+Number of tasks 43
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[27, 39, 36, 29, 14, 4, 15, 26, 2, 40, 8, 34, 16, 21]
+[5, 20, 9, 22, 41, 11]
+[25, 17, 31, 10, 33, 3, 38, 28, 30, 19, 12, 42, 32]
+[1, 24, 18, 23, 6, 37, 7, 35, 13, 0]
+Execution time:  6.9387648130068555
+Total Path Length: 4105.6874128733025
+Total path cost: 1619.9787163341296
+Total task Length: 3402.4217254575988
+Highes route cost: 1233.3931165389124
+Iterations:  26
+Number of tasks 66
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Robot Routes
+[22, 10, 33, 28, 14, 7, 15, 63, 45, 50, 55, 20, 3, 42, 36, 31, 24, 61, 4]
+[11, 12, 40, 13, 59, 25, 38, 54, 29, 39, 18, 47, 60, 30, 5, 34]
+[17, 41, 19, 35, 26, 21, 23, 2, 44, 53, 6, 27, 9, 64, 1, 37]
+[56, 62, 0, 57, 52, 46, 49, 16, 32, 65, 8, 58, 43, 48, 51]
+Execution time:  36.204120540001895
+Total Path Length: 4318.880314392376
+Total path cost: 1806.6529975178514
+Total task Length: 3380.946387583361
+Highes route cost: 1149.8346595905593
+Iterations:  35
+Number of tasks 88
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Robot Routes
+[48, 54, 12, 23, 73, 41, 75, 37, 40, 56, 28, 77, 11, 27, 9, 30, 55, 33, 85, 80, 63]
+[38, 79, 4, 35, 87, 26, 31, 60, 57, 58, 72, 81, 43, 61, 52, 42, 15, 86, 44, 24, 8]
+[47, 20, 71, 32, 46, 17, 39, 34, 21, 69, 5, 74, 51, 19, 76, 10, 1, 36, 29, 7, 18]
+[59, 3, 70, 53, 66, 49, 2, 68, 13, 50, 14, 22, 67, 62, 83, 0, 16, 45, 25, 64, 78, 6]
+Execution time:  69.53158147196518
+Total Path Length: 4263.019875868396
+Total path cost: 1894.9655642131438
+Total task Length: 3253.3978090819155
+Highes route cost: 1137.2831259211293
+Iterations:  31
+Number of tasks 58
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[33, 25, 30, 49, 23, 45, 13, 39, 17, 41, 15, 46, 44, 47, 22]
+[10, 1, 4, 42, 24, 29, 37, 0, 53, 5]
+[35, 12, 36, 6, 3, 20, 16, 28, 34, 50, 40, 52, 56, 57]
+[26, 51, 43, 2, 11, 8, 9, 38, 32, 14, 48, 27, 7, 18, 21, 19, 55, 31, 54]
+Execution time:  22.239766312006395
+Total Path Length: 4064.0855789358066
+Total path cost: 1688.1120527466921
+Total task Length: 3339.0075309455983
+Highes route cost: 1136.4515271948535
+Iterations:  27
+Number of tasks 67
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Robot Routes
+[25, 54, 12, 6, 43, 22, 35, 20, 51, 58, 53, 61, 63, 56, 41, 42, 17, 52, 39, 49, 36, 26]
+[8, 40, 27, 44, 31, 24, 11, 2, 1, 0, 29, 5, 62, 55, 15, 16]
+[9, 65, 32, 21, 13, 64, 18, 7, 23, 33, 10, 4, 34]
+[59, 45, 50, 60, 66, 47, 46, 3, 28, 37, 48, 38, 57, 30, 19, 14]
+Execution time:  27.561909527052194
+Total Path Length: 4277.045216172131
+Total path cost: 1801.786707011474
+Total task Length: 3356.3366207549443
+Highes route cost: 1153.0810460604075
+Iterations:  19
+Number of tasks 91
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Robot Routes
+[44, 47, 17, 24, 15, 8, 39, 78, 11, 88, 83, 32, 28, 30, 60, 5, 53, 4, 19, 81, 71, 21, 36]
+[68, 86, 85, 20, 54, 75, 77, 90, 79, 58, 34, 65, 0, 61, 33, 63, 45, 59, 38, 29, 82, 35, 9]
+[18, 76, 41, 1, 27, 56, 70, 23, 46, 25, 2, 73, 40, 84, 6, 64, 87, 22, 31]
+[80, 57, 12, 42, 67, 89, 13, 48, 62, 7, 3, 37, 66, 55, 43, 26, 74, 49, 51, 10, 52, 16, 14, 72, 50, 69]
+Execution time:  64.93983086000662
+Total Path Length: 4299.133361803972
+Total path cost: 1910.9946704988636
+Total task Length: 3359.3927548391985
+Highes route cost: 1176.2387455112905
+Iterations:  24
+Number of tasks 97
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Robot Routes
+[48, 15, 36, 43, 86, 93, 77, 81, 96, 3, 79, 62, 92, 21, 29, 9, 13, 5, 63, 85]
+[53, 89, 18, 22, 7, 61, 95, 82, 90, 39, 94, 65, 34, 28, 70, 37, 49, 76, 80, 46, 40, 91, 58, 75, 44, 50]
+[74, 45, 8, 17, 54, 35, 30, 2, 88, 42, 57, 47, 16, 87, 32]
+[60, 20, 33, 12, 0, 6, 1, 19, 64, 67, 24, 4, 14, 83, 72, 55, 38, 41, 68, 78, 71, 69, 66, 27, 26, 11, 51, 73]
+Execution time:  92.18429768801434
+Total Path Length: 3969.948854007115
+Total path cost: 1787.791518554146
+Total task Length: 3095.081009866269
+Highes route cost: 1123.2104550805793
+Iterations:  31
+Number of tasks 53
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[23, 8, 1, 20, 37, 25, 47, 4, 3, 51, 26, 2, 15, 32]
+[6, 0, 18, 22, 46, 41, 10, 34, 42, 49, 31, 27]
+[24, 16, 38, 7, 28, 13, 35, 44, 39, 33, 21, 45, 14]
+[29, 19, 43, 30, 12, 50, 48, 17, 52, 40, 11, 36, 5, 9]
+Execution time:  12.454323566053063
+Total Path Length: 4197.949548559579
+Total path cost: 1710.3782143601202
+Total task Length: 3316.778664766771
+Highes route cost: 1270.3365778218213
+Iterations:  27
+Number of tasks 35
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Robot Routes
+[28, 32, 13, 18, 10, 6, 14, 24]
+[22, 12, 4, 16, 31, 27, 0, 29]
+[17, 2, 3, 34, 20, 25, 11, 19, 33, 15]
+[23, 21, 1, 5, 30, 26, 9, 7, 8]
+Execution time:  3.33629635698162
+Total Path Length: 4078.9692381733494
+Total path cost: 1575.9217611922986
+Total task Length: 3392.2892614779257
+Highes route cost: 1184.74460983902
+Iterations:  29
+Number of tasks 52
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Robot Routes
+[7, 40, 20, 25, 24, 12, 8, 0, 38, 18, 26]
+[33, 39, 23, 48, 17, 5, 47, 16, 27, 34, 31, 4, 35, 44]
+[30, 11, 49, 32, 36, 10, 46, 37, 2, 51]
+[29, 9, 1, 19, 22, 14, 15, 13, 3, 43, 28, 6, 41, 21, 45, 42, 50]
+Execution time:  11.765601167979185
+Total Path Length: 4257.151229789266
+Total path cost: 1717.64440698357
+Total task Length: 3387.250029776114
+Highes route cost: 1179.609159598558
+Iterations:  20
+Number of tasks 74
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Robot Routes
+[35, 1, 17, 60, 46, 30, 0, 41, 4, 51, 64, 65, 3, 9, 71, 42, 26]
+[48, 20, 67, 44, 18, 50, 28, 68, 15, 29, 40, 2, 62, 23, 53, 33]
+[7, 12, 16, 49, 6, 55, 66, 24, 58, 10, 43, 32, 31, 70, 14, 19]
+[27, 5, 47, 13, 56, 52, 8, 69, 36, 72, 54, 37, 22, 21, 73, 34, 45, 39, 25, 63, 11, 59, 57, 61]
+Execution time:  47.29432151699439
+Total Path Length: 4463.675935058178
+Total path cost: 1878.8523154976763
+Total task Length: 3323.7111746646724
+Highes route cost: 1348.4058709904616
+Iterations:  30
+Number of tasks 95
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Robot Routes
+[6, 27, 90, 86, 52, 0, 17, 68, 58, 60, 85, 21, 31, 63, 56, 47, 13, 50, 94, 26, 23, 29, 1, 44, 34, 91, 92]
+[7, 39, 33, 57, 70, 62, 24, 88, 79, 51, 74, 84, 89, 28, 83, 9, 10, 45, 67, 2, 11, 77, 40, 8]
+[25, 38, 72, 4, 37, 41, 5, 55, 43, 61, 82, 73, 16, 76, 42, 19, 35, 64, 80, 75, 14, 36, 32, 78, 65]
+[20, 30, 81, 22, 49, 15, 3, 69, 59, 46, 87, 53, 12, 93, 48, 66, 71]
+Execution time:  87.89119748398662
+Total Path Length: 4217.515988124094
+Total path cost: 1902.0944453855398
+Total task Length: 3117.1050137571715
+Highes route cost: 1109.7025381808871
+Iterations:  32
+Number of tasks 45
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[24, 18, 33, 15, 10, 17, 11, 4]
+[0, 7, 8, 21, 2, 16, 37, 32, 19, 20, 36, 34, 44]
+[26, 1, 31, 13, 3, 40, 43, 25, 38, 42, 6]
+[41, 9, 23, 28, 30, 22, 12, 27, 29, 14, 5, 39, 35]
+Execution time:  6.2120309129823
+Total Path Length: 4115.333641217188
+Total path cost: 1637.5480530064642
+Total task Length: 3450.52310942633
+Highes route cost: 1277.0822714058343
+Iterations:  21
+Number of tasks 86
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Robot Routes
+[61, 80, 36, 13, 28, 52, 3, 63, 2, 81, 42, 44, 55, 21, 8, 43, 60, 15, 10, 39, 79, 5, 47]
+[24, 12, 33, 84, 82, 71, 56, 32, 46, 70, 78, 20, 23, 58, 76, 38, 0, 62, 65, 19]
+[69, 50, 30, 22, 66, 57, 73, 37, 59, 11, 25, 29, 26, 49, 75, 17, 72, 27, 41, 77, 14, 68, 16]
+[31, 51, 45, 48, 64, 9, 18, 54, 67, 85, 40, 83, 35, 1, 74, 4, 53, 34, 7]
+Execution time:  40.179595738009084
+Total Path Length: 4063.4783776806444
+Total path cost: 1809.6429021339925
+Total task Length: 3205.5667802353514
+Highes route cost: 1129.7242284779752
+Iterations:  20
+Number of tasks 99
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Robot Routes
+[98, 22, 29, 35, 12, 0, 54, 77, 65, 76, 82, 58, 4, 18, 28, 40, 23, 5, 55, 78, 31, 46, 72, 59, 27]
+[69, 30, 14, 50, 48, 81, 19, 92, 32, 71, 21, 75, 56, 6, 83, 3, 25, 80, 49, 1]
+[62, 33, 10, 39, 93, 26, 63, 88, 96, 85, 13, 15, 34, 60, 66, 68, 11, 36, 47, 86, 95, 20]
+[41, 57, 17, 45, 43, 61, 91, 24, 42, 74, 53, 8, 73, 16, 37, 90, 84, 87, 52, 70, 2, 38]
+Execution time:  66.68472582299728
+Total Path Length: 4031.305821093603
+Total path cost: 1818.66909329271
+Total task Length: 2959.008085974595
+Highes route cost: 1173.780023268426
+Iterations:  31
+Number of tasks 84
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[44, 40, 80, 15, 3, 49, 30, 37, 31, 56, 46, 12, 28, 14, 70, 35, 82, 76, 57, 36, 55, 10, 24, 63, 9]
+[2, 8, 72, 79, 19, 75, 6, 51, 58, 26, 11, 59, 0, 38, 68, 69, 83, 43]
+[77, 47, 33, 25, 41, 65, 29, 71, 60, 1, 17, 78, 50, 20, 27, 32, 62]
+[67, 23, 22, 64, 52, 74, 13, 61, 45, 73, 34, 81, 48, 5, 54, 39, 21, 4, 7, 16, 53, 66, 18, 42]
+Execution time:  60.09363937500166
+Total Path Length: 4276.577773700554
+Total path cost: 1886.3493357587977
+Total task Length: 3280.6139583413565
+Highes route cost: 1089.2908186559632
+Iterations:  27
+Number of tasks 80
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Robot Routes
+[49, 55, 39, 7, 77, 66, 23, 71, 43, 37, 2, 61, 31, 10, 38, 57, 29, 1, 8, 18]
+[15, 41, 27, 30, 67, 35, 48, 45, 19, 4, 17, 58, 56]
+[34, 69, 5, 72, 52, 53, 79, 24, 12, 13, 46, 68, 25, 65, 40, 36, 26, 14, 22]
+[44, 47, 74, 70, 73, 33, 62, 51, 3, 75, 63, 50, 16, 20, 60, 9, 28, 11, 78, 0, 21, 32, 6, 64]
+Execution time:  45.455440781021025
+Total Path Length: 4232.367884961866
+Total path cost: 1845.3084106835367
+Total task Length: 3235.2424097045014
+Highes route cost: 1136.536567763017
+Iterations:  33
+Number of tasks 42
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[1, 19, 2, 23, 18, 20, 36, 0, 29, 17, 30]
+[28, 11, 37, 6, 7, 22, 3, 25, 12, 34, 40]
+[41, 33, 31, 16, 26, 8]
+[38, 27, 21, 39, 35, 10, 4, 14, 13, 15, 24, 9, 32]
+Execution time:  15.462101579003502
+Total Path Length: 4071.4310237003947
+Total path cost: 1599.1141497751294
+Total task Length: 3280.098808793863
+Highes route cost: 1176.8460755168894
+Iterations:  200
+Number of tasks 39
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[7, 18, 37, 2, 19, 38, 20, 15, 31, 4, 9]
+[25, 17]
+[29, 33]
+[1, 12, 26, 32, 14, 11, 27, 22, 16, 3, 8, 13]
+Execution time:  38.61123530601617
+Total Path Length: 3032.1879608484087
+Total path cost: 1178.5938222200425
+Total task Length: 2301.720838752362
+Highes route cost: 1481.4543320421835
+Iterations:  200
+Number of tasks 88
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Robot Routes
+[66, 82, 26, 86, 30, 55, 57, 58, 62, 83, 72, 69, 4, 3, 20, 41, 65]
+[40, 28, 52, 25, 17, 24, 46, 67, 71, 27, 6, 0, 36, 74, 56, 2, 79, 8, 31, 73, 21]
+[45, 12, 77, 59, 43, 76, 53, 68, 85, 60, 11, 70, 34, 81, 50, 29, 35, 64, 33, 47, 39, 38, 15, 51]
+[32, 13, 9, 1, 80, 61, 18, 10, 44, 23, 16, 84, 48, 49, 78, 54, 14, 63, 87, 5, 75, 42, 37, 22]
+Execution time:  48.246621049998794
+Total Path Length: 4239.458842239288
+Total path cost: 1897.617394996709
+Total task Length: 3236.1878686695227
+Highes route cost: 1130.7783850155458
+Iterations:  29
+Number of tasks 38
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Robot Routes
+[27, 7, 12, 20, 13, 3, 22, 33, 15, 5, 9, 19, 6]
+[1, 0, 2, 32, 34, 8]
+[14, 30, 24, 4, 28, 31, 18, 29, 11]
+[36, 10, 35, 37, 23, 26, 16, 17, 21, 25]
+Execution time:  5.925223923986778
+Total Path Length: 4321.158647048842
+Total path cost: 1670.3811610601515
+Total task Length: 3397.830298153559
+Highes route cost: 1289.9730477201806
+Iterations:  39
+Number of tasks 58
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Robot Routes
+[48, 25, 17, 2, 23, 40, 37, 42, 18, 38, 7, 51, 30, 8, 1]
+[53, 16, 12, 13, 11, 4, 44, 21, 19, 28, 43, 3, 35, 52, 46]
+[45, 24, 14, 20, 36, 26, 56, 34, 0, 47, 27, 10]
+[50, 5, 39, 49, 6, 55, 31, 22, 33, 15, 57, 32, 54, 9, 29, 41]
+Execution time:  16.32474509597523
+Total Path Length: 4300.722014194011
+Total path cost: 1756.005593785433
+Total task Length: 3360.061001369098
+Highes route cost: 1143.6095075604424
+Iterations:  36
+Number of tasks 60
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Robot Routes
+[44, 2, 28, 54, 37, 40, 0, 32, 22, 43, 11, 47, 51, 12, 42, 59, 24]
+[13, 31, 14, 39, 20, 57, 53, 38, 23, 26, 58, 10, 1, 25, 52, 30]
+[19, 46, 9, 8, 4, 17, 15, 16, 3, 33, 34, 27]
+[41, 6, 48, 29, 49, 50, 36, 55, 35, 21, 45, 18, 5, 56, 7]
+Execution time:  40.347521504969336
+Total Path Length: 4221.460997761885
+Total path cost: 1751.2400087539531
+Total task Length: 3345.182188591347
+Highes route cost: 1262.7259639921458
+Iterations:  53
+Number of tasks 70
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Robot Routes
+[45, 57, 3, 12, 2, 63, 51, 34, 66, 17, 22, 4, 68, 20, 18, 41, 48, 13, 31]
+[36, 23, 25, 7, 21, 19, 0, 26, 53, 35, 56, 1, 46, 29, 50, 49, 64, 27, 24]
+[42, 60, 38, 47, 6, 11, 55, 43, 37, 32, 62, 28, 16, 14, 8, 69, 15]
+[61, 10, 59, 52, 30, 54, 39, 44, 67, 33, 9, 58, 40, 65, 5]
+Execution time:  50.181802595965564
+Total Path Length: 4171.477269644653
+Total path cost: 1786.9998701012232
+Total task Length: 3291.8793707192463
+Highes route cost: 1165.8998277623132
+Iterations:  46
+Number of tasks 84
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[28, 29, 36, 23, 79, 19, 4, 65, 68, 7, 12, 31, 73, 49, 64, 71, 57, 11, 25, 47, 3, 83, 8, 0, 1, 43]
+[9, 60, 2, 26, 80, 20, 15, 22, 62, 40, 54, 51, 35, 14, 61, 52, 18]
+[34, 27, 77, 75, 46, 10, 37, 48, 69, 55, 63, 74, 5, 17, 56, 30]
+[59, 67, 72, 58, 76, 41, 50, 81, 6, 66, 21, 70, 45, 13, 53, 42, 82, 78, 44, 32, 16, 24, 38, 39, 33]
+Execution time:  36.7568343289895
+Total Path Length: 4088.9299895614886
+Total path cost: 1816.7157636133302
+Total task Length: 3249.7609111830266
+Highes route cost: 1132.2036006469948
+Iterations:  23
+Number of tasks 55
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Robot Routes
+[30, 39, 44, 7, 33, 27, 29, 24, 42, 46, 9, 51]
+[28, 43, 37, 48, 5, 22, 14, 32, 10, 0, 26, 31, 36, 53]
+[16, 50, 19, 23, 45, 54, 18, 17, 21, 8, 52, 12, 34, 40, 47]
+[38, 3, 11, 35, 6, 41, 20, 2, 1, 13, 49, 25, 4, 15]
+Execution time:  13.36194421799155
+Total Path Length: 4341.093627256972
+Total path cost: 1758.755240408252
+Total task Length: 3371.569507488095
+Highes route cost: 1173.885486084446
+Iterations:  25
+Number of tasks 63
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Robot Routes
+[19, 57, 0, 36, 38, 27, 42, 58, 3, 24, 32, 18, 52, 21, 50]
+[1, 13, 7, 29, 53, 17, 44, 28, 61, 56, 11, 55, 23, 31, 40, 35, 20, 45, 9, 34]
+[43, 6, 62, 16, 22, 37, 60, 41, 33, 48, 49]
+[54, 25, 10, 51, 4, 26, 30, 59, 2, 14, 12, 39, 8, 5, 47, 15, 46]
+Execution time:  25.695686238002963
+Total Path Length: 4326.175825546912
+Total path cost: 1810.0918402700227
+Total task Length: 3299.6443015721243
+Highes route cost: 1126.0849615410548
+Iterations:  30
+Number of tasks 83
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Robot Routes
+[39, 45, 80, 79, 73, 49, 48, 42, 54, 50, 20, 21, 58, 8, 10, 69, 47]
+[1, 25, 41, 40, 9, 67, 72, 30, 16, 29, 13, 15, 82, 27, 64, 0, 59, 44, 53, 74, 66, 37, 4, 7]
+[77, 56, 43, 61, 51, 2, 63, 60, 38, 26, 19, 76, 62, 22, 11, 5, 18, 55, 31, 35]
+[36, 6, 12, 70, 34, 24, 78, 75, 81, 33, 46, 65, 32, 3, 28, 57, 71, 23, 52]
+Execution time:  77.0626801319886
+Total Path Length: 4414.722257291316
+Total path cost: 1915.874204861449
+Total task Length: 3044.408236179008
+Highes route cost: 1201.5144727108332
+Iterations:  34
+Number of tasks 40
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Robot Routes
+[10, 13, 37, 21, 25, 22, 9, 32, 7, 11, 26, 36, 23]
+[38, 12, 1, 14, 16, 2, 27, 39, 30, 0, 18]
+[5, 15, 4, 8, 34, 24, 35]
+[29, 28, 17, 20, 3, 33, 19, 6, 31]
+Execution time:  2.515899320016615
+Total Path Length: 4250.004566496774
+Total path cost: 1656.9389808844169
+Total task Length: 3383.9609995353558
+Highes route cost: 1182.604443632664
+Iterations:  17
+Number of tasks 63
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Robot Routes
+[31, 55, 47, 58, 38, 4, 12, 46, 41, 40, 11, 51, 27, 52, 33, 9, 29, 37, 43, 34, 61, 8, 10, 50, 36, 7, 49]
+[28, 18, 16, 17, 60, 39, 1, 6, 25, 20, 2, 30, 13, 23, 0, 54]
+[56, 5, 3, 24, 53, 14, 35, 26, 45, 32, 15]
+[19, 21, 42, 62, 48, 57, 22, 59, 44]
+Execution time:  12.648269883997273
+Total Path Length: 4045.8073290427296
+Total path cost: 1680.9239057084872
+Total task Length: 3377.570734489903
+Highes route cost: 1242.4392269651617
+Iterations:  13
+Number of tasks 66
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[51, 17, 61, 10, 33, 60, 4, 38, 62, 28, 1, 56, 37, 23, 3, 30, 6, 11, 31]
+[57, 35, 19, 45, 58, 55, 41, 65, 12, 43, 29, 21, 64, 39, 24, 50, 13]
+[49, 54, 25, 5, 52, 27, 7, 9]
+[18, 0, 42, 53, 32, 14, 48, 16, 40, 59, 36, 15]
+Execution time:  189.0146073270007
+Total Path Length: 3723.9591843903386
+Total path cost: 1555.9431448356472
+Total task Length: 2938.0081141586447
+Highes route cost: 1080.1151349180304
+Iterations:  200
+Number of tasks 93
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Robot Routes
+[39, 36, 64, 46, 86, 70, 24, 35, 18, 40, 49, 48, 83, 71, 88, 30, 53, 26]
+[73, 56, 84, 5, 61, 38, 92, 34, 65, 82, 25, 20, 3, 52, 6, 28, 55, 13, 17]
+[23, 41, 37, 72, 91, 2, 67, 75, 45, 69, 50, 85, 19, 10, 74, 78, 21, 7, 79, 33, 27, 47, 11, 22, 43, 29, 60, 54, 57]
+[31, 90, 8, 66, 89, 1, 59, 4, 58, 16, 76, 32, 80, 15, 62, 42, 81, 0, 51, 87, 9, 44, 68, 63, 14, 12, 77]
+Execution time:  64.39796530897729
+Total Path Length: 4013.410529700746
+Total path cost: 1842.32716764986
+Total task Length: 3136.123636019824
+Highes route cost: 1095.3521455330047
+Iterations:  23
+Number of tasks 81
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Robot Routes
+[4, 0, 52, 59, 47, 16, 76, 12, 19, 77, 64, 69, 25, 41, 9, 33, 10, 63, 29, 55, 43, 50, 65]
+[18, 45, 58, 56, 20, 68, 66, 17, 14, 51, 40, 79, 8, 7, 11, 27, 23, 34, 62, 37, 54]
+[13, 28, 2, 21, 3, 73, 38, 74, 48, 32, 31, 15, 70, 46, 42, 22, 6, 44]
+[24, 60, 35, 39, 53, 78, 30, 61, 71, 72, 49, 26, 36, 57, 75, 1, 5, 67, 80]
+Execution time:  34.91021765698679
+Total Path Length: 4417.528697154333
+Total path cost: 1915.9628285218234
+Total task Length: 3305.5930100151286
+Highes route cost: 1171.8262762661668
+Iterations:  27
+Number of tasks 71
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Robot Routes
+[37, 3, 59, 45, 14, 10, 57, 34, 22, 43, 65, 70, 11, 35, 1, 9, 38, 60, 27, 61, 28]
+[36, 13, 44, 63, 2, 58, 53, 51, 15, 26, 50, 5, 66, 7, 6, 30, 67, 12, 4, 68, 54]
+[48, 21, 31, 69, 32, 16, 25, 42, 29, 19, 40, 52, 0, 47, 20, 39]
+[62, 8, 46, 56, 17, 33, 23, 49, 18, 64, 41, 24, 55]
+Execution time:  33.87157003197353
+Total Path Length: 4210.806268175405
+Total path cost: 1807.205078633323
+Total task Length: 3284.6099810495252
+Highes route cost: 1183.207830015281
+Iterations:  39
+Number of tasks 42
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Robot Routes
+[8, 21, 32, 35, 10, 13, 20, 4, 31, 18, 36, 3, 37]
+[1, 22, 33, 15, 6, 38, 12, 16, 34, 23, 7, 30]
+[41, 9, 24, 40, 0, 19, 39, 11]
+[25, 5, 29, 14, 28, 17, 26, 27, 2]
+Execution time:  6.667374410026241
+Total Path Length: 4300.0182044262765
+Total path cost: 1681.1349186680873
+Total task Length: 3389.870828979828
+Highes route cost: 1292.0748393205129
+Iterations:  34
+Number of tasks 79
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Robot Routes
+[20, 4, 42, 23, 71, 78, 30, 34, 68, 57, 22, 72, 18, 13, 62, 12, 24, 70, 76, 44, 26]
+[60, 59, 33, 58, 41, 31, 35, 38, 40, 14, 0, 11, 45, 19, 67]
+[10, 7, 49, 37, 65, 17, 16, 69, 66, 6, 47, 27, 73, 1, 53, 54, 43, 15, 52, 29, 77]
+[25, 50, 36, 5, 2, 9, 55, 74, 51, 21, 75, 61, 48, 39, 56, 28, 64, 46, 3, 8, 63, 32]
+Execution time:  52.08545651001623
+Total Path Length: 4060.589290282974
+Total path cost: 1772.282837968683
+Total task Length: 3352.4011755623815
+Highes route cost: 1367.8824765454865
+Iterations:  33
+Number of tasks 66
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Robot Routes
+[10, 21, 45, 46, 47, 50, 33, 27, 40, 13, 18, 11, 62, 5, 0, 53]
+[14, 54, 48, 2, 55, 20, 37, 59, 34, 36, 63, 22, 17, 23]
+[26, 24, 8, 12, 51, 31, 25, 15, 65, 19, 61, 58, 41, 57, 42, 28, 7, 49, 52, 44]
+[60, 39, 43, 4, 29, 9, 64, 30, 32, 3, 1, 16, 56, 35, 38, 6]
+Execution time:  17.250905520981178
+Total Path Length: 4153.959533887722
+Total path cost: 1758.4301464202815
+Total task Length: 3421.6936315473167
+Highes route cost: 1238.516091940126
+Iterations:  29
+Number of tasks 46
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Robot Routes
+[20, 11, 37, 22, 9, 5, 23, 24, 12, 27]
+[8, 13, 2, 41, 3, 29, 38, 30, 26, 4, 0, 21, 34, 1, 6, 42, 35]
+[19, 18, 36, 45, 25, 32, 33, 17, 40]
+[28, 44, 16, 7, 39, 15, 14, 31, 10, 43]
+Execution time:  5.33944483200321
+Total Path Length: 4121.658747897636
+Total path cost: 1635.70030004653
+Total task Length: 3415.573997895938
+Highes route cost: 1160.6695157755476
+Iterations:  20
+Number of tasks 85
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[32, 36, 68, 27, 74, 13, 82, 30, 73, 64, 55, 53, 2, 41, 22, 0, 3, 63, 50, 44, 14, 7, 79, 59, 62]
+[40, 51, 28, 9, 42, 1, 83, 12, 66, 15, 23, 5, 80, 24, 70, 39, 77, 34, 26, 57, 8]
+[46, 65, 35, 20, 37, 21, 25, 17, 11, 48, 54, 60, 45, 6, 43, 58, 56, 4]
+[18, 10, 33, 38, 19, 67, 72, 31, 75, 69, 49, 29, 81, 61, 76, 71, 78, 47, 84, 52]
+Execution time:  33.72524080995936
+Total Path Length: 4198.254287103837
+Total path cost: 1856.9237845779678
+Total task Length: 3254.6158779155394
+Highes route cost: 1107.9368639168224
+Iterations:  21
+Number of tasks 55
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Robot Routes
+[15, 29, 2, 18, 28, 26, 50, 6, 53, 27, 23, 54, 0, 36, 43, 12, 13]
+[22, 25, 21, 39, 41, 20, 3, 38, 11, 10, 4]
+[9, 24, 45, 1, 51, 5, 33, 42, 34, 52, 8, 48, 7, 17, 32]
+[30, 31, 35, 16, 14, 49, 37, 40, 47, 46, 19, 44]
+Execution time:  15.55753776698839
+Total Path Length: 4105.19716616995
+Total path cost: 1695.0243781084823
+Total task Length: 3321.2434021180193
+Highes route cost: 1272.0667369775224
+Iterations:  28
+Number of tasks 99
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Robot Routes
+[44, 97, 96, 16, 27, 71, 82, 19, 33, 72, 53, 42, 69, 46, 95, 7, 83, 10, 62, 15]
+[93, 57, 94, 86, 87, 54, 30, 2, 77, 20, 50, 39, 59, 65, 23, 5, 64, 41, 21, 31, 68, 8, 67]
+[48, 24, 91, 25, 22, 85, 74, 11, 36, 47, 29, 84, 34, 18, 13, 61, 14, 60, 49, 0, 55, 45, 37, 80, 4, 6, 92, 26]
+[51, 38, 76, 98, 3, 70, 12, 81, 1, 78, 58, 40, 88, 28, 89, 35, 17, 73, 90, 52, 43, 63, 66, 75, 79]
+Execution time:  100.84801304800203
+Total Path Length: 3982.925303738655
+Total path cost: 1849.2371614451922
+Total task Length: 3037.961855663486
+Highes route cost: 1148.0985554663428
+Iterations:  30
+Number of tasks 57
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Robot Routes
+[44, 28, 3, 46, 39, 20, 5, 54, 6, 1, 34, 0, 30]
+[16, 11, 43, 29, 56, 21, 27, 14, 19, 13, 40, 42, 10, 18, 35, 53]
+[4, 49, 31, 37, 2, 9, 17, 32, 15, 47, 12, 55, 45, 24, 48, 52, 36]
+[38, 8, 22, 23, 41, 26, 33, 25, 7, 50, 51]
+Execution time:  15.40855598001508
+Total Path Length: 3932.58018503151
+Total path cost: 1635.6933586478408
+Total task Length: 3245.912176868585
+Highes route cost: 1147.515919770018
+Iterations:  17
+Number of tasks 62
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Robot Routes
+[0, 3, 29, 30, 21, 5, 4, 37, 46, 34, 35, 55, 26, 39, 28, 51, 53, 10]
+[60, 7, 16, 17, 58, 36, 11, 43, 6, 12, 47, 57, 23, 33]
+[49, 9, 2, 14, 50, 38, 18, 52, 45, 56, 19, 13, 42, 32, 8]
+[44, 61, 27, 22, 48, 20, 15, 41, 54, 31, 1, 24, 40, 59, 25]
+Execution time:  9.175692558987066
+Total Path Length: 4062.443947932347
+Total path cost: 1705.6405658977062
+Total task Length: 3345.3065964466905
+Highes route cost: 1186.3550786758155
+Iterations:  16
+Number of tasks 67
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Robot Routes
+[64, 4, 39, 47, 44, 60, 22, 63, 3, 5, 59, 9, 48, 34, 58]
+[51, 56, 16, 14, 53, 38, 8, 42, 21, 10, 54, 49, 1, 57, 50, 30]
+[19, 62, 15, 31, 20, 35, 61, 29, 12, 6, 33, 26, 45, 65, 27, 55, 40, 23]
+[28, 41, 7, 0, 37, 66, 25, 24, 11, 52, 32, 17, 2, 46, 18, 43, 36, 13]
+Execution time:  25.76595701201586
+Total Path Length: 4212.716436581748
+Total path cost: 1781.1163146027716
+Total task Length: 3350.581111765583
+Highes route cost: 1267.747177812989
+Iterations:  30
+Number of tasks 78
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Robot Routes
+[24, 8, 70, 77, 6, 47, 7, 4, 45, 75, 22, 19, 63, 41, 18, 32, 72, 61, 37, 60, 42, 73, 44, 59, 51, 36, 74, 62]
+[53, 16, 30, 39, 1, 46, 26, 71, 10, 65, 12, 69, 11, 20, 55, 28, 40]
+[33, 9, 17, 35, 14, 25, 43, 13, 64, 57, 67, 56, 5, 48]
+[49, 66, 21, 50, 52, 23, 15, 29, 0, 76, 54, 27, 58, 38, 34, 3, 31, 68, 2]
+Execution time:  36.06150728702778
+Total Path Length: 4222.184656223746
+Total path cost: 1835.312979063439
+Total task Length: 3288.5232184324063
+Highes route cost: 1085.626919847833
+Iterations:  26
+Number of tasks 92
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[47, 55, 52, 90, 59, 17, 62, 71, 50, 72, 45, 78, 85, 27, 88, 48, 32, 75, 18, 35, 46, 76, 33, 67, 21, 91, 7, 9, 54]
+[19, 65, 23, 29, 8, 26, 3, 36, 69, 25, 43, 60, 15, 13, 34, 73, 87, 68, 57]
+[22, 84, 41, 44, 82, 5, 28, 56, 64, 1, 11, 39, 66, 14, 42, 81, 80]
+[49, 2, 63, 37, 6, 74, 0, 79, 4, 70, 20, 61, 83, 51, 30, 89, 77, 10, 38, 31, 86, 16, 58, 40]
+Execution time:  50.597906612965744
+Total Path Length: 3990.9382814297787
+Total path cost: 1812.9707005308244
+Total task Length: 3184.0558563607865
+Highes route cost: 1072.3717398252977
+Iterations:  21
+Number of tasks 92
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Robot Routes
+[8, 76, 22, 13, 6, 44, 78, 5, 87, 89, 21, 2, 43, 51, 41, 48, 68, 60, 81]
+[33, 18, 63, 34, 85, 24, 65, 49, 4, 71, 7, 57, 27, 64, 42, 67, 3, 80, 79, 56, 28, 35, 70]
+[14, 52, 82, 73, 29, 16, 90, 84, 23, 26, 39, 15, 86, 32, 69, 30, 36, 45, 91, 54, 20, 11, 40, 47]
+[88, 31, 55, 17, 72, 53, 12, 46, 38, 58, 37, 75, 19, 62, 61, 25, 77, 83, 74, 66, 10, 59, 1]
+Execution time:  74.24873817199841
+Total Path Length: 4194.384992050296
+Total path cost: 1875.135891133324
+Total task Length: 3160.0726713856925
+Highes route cost: 1199.5077836401524
+Iterations:  37
+Number of tasks 47
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Robot Routes
+[1, 4, 38, 41, 32, 30, 36, 28, 29, 11, 15, 3]
+[43, 12, 16, 25, 44, 42, 10, 18, 37, 46, 31, 0, 7, 14, 27, 39, 34, 23, 40, 26]
+[45, 9, 6, 17, 8, 35, 24, 19]
+[2, 20, 33, 13, 22, 21, 5]
+Execution time:  4.4145574269932695
+Total Path Length: 4179.255935443314
+Total path cost: 1654.127787554127
+Total task Length: 3398.205783568613
+Highes route cost: 1140.8464273368168
+Iterations:  19
+Number of tasks 85
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Robot Routes
+[58, 32, 57, 9, 84, 65, 40, 6, 27, 80, 78, 44, 8, 11, 31, 46, 4, 14, 48, 15, 43, 41, 66]
+[37, 77, 12, 42, 25, 83, 3, 34, 1, 33, 47, 23, 72, 45, 62, 73, 20, 74]
+[35, 60, 61, 82, 71, 81, 29, 49, 30, 16, 5, 36, 52, 55, 68, 64, 24]
+[2, 38, 59, 22, 79, 51, 69, 21, 13, 50, 28, 63, 10, 53, 67, 54, 17, 26, 70, 19, 56, 75, 76, 39, 0, 7]
+Execution time:  28.678167883015703
+Total Path Length: 4200.204495343078
+Total path cost: 1865.2589176451781
+Total task Length: 3228.5742222150425
+Highes route cost: 1126.69266401208
+Iterations:  21
+Number of tasks 45
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Robot Routes
+[10, 1, 12, 0, 35, 39, 2, 5, 31, 36, 11, 20]
+[7, 42, 43, 30, 26, 18, 19, 22, 33, 14]
+[8, 9, 40, 3, 27, 21, 4, 44, 34, 16, 38, 13]
+[41, 25, 17, 37, 23, 15, 28, 29, 6, 24, 32]
+Execution time:  17.880020573968068
+Total Path Length: 4393.210647352744
+Total path cost: 1726.0364221251411
+Total task Length: 3497.650350751473
+Highes route cost: 1265.3158769858685
+Iterations:  51
+Number of tasks 68
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Robot Routes
+[3, 9, 44, 43, 24, 1, 62, 10, 47, 60, 35, 6, 7, 26, 25, 45, 2, 56, 57]
+[32, 12, 30, 50, 42, 11, 21, 28, 67, 46, 15, 49]
+[55, 27, 22, 20, 48, 34, 65, 23, 33, 39, 31, 51, 36, 58, 52, 14, 41, 18, 53, 4]
+[8, 66, 19, 40, 63, 5, 59, 0, 16, 13, 29, 61, 17, 37, 54, 64, 38]
+Execution time:  24.818101832002867
+Total Path Length: 4285.297233483055
+Total path cost: 1805.7472728176972
+Total task Length: 3430.0789600175635
+Highes route cost: 1140.7454412894992
+Iterations:  24
+Number of tasks 52
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Iteration 30
+Iteration 31
+Iteration 32
+Iteration 33
+Iteration 34
+Iteration 35
+Iteration 36
+Iteration 37
+Iteration 38
+Iteration 39
+Iteration 40
+Iteration 41
+Iteration 42
+Iteration 43
+Iteration 44
+Iteration 45
+Iteration 46
+Iteration 47
+Iteration 48
+Iteration 49
+Iteration 50
+Iteration 51
+Iteration 52
+Iteration 53
+Iteration 54
+Iteration 55
+Iteration 56
+Iteration 57
+Iteration 58
+Iteration 59
+Iteration 60
+Iteration 61
+Iteration 62
+Iteration 63
+Iteration 64
+Iteration 65
+Iteration 66
+Iteration 67
+Iteration 68
+Iteration 69
+Iteration 70
+Iteration 71
+Iteration 72
+Iteration 73
+Iteration 74
+Iteration 75
+Iteration 76
+Iteration 77
+Iteration 78
+Iteration 79
+Iteration 80
+Iteration 81
+Iteration 82
+Iteration 83
+Iteration 84
+Iteration 85
+Iteration 86
+Iteration 87
+Iteration 88
+Iteration 89
+Iteration 90
+Iteration 91
+Iteration 92
+Iteration 93
+Iteration 94
+Iteration 95
+Iteration 96
+Iteration 97
+Iteration 98
+Iteration 99
+Iteration 100
+Iteration 101
+Iteration 102
+Iteration 103
+Iteration 104
+Iteration 105
+Iteration 106
+Iteration 107
+Iteration 108
+Iteration 109
+Iteration 110
+Iteration 111
+Iteration 112
+Iteration 113
+Iteration 114
+Iteration 115
+Iteration 116
+Iteration 117
+Iteration 118
+Iteration 119
+Iteration 120
+Iteration 121
+Iteration 122
+Iteration 123
+Iteration 124
+Iteration 125
+Iteration 126
+Iteration 127
+Iteration 128
+Iteration 129
+Iteration 130
+Iteration 131
+Iteration 132
+Iteration 133
+Iteration 134
+Iteration 135
+Iteration 136
+Iteration 137
+Iteration 138
+Iteration 139
+Iteration 140
+Iteration 141
+Iteration 142
+Iteration 143
+Iteration 144
+Iteration 145
+Iteration 146
+Iteration 147
+Iteration 148
+Iteration 149
+Iteration 150
+Iteration 151
+Iteration 152
+Iteration 153
+Iteration 154
+Iteration 155
+Iteration 156
+Iteration 157
+Iteration 158
+Iteration 159
+Iteration 160
+Iteration 161
+Iteration 162
+Iteration 163
+Iteration 164
+Iteration 165
+Iteration 166
+Iteration 167
+Iteration 168
+Iteration 169
+Iteration 170
+Iteration 171
+Iteration 172
+Iteration 173
+Iteration 174
+Iteration 175
+Iteration 176
+Iteration 177
+Iteration 178
+Iteration 179
+Iteration 180
+Iteration 181
+Iteration 182
+Iteration 183
+Iteration 184
+Iteration 185
+Iteration 186
+Iteration 187
+Iteration 188
+Iteration 189
+Iteration 190
+Iteration 191
+Iteration 192
+Iteration 193
+Iteration 194
+Iteration 195
+Iteration 196
+Iteration 197
+Iteration 198
+Iteration 199
+Iteration 200
+Robot Routes
+[12, 15, 36, 17, 7, 3, 21, 10, 6, 2, 23, 20, 48, 38]
+[50, 11, 34, 49, 19, 25, 27, 32]
+[13, 35, 42, 0, 31, 51, 22, 30, 9, 14, 1, 39, 47, 44]
+[37, 16, 28, 8, 40, 24, 18, 46, 29, 5, 45, 33, 43, 41, 4]
+Execution time:  31.736186586960685
+Total Path Length: 4131.6571824110015
+Total path cost: 1678.6848878538187
+Total task Length: 3310.218978673989
+Highes route cost: 1145.0940533790185
+Iterations:  200
+Number of tasks 65
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Iteration 26
+Iteration 27
+Iteration 28
+Iteration 29
+Robot Routes
+[15, 5, 44, 17, 7, 50, 12, 8, 58, 0, 13, 38, 61, 30, 4]
+[19, 57, 47, 51, 60, 40, 52, 26, 25, 48, 11, 22, 33, 29, 39, 21, 56, 10]
+[59, 62, 34, 42, 36, 32, 53, 16, 46, 9, 49, 63, 64, 2, 31, 6, 18]
+[27, 23, 45, 35, 37, 55, 41, 1, 14, 3, 28, 54, 24, 43, 20]
+Execution time:  17.16559025301831
+Total Path Length: 4266.204333334456
+Total path cost: 1785.399656918265
+Total task Length: 3402.5699928248937
+Highes route cost: 1108.388876785114
+Iterations:  29
+Number of tasks 52
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Iteration 20
+Iteration 21
+Iteration 22
+Iteration 23
+Iteration 24
+Iteration 25
+Robot Routes
+[47, 36, 1, 32, 12, 17, 49, 27, 3, 4, 51]
+[39, 0, 40, 33, 2, 29, 10, 14, 48, 7, 15, 23, 20, 37, 6]
+[18, 38, 50, 45, 21, 28, 41, 30, 11, 9, 43, 13, 31, 34, 24, 44]
+[19, 8, 16, 25, 35, 5, 22, 42, 46, 26]
+Execution time:  8.332497569965199
+Total Path Length: 4195.922324394995
+Total path cost: 1698.2704543386703
+Total task Length: 3380.4570009174795
+Highes route cost: 1242.440795851819
+Iterations:  25
+Number of tasks 67
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+Iteration 11
+Iteration 12
+Iteration 13
+Iteration 14
+Iteration 15
+Iteration 16
+Iteration 17
+Iteration 18
+Iteration 19
+Robot Routes
+[48, 62, 9, 61, 13, 23, 47, 16, 34, 43, 46, 40, 6, 53, 56, 58, 7, 15, 65, 10, 21, 1, 31]
+[35, 51, 24, 39, 2, 45, 5, 44, 41, 38, 18, 4]
+[63, 42, 8, 27, 55, 0, 28, 66, 12, 36, 11, 19, 60]
+[14, 57, 32, 20, 33, 50, 52, 59, 17, 29, 64, 25, 3, 22, 37, 54, 49, 30, 26]
+Execution time:  16.04758877796121
+Total Path Length: 4378.963557422392
+Total path cost: 1835.309396514103
+Total task Length: 3367.9715803953927
+Highes route cost: 1239.6764356851904
+Iterations:  19
