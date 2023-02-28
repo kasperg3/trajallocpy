@@ -77,14 +77,15 @@ class runner:
         travel_length = 0
         total_path_length = 0
         total_task_length = 0
-        total_task_cost = 0
+        total_path_cost = 0
         route_list = []
         max_path_cost = 0
         for r in self.robot_list:
             travel_length, task_length = r.getTotalPathCost()
             total_path_length += travel_length
             total_task_length += task_length
-            total_task_cost += r.getTotalTravelCost(r.getPathTasks())
+            agent_path_cost = r.getTotalTravelCost(r.getPathTasks())
+            total_path_cost += agent_path_cost
             route = [r.state.squeeze()]
             for task in r.getPathTasks():
                 route.append(task.start)
@@ -93,19 +94,19 @@ class runner:
             route_list.append(route)
 
             # Save the highest route cost
-            if total_task_cost > max_path_cost:
-                max_path_cost = total_task_cost
+            if agent_path_cost > max_path_cost:
+                max_path_cost = total_path_cost
 
         print("Execution time: ", self.end_time - self.start_time)
         print("Total Path Length:", total_path_length)
-        print("Total path cost:", total_task_cost)
+        print("Total path cost:", total_path_cost)
         print("Total task Length:", total_task_length)
-        print("Highes route cost:", max_path_cost)
+        print("Highest path cost:", max_path_cost)
         print("Iterations: ", self.iterations)
         return (
             total_path_length,
             total_task_length,
-            total_task_cost,
+            total_path_cost,
             self.iterations,
             self.end_time - self.start_time,
             route_list,
