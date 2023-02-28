@@ -70,8 +70,6 @@ def main(
     files = findDatasetFiles(dataset_name, route_filename)
     for file_names in files:
         task_dict = Utility.loadRoutePlan(file_names[0])
-        if len(task_dict["lines"]) > 100:
-            continue
         print("Number of tasks", len(task_dict["lines"]))
         # For each dataset convert it to a json, save it and load it to a coverage problem
         holes_file = "" if len(file_names) < 3 else file_names[2]
