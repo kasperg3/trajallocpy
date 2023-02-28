@@ -95,7 +95,7 @@ class runner:
 
             # Save the highest route cost
             if agent_path_cost > max_path_cost:
-                max_path_cost = total_path_cost
+                max_path_cost = agent_path_cost
 
         print("Execution time: ", self.end_time - self.start_time)
         print("Total Path Length:", total_path_length)

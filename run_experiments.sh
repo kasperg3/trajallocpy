@@ -30,5 +30,6 @@ python3.11 main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --exper
 python3.11 main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=trajectory_6robots_400capacity_AC300  --n_robots=6 --capacity=400  > logs/trajectory_6robots_400capacity_AC300.txt &
 python3.11 main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=trajectory_4robots_500capacity_AC300  --n_robots=4 --capacity=500  > logs/trajectory_4robots_500capacity_AC300.txt &
 python3.11 main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=trajectory_2robots_1000capacity_AC300 --n_robots=2 --capacity=1000 > logs/trajectory_2robots_1000capacity_AC300.txt &
+python3.11 main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=trajectory_1robots_infcapacity_AC300 --n_robots=1 --capacity=9999 > logs/trajectory_1robots_infcapacity_AC300.txt &
 
 wait
