@@ -1,2 +1,2 @@
 dataset_name,totalRouteLength,sumOfTaskLengths,totalRouteCosts,maxRouteCost,iterations,computeTime,num_tasks,number_of_agents
-data/AreaCoverage-dataset/AC300/AC7_0008/holes,4403.506088860211,3323.8684490385185,1926.1832839591593,1031.040049768942,33,357.3262660400069,81,2
+data/AreaCoverage-dataset/AC300/AC7_0008/holes,4403.506088860211,3323.8684490385185,1926.1832839591593,1031.040049768942,33,354.8796051759855,81,2
