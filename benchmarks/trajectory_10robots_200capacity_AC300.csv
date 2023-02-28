@@ -1,0 +1,2 @@
+dataset_name,totalRouteLength,sumOfTaskLengths,totalRouteCosts,maxRouteCost,iterations,computeTime,num_tasks,number_of_agents
+data/AreaCoverage-dataset/AC300/AC9_0011,4595.194619037737,3298.2857831712,2002.5988205336364,2002.5988205336364,44,179.43494362197816,93,10

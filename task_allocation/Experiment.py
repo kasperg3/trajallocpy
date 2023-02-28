@@ -93,8 +93,8 @@ class runner:
             route_list.append(route)
 
             # Save the highest route cost
-            if travel_length > max_path_cost:
-                max_path_cost = travel_length
+            if total_task_cost > max_path_cost:
+                max_path_cost = total_task_cost
 
         print("Execution time: ", self.end_time - self.start_time)
         print("Total Path Length:", total_path_length)
