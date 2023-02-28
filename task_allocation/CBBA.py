@@ -67,11 +67,9 @@ class agent:
         # socre function parameters
         self.Lambda = 0.95
 
-        # Cache to enhance performance:
-        self.memo = {}
-
-        # mem = Memory(location=".", verbose=0, bytes_limit=1024)
-        # self.getTravelCost = mem.cache(self.getTravelCost)
+        #  
+        self.removal_list = np.zeros(self.task_num, dtype=np.int8)
+        self.removal_threshold = 15
 
     def getPathTasks(self):
         return self.tasks[self.path]
@@ -232,7 +230,7 @@ class agent:
         reverse = np.zeros(self.task_num)
         # try all tasks
         for j in range(self.task_num):
-            if j in self.bundle:  # If already in bundle list
+            if j in self.bundle or self.removal_list[j] > self.removal_threshold:  # If already in bundle list
                 c[j] = 0  # Minimum Score
             else:
                 # for each j calculate the path reward at each location in the local path
@@ -421,6 +419,11 @@ class agent:
             self.winning_agents[b_idx1] = -1
 
         tasks_to_delete = self.bundle[n_bar:]
+    
+        # Keep track of how many times this particular task has been removed
+        if len(tasks_to_delete) !=0:
+            self.removal_list[self.bundle[n_bar]] = self.removal_list[self.bundle[n_bar]] +1
+            
         del self.bundle[n_bar:]
 
         self.path = [ele for ele in self.path if ele not in tasks_to_delete]

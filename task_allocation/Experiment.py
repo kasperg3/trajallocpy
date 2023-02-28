@@ -62,7 +62,7 @@ class runner:
                         tasks=self.tasks,
                         agent_num=self.robot_num,
                         L_t=task_capacity,
-                        state=initial_state,
+                        state=initial_state + [np.random.uniform(-0.5, 0.5),np.random.uniform(-0.5, 0.5)],
                         point_estimation=use_point_estimation,
                     )
                 )
@@ -195,7 +195,7 @@ class runner:
 
             t += 1
 
-            if sum(converged_list) == self.robot_num or t >= self.max_t:
+            if sum(converged_list) == self.robot_num:
                 break
         self.iterations = t
 

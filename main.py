@@ -69,11 +69,11 @@ def main(
     results = []
     files = findDatasetFiles(dataset_name, route_filename)
     for file_names in files:
-        task_dict = Utility.loadRoutePlan(file_names[0])
+        task_dict = Utility.loadRoutePlan(file_names[2])
         print("Number of tasks", len(task_dict["lines"]))
         # For each dataset convert it to a json, save it and load it to a coverage problem
-        holes_file = "" if len(file_names) < 3 else file_names[2]
-        polygon_dict = Utility.loadPolygonFile(file_names[1], holes_file)
+        holes_file = "" if len(file_names) < 3 else file_names[1]
+        polygon_dict = Utility.loadPolygonFile(file_names[0], holes_file)
         combined_dict = {**task_dict, **polygon_dict}
         cp = Utility.loadCoverageProblemFromDict(combined_dict, number_of_agents)
         exp = Experiment.runner(
@@ -130,16 +130,16 @@ if __name__ == "__main__":
     )
     parser.add_argument("--show_plots", default=False, type=bool, help="whether to show plots")
     args = parser.parse_args()
-    print(args)
-    main(
-        args.dataset,
-        args.route_file_name,
-        args.experiment_name,
-        args.n_robots,
-        args.capacity,
-        args.point_estimation,
-        args.show_plots,
-    )
+    # print(args)
+    # main(
+    #     args.dataset,
+    #     args.route_file_name,
+    #     args.experiment_name,
+    #     args.n_robots,
+    #     args.capacity,
+    #     args.point_estimation,
+    #     args.show_plots,
+    # )
 
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_4robots_600capacity_AC300 --n_robots=4 --capacity=600
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_naive_4robots_600capacity_AC300 --n_robots=4 --capacity=600 --point_estimation=True
@@ -147,14 +147,14 @@ if __name__ == "__main__":
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_naive_2robots_1200capacity_AC300 --n_robots=2 --capacity=1200 --point_estimation=True
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_1robots_infcapacity_AC300 --n_robots=1
     # python main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=ours_naive_1robots_infcapacity_AC300 --n_robots=1 --point_estimation=True
-    # experiment_title = "AC300_test"
-    # main(
-    #     dataset_name="AC300",
-    #     route_filename="mem_inf_route_data0",
-    #     experiment_title=experiment_title,
-    #     number_of_agents=10,
-    #     capacity=200,
-    #     point_estimation=False,
-    #     show_plots=False,
-    #     debug=True,
-    # )
+    experiment_title = "AC300_convergence_14robots_test"
+    main(
+        dataset_name="AC300",
+        route_filename="mem_inf_route_data0",
+        experiment_title=experiment_title,
+        number_of_agents=6,
+        capacity=300,
+        point_estimation=False,
+        show_plots=False,
+        debug=False,
+    )
