@@ -117,59 +117,6 @@ def loadDataset(directory, route_data_name, holes_name, outer_poly_name):
             csv_files.append(filepath)
     return csv_files
 
-
-def loadRoutePlan(csvFilePath):
-    with open(csvFilePath, "r") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=" ")
-        rows = []
-        for row in csv_reader:
-            rows.append(row)
-        lines = []
-        for i in range(len(rows)):
-            row = rows[i]
-            if row[2] == "1":
-                next_row = rows[i + 1]
-                lines.append(
-                    [
-                        [float(next_row[0]), float(next_row[1])],
-                        [float(row[0]), float(row[1])],
-                    ]
-                )
-        edgeDict = []
-    for s in lines:
-        edgeDict.append({"start": s[0], "end": s[1]})
-    return {"lines": edgeDict}
-
-
-def loadPolygonFile(polygon_file, holes_file):
-    # Add the polygon
-    with open(polygon_file, "r") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=" ")
-        polygon = []
-        for row in csv_reader:
-            polygon.append([float(row[0]), float(row[1])])
-
-    # add the holes
-    hole_list = []
-    if holes_file:
-        with open(holes_file, "r") as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=" ")
-            hole = []
-            for row in csv_reader:
-                if not row:
-                    hole_list.append(hole)
-                    hole = []
-                else:
-                    hole.append([float(row[0]), float(row[1])])
-
-            # Add the final hole
-            hole_list.append(hole)
-
-    polygon_with_holes_dict = {"polygon": polygon, "holes": hole_list}
-
-    return polygon_with_holes_dict
-
-
 def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
     polygon = data["polygon"]
     holes = data["holes"]

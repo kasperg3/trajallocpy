@@ -5,21 +5,6 @@ import os
 import csv
 import argparse
 
-
-def run_experiment():
-
-    seed = 8986413
-    np.random.seed(seed)
-
-    # import from csv
-    cp = Utility.loadCoverageProblem("data/SDUAreaCoverage/OdenseSO.json", nr=3)
-
-    # stage the experiment
-    for i in range(1):
-        exp = Experiment.runner(coverage_problem=cp, enable_plotting=True)
-        exp.solve()
-
-
 def findDatasetFiles(dataset, route_file, directory="data/AreaCoverage-dataset/"):
     result = []
     for filename in os.listdir(directory + dataset):
@@ -48,11 +33,6 @@ def saveResults(experiment_title, results):
         writer.writerow(results_header)
         writer.writerows(results)
 
-
-def exportSolution(dataset_name, problem_dict, route_list):
-    pass
-
-
 def main(
     dataset_name,
     route_filename,
@@ -67,34 +47,13 @@ def main(
     np.random.seed(seed)
 
     results = []
-    files = findDatasetFiles(dataset_name, route_filename)
     for file_names in files:
-        task_dict = Utility.loadRoutePlan(file_names[0])
-        print("Number of tasks", len(task_dict["lines"]))
-        # For each dataset convert it to a json, save it and load it to a coverage problem
-        holes_file = "" if len(file_names) < 3 else file_names[2]
-        polygon_dict = Utility.loadPolygonFile(file_names[1], holes_file)
-        combined_dict = {**task_dict, **polygon_dict}
         cp = Utility.loadCoverageProblemFromDict(combined_dict, number_of_agents)
-        exp = Experiment.runner(
-            coverage_problem=cp,
-            enable_plotting=show_plots,
-            max_iterations=200,
-            task_capacity=capacity,
-            use_point_estimation=point_estimation,
-        )
+        exp = Experiment.runner(coverage_problem=cp, enable_plotting=show_plots,max_iterations=200,task_capacity=capacity,use_point_estimation=point_estimation)
         exp.solve(profiling_enabled=False, debug=debug)
 
         # Save the results in a csv file
-        (
-            totalRouteLength,
-            sumOfTaskLengths,
-            totalRouteCosts,
-            iterations,
-            computeTime,
-            route_list,
-            maxRouteCost,
-        ) = exp.evaluateSolution()
+        (totalRouteLength, sumOfTaskLengths, totalRouteCosts, iterations, computeTime, route_list, maxRouteCost) = exp.evaluateSolution()
 
         results.append(
             [
@@ -131,24 +90,16 @@ if __name__ == "__main__":
     parser.add_argument("--show_plots", default=False, type=bool, help="whether to show plots")
     args = parser.parse_args()
     print(args)
-    main(
-        args.dataset,
-        args.route_file_name,
-        args.experiment_name,
-        args.n_robots,
-        args.capacity,
-        args.point_estimation,
-        args.show_plots,
-    )
-
-    # experiment_title = "AC300_convergence_14robots_test"
-    # main(
-    #     dataset_name="AC300",
-    #     route_filename="mem_inf_route_data0",
-    #     experiment_title=experiment_title,
-    #     number_of_agents=14,
-    #     capacity=300,
-    #     point_estimation=False,
-    #     show_plots=False,
-    #     debug=False,
-    # )
+    if(len(args._get_args()) != 0):
+        main(
+            args.dataset,
+            args.route_file_name,
+            args.experiment_name,
+            args.n_robots,
+            args.capacity,
+            args.point_estimation,
+            args.show_plots,
+        )
+    else: 
+        experiment_title = "AC300_convergence_14robots_test"
+        main( dataset_name="AC300", route_filename="mem_inf_route_data0", experiment_title=experiment_title, number_of_agents=14, capacity=300, point_estimation=False, show_plots=False, debug=False,)
