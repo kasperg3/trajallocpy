@@ -1,11 +1,10 @@
 import copy
+import math
 import random
 
 import numpy as np
 
 from task_allocation import Task
-import logging as log
-import math
 
 
 class agent:
@@ -24,7 +23,7 @@ class agent:
         self.task_idx = [j for j in range(self.task_num)]
         self.use_single_point_estimation = point_estimation
         self.agent_num = agent_num
-        if color == None:
+        if color is None:
             self.color = (
                 random.uniform(0, 1),
                 random.uniform(0, 1),
@@ -47,7 +46,7 @@ class agent:
         # Path
         self.path = []
         # Maximum task capacity
-        if L_t == None:
+        if L_t is None:
             self.L_t = 999999
         else:
             self.L_t = L_t

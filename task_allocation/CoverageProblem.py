@@ -1,6 +1,8 @@
-import numpy as np
-from task_allocation import Task
 from typing import List
+
+import numpy as np
+
+from task_allocation import Task
 
 
 class CoverageProblem:

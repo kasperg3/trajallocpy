@@ -1,12 +1,8 @@
-# Implement a Experiment class that Should
-#     Initialize the solver
-#     create events/scenario building
-#     Parametrized so that one can test different agent number/task number
-from task_allocation import CoverageProblem, CBBA, Utility
-import numpy as np
 import timeit
-import logging as log
-import os
+
+import numpy as np
+
+from task_allocation import CBBA, CoverageProblem, Utility
 
 
 class runner:
@@ -116,7 +112,9 @@ class runner:
     def solve(self, profiling_enabled=False, debug=False):
         if profiling_enabled:
             print("Profiling enabled!")
-            import cProfile, pstats, io
+            import cProfile
+            import io
+            import pstats
             from pstats import SortKey
 
             pr = cProfile.Profile()
