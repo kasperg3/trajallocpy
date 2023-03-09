@@ -1,7 +1,19 @@
 {
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": true,
+        "gitlens.codeLens.symbolScopes": [
+            "!Module"
+        ],
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.wordBasedSuggestions": false,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {"source.organizeImports": true}
+    },
     "python.analysis.typeCheckingMode": "off",
-    "python.formatting.autopep8Args": [
+    "python.formatting.blackArgs": [
         "--line-length",
-        "119"
-    ]
+        "120"
+    ],
+    "isort.args": ["--profile", "black"],
+    "autoDocstring.docstringFormat": "numpy"
 }

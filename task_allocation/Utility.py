@@ -112,6 +112,7 @@ def loadDataset(directory, route_data_name, holes_name, outer_poly_name):
             csv_files.append(filepath)
     return csv_files
 
+
 def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
     polygon = data["polygon"]
     holes = data["holes"]
@@ -125,6 +126,4 @@ def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
         else:
             tasks.append(Task.Task(start=np.array(s["end"]), end=np.array(s["start"]), task_id=i))
 
-    return CoverageProblem.CoverageProblem(
-        search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr
-    )
+    return CoverageProblem.CoverageProblem(search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr)

@@ -58,9 +58,7 @@ class agent:
 
         # initialize state
         if state is None:
-            self.set_state(
-                np.random.uniform(low=0, high=1, size=(1, 2)).squeeze()
-            )  # Agent State (Position)
+            self.set_state(np.random.uniform(low=0, high=1, size=(1, 2)).squeeze())  # Agent State (Position)
         else:
             self.set_state(state.squeeze())
         # socre function parameters
@@ -100,7 +98,7 @@ class agent:
             for t_index in range(len(task_list)):
                 total_cost += self.getTravelCost(task_list[t_index].start, task_list[t_index].end)
             # Add the cost of returning home
-            total_cost += self.getTravelCost(self.state.squeeze(),task_list[-1].end)
+            total_cost += self.getTravelCost(self.state.squeeze(), task_list[-1].end)
         return total_cost
 
     # This is only used for evaluations!
@@ -130,7 +128,11 @@ class agent:
         # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
 
-        result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
+        result = (
+            math.sqrt(4 * dist / self.max_acceleration)
+            if dist < d_a
+            else self.max_velocity / self.max_acceleration + dist / self.max_velocity
+        )
 
         return result  # the cost of travelling in seconds!
         # return np.linalg.norm(start - end) / self.velocity # Old and less efficient
@@ -145,7 +147,9 @@ class agent:
             travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[self.path[0]].start)
             S_p += self.Lambda ** (travel_cost) * self.tasks[self.path[0]].reward
             for p_idx in range(len(self.path) - 1):
-                travel_cost += self.getTravelCost(self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start)
+                travel_cost += self.getTravelCost(
+                    self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start
+                )
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[self.path[p_idx]])
         return S_p
 
@@ -166,8 +170,7 @@ class agent:
         temp_path.insert(n, j)
         is_reversed = False
         # travel cost to first task
-        travel_cost = self.getTravelCost(
-            self.state.squeeze(), self.tasks[temp_path[0]].start)
+        travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
         S_p = self.getTimeDiscountedReward(
             travel_cost,
             self.tasks[temp_path[0]],
@@ -335,7 +338,9 @@ class agent:
                         if (s_k[m] >= self.timestamps[m]) and (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
                         # Tie Breaker
-                        elif (s_k[m] >= self.timestamps[m]) and (abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id):
+                        elif (s_k[m] >= self.timestamps[m]) and (
+                            abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id
+                        ):
                             self.__update(j, y_kj, z_kj)
                     # Rule 10
                     elif z_ij == k:
@@ -394,7 +399,7 @@ class agent:
             if self.winning_agents[b_n] != self.id and n_bar > n:
                 n_bar = n  # Find the minimum n in the agents bundle
 
-        b_idx1 = copy.deepcopy(self.bundle[n_bar + 1:])
+        b_idx1 = copy.deepcopy(self.bundle[n_bar + 1 :])
 
         if len(b_idx1) > 0:
             self.winning_bids[b_idx1] = 0

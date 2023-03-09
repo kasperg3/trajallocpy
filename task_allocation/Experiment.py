@@ -58,7 +58,7 @@ class runner:
                         tasks=self.tasks,
                         agent_num=self.robot_num,
                         L_t=task_capacity,
-                        state=initial_state + [np.random.uniform(-0.5, 0.5),np.random.uniform(-0.5, 0.5)],
+                        state=initial_state + [np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5)],
                         point_estimation=use_point_estimation,
                     )
                 )
@@ -124,9 +124,7 @@ class runner:
 
         # Plot the search area and restricted area
         plotter.plotAreas([self.coverage_problem.getSearchArea()], color=(0, 0, 0, 0.5))
-        plotter.plotAreas(
-            self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.2), fill=True
-        )
+        plotter.plotAreas(self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.2), fill=True)
         self.start_time = timeit.default_timer()
 
         while True:
