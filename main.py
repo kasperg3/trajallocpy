@@ -4,6 +4,7 @@ import numpy as np
 import os
 import csv
 import argparse
+import sys
 
 
 def getAllCoverageFiles(dataset, directory="data/CoverageTasks/"):
@@ -55,10 +56,10 @@ def main(
             data = json.load(json_file)
 
         cp = Utility.loadCoverageProblemFromDict(data, number_of_agents)
-        exp = Experiment.runner(coverage_problem=cp, 
+        exp = Experiment.runner(coverage_problem=cp,
                                 enable_plotting=show_plots,
-                                max_iterations=200, 
-                                task_capacity=capacity, 
+                                max_iterations=200,
+                                task_capacity=capacity,
                                 use_point_estimation=point_estimation)
         exp.solve(profiling_enabled=False, debug=debug)
 
@@ -82,7 +83,6 @@ def main(
         # Save the results to the csv
         saveResults(experiment_title, results)
 
-
 if __name__ == "__main__":
     # main()
     parser = argparse.ArgumentParser(
@@ -103,19 +103,18 @@ if __name__ == "__main__":
     parser.add_argument("--show_plots", default=False,
                         type=bool, help="whether to show plots")
     args = parser.parse_args()
-    print(args)
-    if (len(args._get_args()) != 0):
-        main(args.dataset, args.experiment_name, args.n_robots,
-             args.capacity, args.point_estimation, args.show_plots,)
+    if (len(sys.argv) > 1):
+        main(args.dataset, args.experiment_name, args.n_robots,args.capacity, args.point_estimation, args.show_plots,)
     else:
         ds = "AC300"
         n_agents = 10
         capacity = 300
         use_point_est = False
-        main(dataset_name=ds, 
-             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) +"capacity", 
-             number_of_agents=14, 
-             capacity=300, 
-             point_estimation=False, 
-             show_plots=False, 
+        main(dataset_name=ds,
+             experiment_title=ds + "_" +
+             str(n_agents) + "agents_" + str(capacity) + "capacity",
+             number_of_agents=14,
+             capacity=300,
+             point_estimation=False,
+             show_plots=False,
              debug=False,)

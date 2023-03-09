@@ -1,0 +1,5 @@
+[tool.ruff]
+extend-select = ["C4", "SIM", "TCH", "SLF", "S", "W"]
+ignore = []
+show-fixes = true
+line-length = 150

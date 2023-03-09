@@ -20,7 +20,7 @@ class agent:
     ):
         self.tasks = copy.deepcopy(tasks)
         self.task_num = len(tasks)
-        self.task_idx = [j for j in range(self.task_num)]
+        self.task_idx = list(range(self.task_num))
         self.use_single_point_estimation = point_estimation
         self.agent_num = agent_num
         if color is None:
@@ -66,7 +66,6 @@ class agent:
         # socre function parameters
         self.Lambda = 0.95
 
-        #  
         self.removal_list = np.zeros(self.task_num, dtype=np.int8)
         self.removal_threshold = 15
 
@@ -97,13 +96,11 @@ class agent:
             # Add the cost of travelling to the first task
             total_cost = self.getTravelCost(self.state.squeeze(), task_list[0].start)
             for t_index in range(len(task_list) - 1):
-                total_cost += self.getTravelCost(
-                    task_list[t_index].end, task_list[t_index + 1].start
-                )
+                total_cost += self.getTravelCost(task_list[t_index].end, task_list[t_index + 1].start)
             for t_index in range(len(task_list)):
                 total_cost += self.getTravelCost(task_list[t_index].start, task_list[t_index].end)
             # Add the cost of returning home
-            total_cost += self.getTravelCost(self.state.squeeze(), task_list[-1].end)
+            total_cost += self.getTravelCost(self.state.squeeze(),task_list[-1].end)
         return total_cost
 
     # This is only used for evaluations!
@@ -115,14 +112,9 @@ class agent:
             # Add the cost of travelling to the first task
             total_dist = np.linalg.norm(self.state.squeeze() - finalTaskList[0].start)
             for t_index in range(len(finalTaskList) - 1):
-                total_dist += np.linalg.norm(
-                    finalTaskList[t_index].end - finalTaskList[t_index + 1].start
-                )
-
+                total_dist += np.linalg.norm(finalTaskList[t_index].end - finalTaskList[t_index + 1].start)
             for t_index in range(len(finalTaskList)):
-                total_task_length += np.linalg.norm(
-                    finalTaskList[t_index].start - finalTaskList[t_index].end
-                )
+                total_task_length += np.linalg.norm(finalTaskList[t_index].start - finalTaskList[t_index].end)
             # Add the cost of returning home
             total_dist += np.linalg.norm(self.state.squeeze() - finalTaskList[-1].end)
             # Add the total task length
@@ -138,10 +130,7 @@ class agent:
         # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
 
-        if dist < d_a:
-            result = math.sqrt((4 * dist) / self.max_acceleration)
-        else:
-            result = self.max_velocity / self.max_acceleration + dist / self.max_velocity
+        result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
 
         return result  # the cost of travelling in seconds!
         # return np.linalg.norm(start - end) / self.velocity # Old and less efficient
@@ -156,9 +145,7 @@ class agent:
             travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[self.path[0]].start)
             S_p += self.Lambda ** (travel_cost) * self.tasks[self.path[0]].reward
             for p_idx in range(len(self.path) - 1):
-                travel_cost += self.getTravelCost(
-                    self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start
-                )
+                travel_cost += self.getTravelCost(self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start)
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[self.path[p_idx]])
         return S_p
 
@@ -179,7 +166,8 @@ class agent:
         temp_path.insert(n, j)
         is_reversed = False
         # travel cost to first task
-        travel_cost = self.getTravelCost(self.state.squeeze(), self.tasks[temp_path[0]].start)
+        travel_cost = self.getTravelCost(
+            self.state.squeeze(), self.tasks[temp_path[0]].start)
         S_p = self.getTimeDiscountedReward(
             travel_cost,
             self.tasks[temp_path[0]],
@@ -229,7 +217,8 @@ class agent:
         reverse = np.zeros(self.task_num)
         # try all tasks
         for j in range(self.task_num):
-            if j in self.bundle or self.removal_list[j] > self.removal_threshold:  # If already in bundle list
+            # If already in bundle list
+            if j in self.bundle or self.removal_list[j] > self.removal_threshold:
                 c[j] = 0  # Minimum Score
             else:
                 # for each j calculate the path reward at each location in the local path
@@ -313,9 +302,8 @@ class agent:
                         m = z_ij
                         if (s_k[m] > self.timestamps[m]) or (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
-                        elif abs(y_kj - y_ij) < np.finfo(float).eps:  # Tie Breaker
-                            if k < self.id:
-                                self.__update(j, y_kj, z_kj)
+                        elif abs(y_kj - y_ij) < np.finfo(float).eps and k < self.id:  # Tie Breaker
+                            self.__update(j, y_kj, z_kj)
                     # Rule 4
                     elif z_ij == -1:
                         self.__update(j, y_kj, z_kj)
@@ -347,11 +335,8 @@ class agent:
                         if (s_k[m] >= self.timestamps[m]) and (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
                         # Tie Breaker
-                        elif (s_k[m] >= self.timestamps[m]) and (
-                            abs(y_kj - y_ij) < np.finfo(float).eps
-                        ):
-                            if m < self.id:
-                                self.__update(j, y_kj, z_kj)
+                        elif (s_k[m] >= self.timestamps[m]) and (abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id):
+                            self.__update(j, y_kj, z_kj)
                     # Rule 10
                     elif z_ij == k:
                         if s_k[m] > self.timestamps[m]:
@@ -369,9 +354,8 @@ class agent:
                             self.__update(j, y_kj, z_kj)
                         elif (s_k[m] > self.timestamps[m]) and (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
-                        elif (s_k[m] > self.timestamps[m]) and (
-                            abs(y_kj - y_ij) < np.finfo(float).eps
-                        ):  # Tie Breaker
+                        # Tie Breaker
+                        elif (s_k[m] > self.timestamps[m]) and (abs(y_kj - y_ij) < np.finfo(float).eps):
                             if m < n:
                                 self.__update(j, y_kj, z_kj)
                         elif (s_k[n] > self.timestamps[n]) and (self.timestamps[m] > s_k[m]):
@@ -407,22 +391,21 @@ class agent:
         # Get n_bar
         for n in range(len(self.bundle)):
             b_n = self.bundle[n]
-            if self.winning_agents[b_n] != self.id:
-                if n_bar > n:
-                    n_bar = n  # Find the minimum n in the agents bundle
+            if self.winning_agents[b_n] != self.id and n_bar > n:
+                n_bar = n  # Find the minimum n in the agents bundle
 
-        b_idx1 = copy.deepcopy(self.bundle[n_bar + 1 :])
+        b_idx1 = copy.deepcopy(self.bundle[n_bar + 1:])
 
         if len(b_idx1) > 0:
             self.winning_bids[b_idx1] = 0
             self.winning_agents[b_idx1] = -1
 
         tasks_to_delete = self.bundle[n_bar:]
-    
+
         # Keep track of how many times this particular task has been removed
-        if len(tasks_to_delete) !=0:
-            self.removal_list[self.bundle[n_bar]] = self.removal_list[self.bundle[n_bar]] +1
-            
+        if len(tasks_to_delete) != 0:
+            self.removal_list[self.bundle[n_bar]] = self.removal_list[self.bundle[n_bar]] + 1
+
         del self.bundle[n_bar:]
 
         self.path = [ele for ele in self.path if ele not in tasks_to_delete]

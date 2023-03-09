@@ -1,5 +1,3 @@
-import json
-import logging as log
 import os
 
 import matplotlib.pyplot as plt
@@ -129,40 +127,4 @@ def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
 
     return CoverageProblem.CoverageProblem(
         search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr
-    )
-
-
-def loadCoverageProblem(path, nr) -> CoverageProblem.CoverageProblem:
-
-    # Opening JSON file
-    f = open(path)
-
-    # returns JSON object as
-    # a dictionary
-    data = json.load(f)
-    f.close()
-
-    # convert all the coordinates to utm coordinates
-    search = data["search_area"]
-    restricted = data["restricted_areas"]
-
-    # Convert the sweeps
-    sweep = data["sweeps"]
-    test = [
-        utm.from_latlon(s["longitude"], s["latitude"], force_zone_number=40, force_zone_letter="U")
-        for s in sweep
-    ]
-    sweeps = list(zip(test[::2], test[1::2]))
-    tasks = []
-    i = 0
-    for s in sweeps:
-        if np.random.choice(2, 1):
-            tasks.append(Task.Task(start=np.array(s[0][:2]), end=np.array(s[1][:2]), task_id=i))
-        else:
-            tasks.append(Task.Task(start=np.array(s[1][:2]), end=np.array(s[0][:2]), task_id=i))
-        i = i + 1
-    log.info("Loaded %i tasks from file %s", i, "path")
-
-    return CoverageProblem.CoverageProblem(
-        search_area=search, restricted_area=restricted, tasks=tasks, number_of_robots=nr
     )

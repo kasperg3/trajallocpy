@@ -1,7 +1,7 @@
 {
     "python.analysis.typeCheckingMode": "off",
-    "python.formatting.blackArgs": [
+    "python.formatting.autopep8Args": [
         "--line-length",
-        "100"
+        "119"
     ]
 }
