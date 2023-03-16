@@ -9,11 +9,6 @@ import numpy as np
 from task_allocation import Experiment, Utility
 
 
-def getAllCoverageFiles(dataset, directory="data/CoverageTasks/"):
-    result = []
-    for filename in os.listdir(directory + dataset):
-        result.append(os.path.join(directory + dataset, filename))
-    return result
 
 
 def saveResults(experiment_title, results, directory="experiments/"):
@@ -51,7 +46,7 @@ def main(
     np.random.seed(seed)
 
     results = []
-    files = getAllCoverageFiles(dataset_name)
+    files = Utility.getAllCoverageFiles(dataset_name)
 
     for file_name in files:
         with open(file_name) as json_file:

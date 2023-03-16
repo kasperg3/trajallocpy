@@ -127,3 +127,10 @@ def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
             tasks.append(Task.Task(start=np.array(s["end"]), end=np.array(s["start"]), task_id=i))
 
     return CoverageProblem.CoverageProblem(search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr)
+
+
+def getAllCoverageFiles(dataset, directory="data/CoverageTasks/"):
+    result = []
+    for filename in os.listdir(directory + dataset):
+        result.append(os.path.join(directory + dataset, filename))
+    return result
