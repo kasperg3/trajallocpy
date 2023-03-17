@@ -19,7 +19,6 @@ class BalancedBinarySearchTree:
         self.root = self._insert_helper(self.root, angle, distance, edge)
 
     def _insert_helper(self, node: Node, angle, distance, edge):
-        # print("Adding node to tree: " + str(Node(angle, distance, edge)))
 
         if node is None:
             return Node(angle, distance, edge)
@@ -36,14 +35,14 @@ class BalancedBinarySearchTree:
         if balance_factor > 1 and angle < node.left_child.angle:
             return self._right_rotate(node)
 
-        if balance_factor > 1 and angle > node.left_child.angle:
+        if balance_factor > 1 and angle > node.left_child.angle and distance > node.left_child.distance:
             node.left_child = self._left_rotate(node.left_child)
             return self._right_rotate(node)
 
-        if balance_factor < -1 and angle > node.right_child.angle:
+        if balance_factor < -1 and angle > node.right_child.angle and distance > node.right_child.distance:
             return self._left_rotate(node)
 
-        if balance_factor < -1 and angle < node.right_child.angle:
+        if balance_factor < -1 and angle < node.right_child.angle and distance < node.right_child.distance:
             node.right_child = self._right_rotate(node.right_child)
             return self._left_rotate(node)
 
@@ -125,10 +124,13 @@ class BalancedBinarySearchTree:
 
         return y
 
-    def _find_min(self, node: Node):
-        while node.left_child:
-            node = node.left_child
-        return node
+    def _find_min(self, root: Node):
+        if root is None or root.left_child is None:
+            return root
+        return self._find_min(root.left_child)
+
+    def find_min(self):
+        return self._find_min(self.root)
 
     def pretty_print(self):
         self._print_helper(self.root, "", True)
@@ -171,17 +173,20 @@ class BinarySearchTree:
 if __name__ == "__main__":
     # create a new balanced binary search tree
     bst = BalancedBinarySearchTree()
-
+    print("Min: ", bst.find_min())
     # insert some values into the tree
     bst.insert(30, 10, "test5")
     bst.insert(10, 20, "test1")
     bst.insert(50, 20, "test2")
     bst.insert(10, 10, "test3")
     bst.insert(40, 20, "test4")
+    bst.insert(40, 20, "test4")
+    bst.insert(40, 20, "test4")
+    bst.insert(40, 20, "test4")
+    bst.insert(40, 10, "test4")
     bst.insert(30, 20, "test5")
     bst.insert(20, 20, "test6")
     bst.insert(25, 20, "test7")
-
     # print out the values in sorted order
     def inorder_traversal(current_node):
         if current_node:
@@ -191,6 +196,8 @@ if __name__ == "__main__":
 
     inorder_traversal(bst.root)
     print(bst.pretty_print())
-    bst.delete(40, 20)
+    print("min node: ", bst.find_min())
+    bst.delete(40, 10)
     bst.delete(10, 10)
     print(bst.pretty_print())
+    print("min node: ", bst.find_min())
