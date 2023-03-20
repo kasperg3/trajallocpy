@@ -229,33 +229,42 @@ def visibility_graph(polygon: Polygon, holes: list):
     plt.show()
 
 
+from itertools import combinations
+
+
+@Utility.timing()
 def naive_visibility_graph(polygon: Polygon, holes: list):
     # Create a NetworkX graph to represent the visibility graph
     visibility_graph = construct_graph(polygon, holes)
+    # Only compare the combinations which are unique
+    node_combinations = list(combinations(visibility_graph.nodes, 2))
+    for u, v in node_combinations:
+        line = LineString([u, v])
+        intersects_obstacle = False
 
-    for u in visibility_graph.nodes:
-        for v in visibility_graph.nodes:
-            if u == v:
-                continue
-            line = LineString([u, v])
-            intersects_obstacle = False
+        # If the line is intersecting with the polygon do not add the edge
+        if not line.within(polygon):
+            intersects_obstacle = True
+        else:
+            # Check if the line is intersecting any of the obstacles
+            for obstacle in holes:
+                if line.crosses(obstacle) or line.within(obstacle):
+                    intersects_obstacle = True
+                    break
+        if not intersects_obstacle:
+            visibility_graph.add_edge(u, v)
 
-            # If the line is intersecting with the polygon do not add the edge
-            if not line.within(polygon):
-                intersects_obstacle = True
-            else:
-                # Check if the line is intersecting any of the obstacles
-                for obstacle in holes:
-                    if line.crosses(obstacle) or line.within(obstacle):
-                        intersects_obstacle = True
-                        break
-            if not intersects_obstacle:
-                visibility_graph.add_edge(u, v)
+    # Add a cost based on the euclidean distance for each edge
+    nx.set_edge_attributes(
+        visibility_graph,
+        {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in visibility_graph.edges()},
+        "cost",
+    )
     return visibility_graph
 
 
 @Utility.timing()
-def find_path(start, end):
+def a_star_path(start, end):
     def dist(a, b):
         (x1, y1) = a
         (x2, y2) = b
@@ -264,35 +273,26 @@ def find_path(start, end):
     return nx.astar_path(G, start, end, heuristic=dist, weight="cost")
 
 
+@Utility.timing()
+def dijkstra_path(start, end):
+    return nx.astar_path(G, start, end, weight="cost")
+
+
 if __name__ == "__main__":
-    G = naive_visibility_graph(
-        Polygon([(0, 0), (0, 6), (4, 6), (4, 7), (0, 7), (0, 10), (10, 12), (10, 0)]),
-        [
-            Polygon([(2, 2), (4, 2), (4, 4), (2, 4)]),
-            Polygon([(6, 2), (7, 2), (7, 7), (6, 7)]),
-        ],
-    )
+    dataset_name = "AC300"
 
-    # Add a cost based on the euclidean distance for each edge
-    nx.set_edge_attributes(
-        G, {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in G.edges()}, "cost"
-    )
+    files = Utility.getAllCoverageFiles(dataset_name)
 
-    print(find_path((0, 0), (0, 10)))
+    for file_name in files:
+        with open(file_name) as json_file:
+            data = json.load(json_file)
 
-    nx.draw(G, nx.get_node_attributes(G, "pos"), with_labels=True)
-    plt.show()
+        holes = [Polygon(obs) for obs in data["holes"]]
+        polygon = Polygon(data["polygon"])
 
-    # main()
+        G = naive_visibility_graph(polygon, holes)
 
-    # dataset_name = "AC300"
+        print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0])))
 
-    # files = Utility.getAllCoverageFiles(dataset_name)
-
-    # for file_name in files:
-    #     with open(file_name) as json_file:
-    #         data = json.load(json_file)
-    #     visibility_graph(data["polygon"], data["holes"])
-    #     break
-    #     break
-    #     break
+        nx.draw(G, nx.get_node_attributes(G, "pos"), with_labels=False)
+        plt.show()
