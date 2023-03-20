@@ -231,7 +231,6 @@ def visibility_graph(polygon: Polygon, holes: list):
 
 def naive_visibility_graph(polygon: Polygon, holes: list):
     # Create a NetworkX graph to represent the visibility graph
-    visibility_graph = nx.Graph()
     visibility_graph = construct_graph(polygon, holes)
 
     for u in visibility_graph.nodes:
@@ -240,26 +239,50 @@ def naive_visibility_graph(polygon: Polygon, holes: list):
                 continue
             line = LineString([u, v])
             intersects_obstacle = False
-            for obstacle in holes:
-                if line.crosses(obstacle) or line.within(obstacle):
-                    intersects_obstacle = True
-                    break
+
+            # If the line is intersecting with the polygon do not add the edge
+            if not line.within(polygon):
+                intersects_obstacle = True
+            else:
+                # Check if the line is intersecting any of the obstacles
+                for obstacle in holes:
+                    if line.crosses(obstacle) or line.within(obstacle):
+                        intersects_obstacle = True
+                        break
             if not intersects_obstacle:
                 visibility_graph.add_edge(u, v)
-    print(visibility_graph)
+    return visibility_graph
 
-    nx.draw(visibility_graph, nx.get_node_attributes(visibility_graph, "pos"), with_labels=True)
-    plt.show()
+
+@Utility.timing()
+def find_path(start, end):
+    def dist(a, b):
+        (x1, y1) = a
+        (x2, y2) = b
+        return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+
+    return nx.astar_path(G, start, end, heuristic=dist, weight="cost")
 
 
 if __name__ == "__main__":
-    naive_visibility_graph(
-        Polygon([(0, 0), (0, 10), (10, 12), (10, 0)]),
+    G = naive_visibility_graph(
+        Polygon([(0, 0), (0, 6), (4, 6), (4, 7), (0, 7), (0, 10), (10, 12), (10, 0)]),
         [
             Polygon([(2, 2), (4, 2), (4, 4), (2, 4)]),
             Polygon([(6, 2), (7, 2), (7, 7), (6, 7)]),
         ],
     )
+
+    # Add a cost based on the euclidean distance for each edge
+    nx.set_edge_attributes(
+        G, {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in G.edges()}, "cost"
+    )
+
+    print(find_path((0, 0), (0, 10)))
+
+    nx.draw(G, nx.get_node_attributes(G, "pos"), with_labels=True)
+    plt.show()
+
     # main()
 
     # dataset_name = "AC300"

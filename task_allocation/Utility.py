@@ -1,4 +1,5 @@
 import os
+import time
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -134,3 +135,18 @@ def getAllCoverageFiles(dataset, directory="data/CoverageTasks/"):
     for filename in os.listdir(directory + dataset):
         result.append(os.path.join(directory + dataset, filename))
     return result
+
+
+def timing(name=None):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            result = func(*args, **kwargs)
+            end_time = time.time()
+            func_name = name if name is not None else func.__name__
+            print(f"{func_name} execution time:{end_time - start_time} seconds")
+            return result
+
+        return wrapper
+
+    return decorator
