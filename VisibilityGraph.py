@@ -1,9 +1,11 @@
 import json
 import math
+from itertools import combinations
 
 import matplotlib.pyplot as plt
 import networkx as nx
-from shapely.geometry import LineString, Polygon
+from shapely.geometry import LineString, Point, Polygon
+from shapely.validation import explain_validity, make_valid
 
 from BST import BalancedBinarySearchTree, Node
 from task_allocation import Utility
@@ -72,24 +74,25 @@ def does_intersect(seg1, seg2, include_endpoints):
 
 def inorder_traversal(current_node):
     if current_node:
-        inorder_traversal(current_node.left_child)
+        inorder_traversal(current_node.left)
         print(current_node)
-        inorder_traversal(current_node.right_child)
+        inorder_traversal(current_node.right)
 
 
 def search_for_edge(root: Node, key):
-    result = False
-    if root is None or does_intersect(root.edge, key, True):
+    result = True
+    if root is None:
+        return False
+    elif root is not None and does_intersect(root.edge, key, False):
         return True
     else:
-        result = search_for_edge(root.left_child, key) and search_for_edge(root.right_child, key)
+        result = search_for_edge(root.left, key) or search_for_edge(root.right, key)
     return result
 
 
 def find_intersection_in_tree(edge, tree: BalancedBinarySearchTree):
     # TODO traverse the tree in order and find if any edges are intersecting!
-    search_for_edge(tree.root, edge)
-    return False
+    return search_for_edge(tree.root, edge)
 
 
 def visible_vertices(p, S):
@@ -122,13 +125,13 @@ def visible_vertices(p, S):
     for edge in S.edges():
         intersection_point = intersection(p_wi, edge, True)
         if intersection_point is not None:
-            T.insert(0.0, math.dist(p, intersection_point), edge)
+            key = (0.0, math.dist(p, intersection_point))
+            T.insert(key, edge)
 
     # Sort the list of points based on their angle to the origin
     w_previous = None
     w_previous_visible = None
     for w_i in sorted(S.nodes, key=angle_to_point):
-        T.pretty_print()
         if w_i == p:  # Do not check collision between the same nodes
             continue
 
@@ -136,51 +139,54 @@ def visible_vertices(p, S):
         visible = is_visible(S, T, p_wi, w_previous, w_previous_visible, w_i)
         if visible:
             W.append((p, w_i))
-            for edge in S.edges(w_i):  # the point have two edges
-                for node in edge:
-                    # only compare with the node which is not the common point
-                    if node is not w_i:
-                        angle, distance = angle_to_point(node)
-                        if angle_to_point(w_i) <= angle_to_point(node):
-                            # Edge is on the Clockwise side of w_i
-                            T.insert(angle, distance, edge)
-                        else:
-                            # Edge is on the Counter-clockwise side of w_i
-                            T.delete(angle, distance)
-
+        # BST upkeep
+        for edge in S.edges(w_i):  # the point have two edges
+            for node in edge:
+                # only compare with the node which is not the common point
+                if node is not w_i:
+                    angle, distance = angle_to_point(node)
+                    if angle_to_point(w_i) <= angle_to_point(node):
+                        # Edge is on the Clockwise side of w_i
+                        T.insert((angle, distance), edge)
+                    else:
+                        # Edge is on the Counter-clockwise side of w_i
+                        T.delete((angle, distance))
         w_previous = w_i
         w_previous_visible = visible
-    T.pretty_print()
+
+    # T.pretty_print()
 
     return W
 
 
 def is_visible(S, T, p_wi, w_previous, w_previous_visible, w_i):
     visible = True
-
     # If p_wi intersects any edges of the polygon which w_i is a part of do not check anything else
     polygon_nodes = list(nx.dfs_preorder_nodes(S, w_i))
     poly = Polygon(polygon_nodes)
     line = LineString(p_wi)
-    visible = not line.crosses(poly)
+    # TODO Use not within when checking the boundary obstacle
+    visible = not (line.crosses(poly)) and not line.within(poly)
 
     if visible:
         # If it is the first iteration or w_i-1 is not on the segment p_wi
         if w_previous is None or not on_segment(p_wi, w_previous):
             # search in T for the edge e in the leaftmost leaf
+            # visible = not find_intersection_in_tree(p_wi, T)
+            # TODO is this the right implementation?
             e = T.find_min()
             if e is not None:
                 visible = not does_intersect(p_wi, e.edge, include_endpoints=True)
         elif w_previous_visible:
-            # TODO search T for an edge that intersects the segment (w_i-1, w_i)
-            e = find_intersection_in_tree((w_previous, w_i), T)
-            if e:
-                visible = False
+            # search T for an edge that intersects the segment (w_i-1, w_i)
+            # no intersections == visible
+            visible = not find_intersection_in_tree((w_previous, w_i), T)
         else:
             visible = False
     return visible
 
 
+@Utility.timing()
 def construct_graph(polygon: Polygon, holes: list):
     G = nx.Graph()
     for i in range(len(polygon.boundary.coords) - 1):
@@ -212,6 +218,7 @@ def construct_graph(polygon: Polygon, holes: list):
     return G
 
 
+@Utility.timing()
 def visibility_graph(polygon: Polygon, holes: list):
     # Construct the graph
     G = construct_graph(polygon, holes)
@@ -225,11 +232,14 @@ def visibility_graph(polygon: Polygon, holes: list):
         edges.extend(visible_vertices(v, G))
 
     G.add_edges_from(edges)
-    nx.draw(G, nx.get_node_attributes(G, "pos"), with_labels=True)
-    plt.show()
 
-
-from itertools import combinations
+    # Add a cost based on the euclidean distance for each edge
+    nx.set_edge_attributes(
+        G,
+        {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in G.edges()},
+        "cost",
+    )
+    return G
 
 
 @Utility.timing()
@@ -264,7 +274,7 @@ def naive_visibility_graph(polygon: Polygon, holes: list):
 
 
 @Utility.timing()
-def a_star_path(start, end):
+def a_star_path(start, end, G: nx.Graph):
     def dist(a, b):
         (x1, y1) = a
         (x2, y2) = b
@@ -274,11 +284,67 @@ def a_star_path(start, end):
 
 
 @Utility.timing()
-def dijkstra_path(start, end):
+def dijkstra_path(start, end, G: nx.Graph):
     return nx.astar_path(G, start, end, weight="cost")
 
 
-if __name__ == "__main__":
+def test_connect_nearest_nodes():
+
+    # Create an arbitrary graph
+    G = nx.Graph()
+    G.add_edges_from([(1, 2), (2, 3), (3, 4), (4, 1)])
+
+    # Define the coordinates of the new node
+    new_node_coords = (2.5, 2.5)
+
+    # Find the nearest edge to the new node
+    nearest_edge = None
+    nearest_edge_dist = float("inf")
+    for u, v in G.edges():
+        edge = LineString([(u, v), G.nodes[u]["pos"], G.nodes[v]["pos"]])
+        node = Point(new_node_coords)
+        dist = edge.distance(node)
+        if dist < nearest_edge_dist:
+            nearest_edge = (u, v)
+            nearest_edge_dist = dist
+
+    # Calculate the distance between the new node and the nearest point on the nearest edge
+    edge = LineString([nearest_edge, G.nodes[nearest_edge[0]]["pos"], G.nodes[nearest_edge[1]]["pos"]])
+    node = Point(new_node_coords)
+    nearest_point = edge.interpolate(edge.project(node))
+    nearest_point_dist = nearest_point.distance(node)
+
+    # Add the new node to the graph and connect it to the nearest point on the nearest edge
+    new_node = max(G.nodes) + 1
+    G.add_node(new_node, pos=new_node_coords)
+    G.add_edge(new_node, nearest_edge[0] if nearest_point_dist < 0.5 else nearest_edge[1])
+
+    # Print the resulting graph
+    print(G.nodes)
+
+
+def own_test():
+    G = naive_visibility_graph(
+        Polygon([(0, 0), (0, 6), (4, 6), (4, 7), (0, 7), (0, 10), (10, 12), (10, 0)]),
+        [
+            Polygon([(2, 2), (4, 2), (4, 4), (2, 4)]),
+            Polygon([(6, 2), (7, 2), (7, 7), (6, 7)]),
+        ],
+    )
+
+    # Add a cost based on the euclidean distance for each edge
+    nx.set_edge_attributes(
+        G, {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in G.edges()}, "cost"
+    )
+
+    print(a_star_path((0, 0), (0, 10), G))
+
+    nx.draw(G, nx.get_node_attributes(G, "pos"), with_labels=True)
+    plt.show()
+
+
+def dataset_test():
+
     dataset_name = "AC300"
 
     files = Utility.getAllCoverageFiles(dataset_name)
@@ -287,12 +353,24 @@ if __name__ == "__main__":
         with open(file_name) as json_file:
             data = json.load(json_file)
 
-        holes = [Polygon(obs) for obs in data["holes"]]
+        holes = []
+        for obs in data["holes"]:
+            hole = Polygon(obs)
+            if not hole.is_valid:
+                print("Hole polygon is not valid! Reason: ", explain_validity(hole))
+            else:
+                holes.append(hole)
         polygon = Polygon(data["polygon"])
+        if not polygon.is_valid:
+            print("Polygon is not valid! Reason: ", explain_validity(polygon))
+        polygon = make_valid(polygon)
 
         G = naive_visibility_graph(polygon, holes)
 
-        print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0])))
-
+        # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
         nx.draw(G, nx.get_node_attributes(G, "pos"), with_labels=False)
         plt.show()
+
+
+if __name__ == "__main__":
+    dataset_test()
