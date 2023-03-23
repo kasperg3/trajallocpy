@@ -330,8 +330,8 @@ def test_connect_nearest_nodes():
 
 
 def dataset_test():
-    # test
-    dataset_name = "AC300"
+
+    dataset_name = "VM25"
     files = Utility.getAllCoverageFiles(dataset_name)
     for file_name in files:
         with open(file_name) as json_file:
