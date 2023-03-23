@@ -3,7 +3,8 @@ message: "If you use this software, please cite it as below."
 authors:
   - family-names: Grøntved
     given-names: Kasper A. R.
-    orcid: https://orcid.org/0000-0002-6360-371X
-title: kasperg3/CoverageTasks: Initial release
-version: 0.0
-date-released: 2023-02-28
+    orcid: "https://orcid.org/0000-0002-6360-371X"
+title: "CoverageTasks"
+version: 0.1
+date-released: 2023-03-23
+url: "https://github.com/kasperg3/CoverageTasks"
