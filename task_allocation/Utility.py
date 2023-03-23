@@ -130,7 +130,7 @@ def loadDataset(directory, route_data_name, holes_name, outer_poly_name):
 #     return CoverageProblem.CoverageProblem(search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr)
 
 
-def getAllCoverageFiles(dataset, directory="data/CoverageTasks/"):
+def getAllCoverageFiles(dataset, directory="CoverageTasks/"):
     result = []
     for filename in os.listdir(directory + dataset):
         result.append(os.path.join(directory + dataset, filename))

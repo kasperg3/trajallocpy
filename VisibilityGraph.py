@@ -252,6 +252,7 @@ def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon):
     # Create a NetworkX graph to represent the visibility graph
     visibility_graph = construct_graph(polygon, holes)
     # Only compare the combinations which are unique
+    # TODO to speed this up further check out the shapely prepare
     node_combinations = list(combinations(visibility_graph.nodes, 2))
     for u, v in node_combinations:
         line = LineString([u, v])
