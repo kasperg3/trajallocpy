@@ -114,20 +114,20 @@ def loadDataset(directory, route_data_name, holes_name, outer_poly_name):
     return csv_files
 
 
-def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
-    polygon = data["polygon"]
-    holes = data["holes"]
-    lines = data["lines"]
-    tasks = []
-    # Convert tasks and shuffle the start and end points
-    for i in range(len(lines)):
-        s = lines[i]
-        if np.random.choice(2, 1):
-            tasks.append(Task.Task(start=np.array(s["start"]), end=np.array(s["end"]), task_id=i))
-        else:
-            tasks.append(Task.Task(start=np.array(s["end"]), end=np.array(s["start"]), task_id=i))
+# def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
+#     polygon = data["polygon"]
+#     holes = data["holes"]
+#     lines = data["lines"]
+#     tasks = []
+#     # Convert tasks and shuffle the start and end points
+#     for i in range(len(lines)):
+#         s = lines[i]
+#         if np.random.choice(2, 1):
+#             tasks.append(Task.Task(start=np.array(s["start"]), end=np.array(s["end"]), task_id=i))
+#         else:
+#             tasks.append(Task.Task(start=np.array(s["end"]), end=np.array(s["start"]), task_id=i))
 
-    return CoverageProblem.CoverageProblem(search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr)
+#     return CoverageProblem.CoverageProblem(search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr)
 
 
 def getAllCoverageFiles(dataset, directory="data/CoverageTasks/"):

@@ -6,9 +6,7 @@ import sys
 
 import numpy as np
 
-from task_allocation import Experiment, Utility
-
-
+from task_allocation import CoverageProblem, Experiment, Utility
 
 
 def saveResults(experiment_title, results, directory="experiments/"):
@@ -33,6 +31,9 @@ def saveResults(experiment_title, results, directory="experiments/"):
         writer.writerows(results)
 
 
+import geojson
+
+
 def main(
     dataset_name,
     experiment_title,
@@ -50,9 +51,10 @@ def main(
 
     for file_name in files:
         with open(file_name) as json_file:
-            data = json.load(json_file)
+            features = geojson.load(json_file)["features"]
 
-        cp = Utility.loadCoverageProblemFromDict(data, number_of_agents)
+        # TODO load from a geojson file instead
+        cp = CoverageProblem.CoverageProblem(features, number_of_robots=number_of_agents)
         exp = Experiment.runner(
             coverage_problem=cp,
             enable_plotting=show_plots,

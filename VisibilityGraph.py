@@ -2,10 +2,17 @@ import json
 import math
 from itertools import combinations
 
+import geojson
 import matplotlib.pyplot as plt
 import networkx as nx
-from shapely.geometry import LineString, Point, Polygon
-from shapely.validation import explain_validity, make_valid
+from shapely.geometry import (
+    LineString,
+    MultiLineString,
+    MultiPolygon,
+    Point,
+    Polygon,
+    shape,
+)
 
 from BST import BalancedBinarySearchTree, Node
 from task_allocation import Utility
@@ -91,7 +98,6 @@ def search_for_edge(root: Node, key):
 
 
 def find_intersection_in_tree(edge, tree: BalancedBinarySearchTree):
-    # TODO traverse the tree in order and find if any edges are intersecting!
     return search_for_edge(tree.root, edge)
 
 
@@ -121,7 +127,7 @@ def visible_vertices(p, S):
 
     # Find the initial intersections and store then in a balanced search tree in the order that they were intersected by the line rho
     # Initialize the half-line rho to be pointing in the positive x direction
-    p_wi = (p, (p[0] + 10000000, 0))  # TODO make sure that this is enough
+    p_wi = (p, (p[0] + 10000000, 0))
     for edge in S.edges():
         intersection_point = intersection(p_wi, edge, True)
         if intersection_point is not None:
@@ -165,7 +171,6 @@ def is_visible(S, T, p_wi, w_previous, w_previous_visible, w_i):
     polygon_nodes = list(nx.dfs_preorder_nodes(S, w_i))
     poly = Polygon(polygon_nodes)
     line = LineString(p_wi)
-    # TODO Use not within when checking the boundary obstacle
     visible = not (line.crosses(poly)) and not line.within(poly)
 
     if visible:
@@ -187,7 +192,7 @@ def is_visible(S, T, p_wi, w_previous, w_previous_visible, w_i):
 
 
 @Utility.timing()
-def construct_graph(polygon: Polygon, holes: list):
+def construct_graph(polygon: Polygon, holes: MultiPolygon):
     G = nx.Graph()
     for i in range(len(polygon.boundary.coords) - 1):
         node_from = polygon.boundary.coords[i]
@@ -201,20 +206,20 @@ def construct_graph(polygon: Polygon, holes: list):
     G.add_node(node_from, pos=node_from, type="border")
     G.add_node(node_to, pos=node_to, type="border")
     G.add_edge(polygon.boundary.coords[-1], polygon.boundary.coords[len(polygon.boundary.coords) - 2], type="border")
+    if not holes.is_empty:
+        for hole in holes.geoms:
+            for i in range(len(hole.boundary.coords) - 1):
+                node_from = hole.boundary.coords[i]
+                node_to = hole.boundary.coords[i + 1]
+                G.add_node(node_from, pos=node_from, type="obstacle")
+                G.add_node(node_to, pos=node_to, type="obstacle")
+                G.add_edge(hole.boundary.coords[i], hole.boundary.coords[i + 1], type="obstacle")
 
-    for hole in holes:
-        for i in range(len(hole.boundary.coords) - 1):
-            node_from = hole.boundary.coords[i]
-            node_to = hole.boundary.coords[i + 1]
+            node_from = hole.boundary.coords[-1]
+            node_to = hole.boundary.coords[len(hole.boundary.coords) - 2]
             G.add_node(node_from, pos=node_from, type="obstacle")
             G.add_node(node_to, pos=node_to, type="obstacle")
-            G.add_edge(hole.boundary.coords[i], hole.boundary.coords[i + 1], type="obstacle")
-
-        node_from = hole.boundary.coords[-1]
-        node_to = hole.boundary.coords[len(hole.boundary.coords) - 2]
-        G.add_node(node_from, pos=node_from, type="obstacle")
-        G.add_node(node_to, pos=node_to, type="obstacle")
-        G.add_edge(hole.boundary.coords[-1], hole.boundary.coords[len(hole.boundary.coords) - 2], type="obstacle")
+            G.add_edge(hole.boundary.coords[-1], hole.boundary.coords[len(hole.boundary.coords) - 2], type="obstacle")
     return G
 
 
@@ -243,24 +248,26 @@ def visibility_graph(polygon: Polygon, holes: list):
 
 
 @Utility.timing()
-def naive_visibility_graph(polygon: Polygon, holes: list):
+def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon):
     # Create a NetworkX graph to represent the visibility graph
     visibility_graph = construct_graph(polygon, holes)
     # Only compare the combinations which are unique
     node_combinations = list(combinations(visibility_graph.nodes, 2))
     for u, v in node_combinations:
         line = LineString([u, v])
+
         intersects_obstacle = False
 
-        # If the line is intersecting with the polygon do not add the edge
+        # Check if the line is outside the polygon
         if not line.within(polygon):
             intersects_obstacle = True
-        else:
+        elif not holes.is_empty:
             # Check if the line is intersecting any of the obstacles
-            for obstacle in holes:
+            for obstacle in holes.geoms:
                 if line.crosses(obstacle) or line.within(obstacle):
                     intersects_obstacle = True
                     break
+
         if not intersects_obstacle:
             visibility_graph.add_edge(u, v)
 
@@ -289,7 +296,6 @@ def dijkstra_path(start, end, G: nx.Graph):
 
 
 def test_connect_nearest_nodes():
-
     # Create an arbitrary graph
     G = nx.Graph()
     G.add_edges_from([(1, 2), (2, 3), (3, 4), (4, 1)])
@@ -315,61 +321,71 @@ def test_connect_nearest_nodes():
     nearest_point_dist = nearest_point.distance(node)
 
     # Add the new node to the graph and connect it to the nearest point on the nearest edge
-    new_node = max(G.nodes) + 1
-    G.add_node(new_node, pos=new_node_coords)
-    G.add_edge(new_node, nearest_edge[0] if nearest_point_dist < 0.5 else nearest_edge[1])
+    # new_node = max(G.nodes) + 1
+    G.add_node(new_node_coords, pos=new_node_coords)
+    G.add_edge(new_node_coords, nearest_edge[0] if nearest_point_dist < 0.5 else nearest_edge[1])
 
     # Print the resulting graph
     print(G.nodes)
 
 
-def own_test():
-    G = naive_visibility_graph(
-        Polygon([(0, 0), (0, 6), (4, 6), (4, 7), (0, 7), (0, 10), (10, 12), (10, 0)]),
-        [
-            Polygon([(2, 2), (4, 2), (4, 4), (2, 4)]),
-            Polygon([(6, 2), (7, 2), (7, 7), (6, 7)]),
-        ],
-    )
-
-    # Add a cost based on the euclidean distance for each edge
-    nx.set_edge_attributes(
-        G, {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in G.edges()}, "cost"
-    )
-
-    print(a_star_path((0, 0), (0, 10), G))
-
-    nx.draw(G, nx.get_node_attributes(G, "pos"), with_labels=True)
-    plt.show()
-
-
 def dataset_test():
-
     dataset_name = "AC300"
-
     files = Utility.getAllCoverageFiles(dataset_name)
+    for file_name in files:
+        with open(file_name) as json_file:
+            features = geojson.load(json_file)["features"]
+
+        # Convert each feature to a Shapely geometry object
+        geometries = {"obstacles": MultiPolygon(), "tasks": MultiLineString(), "boundary": Polygon()}
+        for feature in features:
+            if feature["geometry"]:
+                geometries[feature["id"]] = shape(feature["geometry"])
+
+        # Create a GeometryCollection with the geometries and their types
+        G = naive_visibility_graph(geometries["boundary"], geometries["obstacles"])
+        options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
+        # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
+        nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
+        nx.draw_networkx_nodes(G, nx.get_node_attributes(G, "pos"), node_color="tab:blue", **options)
+
+        x, y = geometries["boundary"].exterior.xy
+        plt.plot(x, y)
+        for poly in geometries["obstacles"].geoms:
+            xi, yi = poly.exterior.xy
+            plt.plot(xi, yi)
+        plt.pause(1)
+        plt.clf()
+
+
+def convert_dataset_to_geojson():
+    files = Utility.getAllCoverageFiles("AC300")
 
     for file_name in files:
         with open(file_name) as json_file:
             data = json.load(json_file)
-
         holes = []
         for obs in data["holes"]:
             hole = Polygon(obs)
-            if not hole.is_valid:
-                print("Hole polygon is not valid! Reason: ", explain_validity(hole))
-            else:
-                holes.append(hole)
+            holes.append(hole)
+
+        obstacles = MultiPolygon(holes)
         polygon = Polygon(data["polygon"])
-        if not polygon.is_valid:
-            print("Polygon is not valid! Reason: ", explain_validity(polygon))
-        polygon = make_valid(polygon)
 
-        G = naive_visibility_graph(polygon, holes)
+        lines = []
+        for line in data["lines"]:
+            lines.append(LineString([line["start"], line["end"]]))
 
-        # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
-        nx.draw(G, nx.get_node_attributes(G, "pos"), with_labels=False)
-        plt.show()
+        tasks = MultiLineString(lines)
+        feature_collection = geojson.FeatureCollection(
+            [
+                geojson.Feature(geometry=polygon.__geo_interface__, id="boundary"),
+                geojson.Feature(geometry=obstacles.__geo_interface__, id="obstacles"),
+                geojson.Feature(geometry=tasks.__geo_interface__, id="tasks"),
+            ]
+        )
+        with open(file_name, "w") as f:
+            geojson.dump(feature_collection, f)
 
 
 if __name__ == "__main__":

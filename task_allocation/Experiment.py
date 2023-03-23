@@ -18,27 +18,28 @@ class runner:
     ):
         # Task definition
         self.coverage_problem = coverage_problem
-        self.tasks = np.array(self.coverage_problem.getTasks())
+        self.tasks = self.coverage_problem.getTasks()
         self.task_num = int(len(self.tasks))
         self.robot_num = self.coverage_problem.getNumberOfRobots()
 
         # TODO this should be based able to be based on distance/batterylife
-
         min_x = 100000000
         min_y = 100000000
         max_x = 0
         max_y = 0
+        # TODO sample a point inside the bounding polygon instead
+        assert False
         for t in self.tasks:
-            temp = min([t.end[0], t.start[0]])
+            temp = min([t[1][0], t[0][0]])
             if min_x > temp:
                 min_x = temp
-            temp = min([t.end[1], t.start[1]])
+            temp = min([t[1][1], t[0][1]])
             if min_y > temp:
                 min_y = temp
-            temp = max([t.end[0], t.start[0]])
+            temp = max([t[1][0], t[0][0]])
             if max_x < temp:
                 max_x = temp
-            temp = max([t.end[1], t.start[1]])
+            temp = max([t[1][1], t[0][1]])
             if max_y < temp:
                 max_y = temp
 
@@ -51,6 +52,7 @@ class runner:
                     ]
                 )
             self.robot_list = []
+            # TODO construct task objects from the self.tasks list
             for i in range(self.robot_num):
                 self.robot_list.append(
                     CBBA.agent(
