@@ -5,6 +5,7 @@ from itertools import combinations
 import geojson
 import matplotlib.pyplot as plt
 import networkx as nx
+import numpy as np
 from shapely.geometry import (
     LineString,
     MultiLineString,
@@ -247,13 +248,40 @@ def visibility_graph(polygon: Polygon, holes: list):
     return G
 
 
+def cross_product(u, v):
+    return u[0] * v[1] - u[1] * v[0]
+
+
 @Utility.timing()
-def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon):
+def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon, reduced_visibility=True):
     # Create a NetworkX graph to represent the visibility graph
     visibility_graph = construct_graph(polygon, holes)
     # Only compare the combinations which are unique
     # TODO to speed this up further check out the shapely prepare
     node_combinations = list(combinations(visibility_graph.nodes, 2))
+
+    if reduced_visibility:
+        # reduced visibility graph
+        edges = []
+        for u, v in node_combinations:
+            u_og = np.array(u)
+            v_og = np.array(v)
+            v_0 = v_og - u_og
+
+            edges_0 = list(visibility_graph.edges(v))
+            e_1 = np.array(edges_0[0][0]) - np.array(edges_0[0][1])
+            e_2 = np.array(edges_0[1][0]) - np.array(edges_0[1][1])
+            if cross_product(e_2, v_0) * cross_product(e_1, v_0) >= 0:
+                edges.append((u, v))
+            else:
+                v_1 = u_og - v_og
+                edges_0 = list(visibility_graph.edges(u))
+                e_1 = np.array(edges_0[0][1]) - np.array(edges_0[0][0])
+                e_2 = np.array(edges_0[1][1]) - np.array(edges_0[1][0])
+                if cross_product(e_2, v_1) * cross_product(e_1, v_1) >= 0:
+                    edges.append((u, v))
+        node_combinations = edges
+
     for u, v in node_combinations:
         line = LineString([u, v])
 
@@ -278,6 +306,7 @@ def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon):
         {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in visibility_graph.edges()},
         "cost",
     )
+    print(visibility_graph)
     return visibility_graph
 
 
@@ -345,7 +374,7 @@ def dataset_test():
                 geometries[feature["id"]] = shape(feature["geometry"])
 
         # Create a GeometryCollection with the geometries and their types
-        G = naive_visibility_graph(geometries["boundary"], geometries["obstacles"])
+        G = naive_visibility_graph(geometries["boundary"], geometries["obstacles"], reduced_visibility=True)
         options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
         # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
         nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
@@ -356,7 +385,7 @@ def dataset_test():
         for poly in geometries["obstacles"].geoms:
             xi, yi = poly.exterior.xy
             plt.plot(xi, yi)
-        plt.pause(1)
+        plt.show()
         plt.clf()
 
 
@@ -390,5 +419,9 @@ def convert_dataset_to_geojson():
             geojson.dump(feature_collection, f)
 
 
+if __name__ == "__main__":
+    dataset_test()
+if __name__ == "__main__":
+    dataset_test()
 if __name__ == "__main__":
     dataset_test()
