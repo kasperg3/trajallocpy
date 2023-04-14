@@ -360,8 +360,7 @@ def test_connect_nearest_nodes():
 
 
 def dataset_test():
-
-    dataset_name = "VM25"
+    dataset_name = "AC300"
     files = Utility.getAllCoverageFiles(dataset_name)
     for file_name in files:
         with open(file_name) as json_file:
@@ -419,9 +418,5 @@ def convert_dataset_to_geojson():
             geojson.dump(feature_collection, f)
 
 
-if __name__ == "__main__":
-    dataset_test()
-if __name__ == "__main__":
-    dataset_test()
 if __name__ == "__main__":
     dataset_test()
