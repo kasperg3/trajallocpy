@@ -1,9 +1,9 @@
 import argparse
 import csv
-import json
 import os
 import sys
 
+import geojson
 import numpy as np
 
 from task_allocation import CoverageProblem, Experiment, Utility
@@ -29,9 +29,6 @@ def saveResults(experiment_title, results, directory="experiments/"):
         writer = csv.writer(csvfile)
         writer.writerow(results_header)
         writer.writerows(results)
-
-
-import geojson
 
 
 def main(
@@ -83,7 +80,7 @@ def main(
                 maxRouteCost,
                 iterations,
                 computeTime,
-                len(data["lines"]),
+                cp.getNumberOfTasks(),
                 number_of_agents,
             ]
         )
@@ -119,14 +116,14 @@ if __name__ == "__main__":
     else:
         ds = "AC300"
         n_agents = 10
-        capacity = 300
+        capacity = 500
         use_point_est = False
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
-            number_of_agents=14,
-            capacity=300,
+            number_of_agents=n_agents,
+            capacity=capacity,
             point_estimation=False,
-            show_plots=False,
-            debug=False,
+            show_plots=True,
+            debug=True,
         )

@@ -18,49 +18,24 @@ class runner:
     ):
         # Task definition
         self.coverage_problem = coverage_problem
-        self.tasks = self.coverage_problem.getTasks()
-        self.task_num = int(len(self.tasks))
+        self.tasks = np.array(self.coverage_problem.getTasks())
+        self.task_num = int(len(self.tasks))  # number of geoms
         self.robot_num = self.coverage_problem.getNumberOfRobots()
 
-        # TODO this should be based able to be based on distance/batterylife
-        min_x = 100000000
-        min_y = 100000000
-        max_x = 0
-        max_y = 0
-        # TODO sample a point inside the bounding polygon instead
-        assert False
-        for t in self.tasks:
-            temp = min([t[1][0], t[0][0]])
-            if min_x > temp:
-                min_x = temp
-            temp = min([t[1][1], t[0][1]])
-            if min_y > temp:
-                min_y = temp
-            temp = max([t[1][0], t[0][0]])
-            if max_x < temp:
-                max_x = temp
-            temp = max([t[1][1], t[0][1]])
-            if max_y < temp:
-                max_y = temp
-
+        # TODO sampling of initial state should be based able to be based on distance/batterylife
         if agents is None:
-            if initial_state is None:
-                initial_state = np.array(
-                    [
-                        np.random.uniform(min_x, max_x),
-                        np.random.uniform(min_y, max_y),
-                    ]
-                )
+            # if initial_state is None:
+            initial_state = self.coverage_problem.generate_random_point_in_problem()
             self.robot_list = []
             # TODO construct task objects from the self.tasks list
             for i in range(self.robot_num):
                 self.robot_list.append(
                     CBBA.agent(
                         id=i,
+                        state=initial_state,
                         tasks=self.tasks,
                         agent_num=self.robot_num,
                         L_t=task_capacity,
-                        state=initial_state + [np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5)],
                         point_estimation=use_point_estimation,
                     )
                 )
@@ -84,11 +59,12 @@ class runner:
             total_task_length += task_length
             agent_path_cost = r.getTotalTravelCost(r.getPathTasks())
             total_path_cost += agent_path_cost
-            route = [r.state.squeeze()]
+            route = [r.state]
             for task in r.getPathTasks():
-                route.append(task.start)
-                route.append(task.end)
-            route.append(r.state.squeeze())
+                route.append(task.getStart())
+                route.append(task.getEnd())
+                # TODO add all points in the line, it is not necesarily single line tasks
+            route.append(r.state)
             route_list.append(route)
 
             # Save the highest route cost
@@ -125,8 +101,8 @@ class runner:
         plotter = Utility.Plotter(self.tasks, self.robot_list, self.communication_graph)
 
         # Plot the search area and restricted area
-        plotter.plotAreas([self.coverage_problem.getSearchArea()], color=(0, 0, 0, 0.5))
-        plotter.plotAreas(self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.2), fill=True)
+        plotter.plotPolygon(self.coverage_problem.getSearchArea(), color=(0, 0, 0, 0.5))
+        plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.2), fill=True)
         self.start_time = timeit.default_timer()
 
         while True:
@@ -144,13 +120,6 @@ class runner:
                 for robot in self.robot_list:
                     print(robot.getPath())
 
-            # Plot
-            if self.plot:
-                plotter.setTitle("Time Step:{}, Bundle Construct".format(t))
-                for robot in self.robot_list:
-                    plotter.plotAgents(robot, self.tasks, t)
-                plotter.pause(0.1)
-
             # Communication stage
             # Send winning bid list to neighbors (depend on env)
             message_pool = [robot.send_message() for robot in self.robot_list]
@@ -162,10 +131,11 @@ class runner:
                 connected = list(connected)
                 connected.remove(robot_id)
 
-                if len(connected) > 0:
-                    Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected}
-                else:
-                    Y = None
+                Y = (
+                    {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected}
+                    if len(connected) > 0
+                    else None
+                )
 
                 robot.receive_message(Y)
 

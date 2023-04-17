@@ -1,42 +1,44 @@
 import os
 import time
+from typing import List
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.lines import Line2D
-from matplotlib.patches import Polygon
+from matplotlib.patches import Polygon as PolygonPatch
 
 from task_allocation import CBBA, CoverageProblem, Task
 
 
 class Plotter:
     def __init__(self, tasks, robot_list, communication_graph):
-        self.fig, self.ax = plt.subplots()
+        self.fig, self.environmentAx = plt.subplots()
 
         # Plot tasks
         self.plotTasks(tasks)
 
         # Plot agents
-        robot_pos = np.array([r.state.tolist() for r in robot_list])
+        robot_pos = np.array([r.state for r in robot_list])
 
         # Plot agent information
         for i in range(len(robot_list)):
             # Plot communication graph path
             for j in range(i + 1, len(robot_list)):
                 if communication_graph[i][j] == 1:
-                    self.ax.plot(
+                    self.environmentAx.plot(
                         [robot_pos[i][0], robot_pos[j][0]],
                         [robot_pos[i][1], robot_pos[j][1]],
                         "g--",
                         linewidth=1,
                     )
             # Plot agent position
-            self.ax.plot(robot_pos[i][0], robot_pos[i][1], "b*", label="Robot")
+            self.environmentAx.scatter(robot_pos[:, 0], robot_pos[:, 1], color="black")
 
-        handles, labels = self.ax.get_legend_handles_labels()
+        handles, labels = self.environmentAx.get_legend_handles_labels()
         communication_label = Line2D([0], [0], color="g", linestyle="--", label="communication")
         handles.append(communication_label)
-        self.ax.legend(handles=handles)
+        self.environmentAx.legend(handles=handles)
         self.assign_plots = []
 
     def plotAgents(self, robot: CBBA.agent, task, iteration):
@@ -52,7 +54,7 @@ class Plotter:
         self.y_data = task_y
 
         if iteration == 0:
-            (assign_line,) = self.ax.plot(
+            (assign_line,) = self.environmentAx.plot(
                 self.x_data,
                 self.y_data,
                 linestyle="solid",
@@ -64,7 +66,7 @@ class Plotter:
             self.assign_plots[robot.id].set_data(self.x_data, self.y_data)
 
     def setTitle(self, title):
-        self.ax.set_title(title)
+        self.environmentAx.set_title(title)
 
     def show(self):
         plt.show()
@@ -72,26 +74,22 @@ class Plotter:
     def pause(self, wait_time):
         plt.pause(wait_time)
 
-    def plotAreas(self, areas, color, fill=False):
-        for a in areas:
-            y = []
-            for p in a:
-                y.append([p[0], p[1]])
-            p = Polygon(y, facecolor=color)
-            p.set_fill(fill)
-            self.ax.add_patch(p)
+    def plotMultiPolygon(self, areas, color, fill=False):
+        for a in areas.geoms:
+            self.plotPolygon(a, color, fill)
+
+    def plotPolygon(self, poly, color, fill=False):
+        coords = []
+        for x, y in poly.boundary.coords:
+            coords.append([x, y])
+        p = PolygonPatch(coords, facecolor=color)
+        p.set_fill(fill)
+        self.environmentAx.add_patch(p)
 
     def plotTasks(self, tasks):
         for t in tasks:
-            self.ax.plot(
-                [
-                    t.start[0],
-                    t.end[0],
-                ],
-                [
-                    t.start[1],
-                    t.end[1],
-                ],
+            self.environmentAx.plot(
+                *t.trajectory.xy,
                 "b--",
                 linewidth=1,
             )
@@ -114,22 +112,6 @@ def loadDataset(directory, route_data_name, holes_name, outer_poly_name):
     return csv_files
 
 
-# def loadCoverageProblemFromDict(data, nr) -> CoverageProblem.CoverageProblem:
-#     polygon = data["polygon"]
-#     holes = data["holes"]
-#     lines = data["lines"]
-#     tasks = []
-#     # Convert tasks and shuffle the start and end points
-#     for i in range(len(lines)):
-#         s = lines[i]
-#         if np.random.choice(2, 1):
-#             tasks.append(Task.Task(start=np.array(s["start"]), end=np.array(s["end"]), task_id=i))
-#         else:
-#             tasks.append(Task.Task(start=np.array(s["end"]), end=np.array(s["start"]), task_id=i))
-
-#     return CoverageProblem.CoverageProblem(search_area=polygon, restricted_area=holes, tasks=tasks, number_of_robots=nr)
-
-
 def getAllCoverageFiles(dataset, directory="CoverageTasks/"):
     result = []
     for filename in os.listdir(directory + dataset):
@@ -149,4 +131,6 @@ def timing(name=None):
 
         return wrapper
 
+    return decorator
+    return decorator
     return decorator
