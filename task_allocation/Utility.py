@@ -132,5 +132,18 @@ def timing(name=None):
         return wrapper
 
     return decorator
-    return decorator
-    return decorator
+
+
+# TODO create a function to plot graphs
+# def plotGraph():
+#         options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
+#         nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
+#         nx.draw_networkx_nodes(G, nx.get_node_attributes(G, "pos"), node_color="tab:blue", **options)
+
+#         x, y = geometries["boundary"].exterior.xy
+#         plt.plot(x, y)
+#         for poly in geometries["obstacles"].geoms:
+#             xi, yi = poly.exterior.xy
+#             plt.plot(xi, yi)
+#         plt.show()
+#         plt.clf()

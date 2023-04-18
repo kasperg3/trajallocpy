@@ -4,9 +4,12 @@ import os
 import sys
 
 import geojson
+import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
+from shapely.geometry import LineString, MultiLineString, MultiPolygon, Polygon, shape
 
-from task_allocation import CoverageProblem, Experiment, Utility
+from task_allocation import CoverageProblem, Experiment, Utility, VisibilityGraph
 
 
 def saveResults(experiment_title, results, directory="experiments/"):
@@ -50,7 +53,6 @@ def main(
         with open(file_name) as json_file:
             features = geojson.load(json_file)["features"]
 
-        # TODO load from a geojson file instead
         cp = CoverageProblem.CoverageProblem(features, number_of_robots=number_of_agents)
         exp = Experiment.runner(
             coverage_problem=cp,
@@ -59,6 +61,7 @@ def main(
             task_capacity=capacity,
             use_point_estimation=point_estimation,
         )
+
         exp.solve(profiling_enabled=False, debug=debug)
 
         # Save the results in a csv file
@@ -114,7 +117,7 @@ if __name__ == "__main__":
             args.show_plots,
         )
     else:
-        ds = "AC300"
+        ds = "VM25"
         n_agents = 2
         capacity = 2000
         use_point_est = False
@@ -124,6 +127,6 @@ if __name__ == "__main__":
             number_of_agents=n_agents,
             capacity=capacity,
             point_estimation=False,
-            show_plots=False,
+            show_plots=True,
             debug=False,
         )

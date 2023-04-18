@@ -1,12 +1,11 @@
 import math
 from itertools import combinations
 
-import geojson
-import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 from scipy.spatial import KDTree
-from shapely.geometry import LineString, MultiLineString, MultiPolygon, Polygon, shape
+from shapely import prepare
+from shapely.geometry import LineString, MultiPolygon, Polygon
 
 from task_allocation import Utility
 
@@ -52,8 +51,10 @@ def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon, reduced_visibi
     # Create a NetworkX graph to represent the visibility graph
     visibility_graph = construct_graph(polygon, holes)
     # Only compare the combinations which are unique
-    # TODO to speed this up further check out the shapely prepare
     node_combinations = list(combinations(visibility_graph.nodes, 2))
+    # Performance improvements
+    prepare(polygon)
+    prepare(holes)
 
     if reduced_visibility:
         # reduced visibility graph
@@ -79,7 +80,6 @@ def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon, reduced_visibi
 
     for u, v in node_combinations:
         line = LineString([u, v])
-
         intersects_obstacle = False
 
         # Check if the line is outside the polygon
@@ -220,43 +220,3 @@ def add_point_to_graph(kdtree, graph, new_point):
         add_edge(graph, new_point, projection_point)
         add_edge(graph, projection_point, endpoint2)
         add_edge(graph, projection_point, endpoint1)
-
-
-def dataset_test():
-    dataset_name = "AC300"
-    files = Utility.getAllCoverageFiles(dataset_name)
-    for file_name in files:
-        with open(file_name) as json_file:
-            features = geojson.load(json_file)["features"]
-
-        # Convert each feature to a Shapely geometry object
-        geometries = {"obstacles": MultiPolygon(), "tasks": MultiLineString(), "boundary": Polygon()}
-        for feature in features:
-            if feature["geometry"]:
-                geometries[feature["id"]] = shape(feature["geometry"])
-
-        # Create a GeometryCollection with the geometries and their types
-        G = naive_visibility_graph(geometries["boundary"], geometries["obstacles"], reduced_visibility=True)
-
-        start_points = [trajectory.coords[0] for trajectory in list(geometries["tasks"].geoms)]
-        end_points = [trajectory.coords[-1] for trajectory in list(geometries["tasks"].geoms)]
-        start_points.extend(end_points)
-        # Add new point to the graph
-        add_points_to_graph(G, end_points)
-        print(G)
-        options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
-        # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
-        nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
-        nx.draw_networkx_nodes(G, nx.get_node_attributes(G, "pos"), node_color="tab:blue", **options)
-
-        x, y = geometries["boundary"].exterior.xy
-        plt.plot(x, y)
-        for poly in geometries["obstacles"].geoms:
-            xi, yi = poly.exterior.xy
-            plt.plot(xi, yi)
-        plt.show()
-        plt.clf()
-
-
-if __name__ == "__main__":
-    dataset_test()

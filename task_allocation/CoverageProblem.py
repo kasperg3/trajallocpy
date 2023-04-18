@@ -5,7 +5,7 @@ import numpy as np
 import shapely.geometry
 from geojson import FeatureCollection
 
-from task_allocation import Task
+from task_allocation import Task, VisibilityGraph
 
 
 class CoverageProblem:
@@ -20,10 +20,25 @@ class CoverageProblem:
                 geometries[feature["id"]] = shapely.geometry.shape(feature["geometry"])
         self.__restricted_areas = geometries["obstacles"]
         self.__search_area = geometries["boundary"]
+
+        # Create a GeometryCollection with the geometries and their types
+        self.travel_graph = VisibilityGraph.naive_visibility_graph(
+            geometries["boundary"], geometries["obstacles"], reduced_visibility=True
+        )
+
+        start_points = [trajectory.coords[0] for trajectory in list(geometries["tasks"].geoms)]
+        end_points = [trajectory.coords[-1] for trajectory in list(geometries["tasks"].geoms)]
+        start_points.extend(end_points)
+
+        # Add all the task endpoints
+        VisibilityGraph.add_points_to_graph(self.travel_graph, end_points)
+        print("Travel graph ", self.travel_graph)
+        # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
+
         # convert geometries to tasks
         tasks = []
-        for id, line in enumerate(geometries["tasks"].geoms):
-            tasks.append(Task.TrajectoryTask(id, line, line.coords[0], line.coords[-1]))
+        for id, trajectory in enumerate(geometries["tasks"].geoms):
+            tasks.append(Task.TrajectoryTask(id, trajectory, trajectory.coords[0], trajectory.coords[-1]))
 
         self.__tasks = tasks
         self.__n_robots = number_of_robots
