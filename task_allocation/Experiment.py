@@ -61,8 +61,8 @@ class runner:
             total_path_cost += agent_path_cost
             route = [r.state]
             for task in r.getPathTasks():
-                route.append(task.getStart())
-                route.append(task.getEnd())
+                route.append(task.start)
+                route.append(task.end)
                 # TODO add all points in the line, it is not necesarily single line tasks
             route.append(r.state)
             route_list.append(route)

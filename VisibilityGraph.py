@@ -6,6 +6,7 @@ import geojson
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from scipy.spatial import KDTree
 from shapely.geometry import (
     LineString,
     MultiLineString,
@@ -325,38 +326,96 @@ def dijkstra_path(start, end, G: nx.Graph):
     return nx.astar_path(G, start, end, weight="cost")
 
 
-def test_connect_nearest_nodes():
-    # Create an arbitrary graph
-    G = nx.Graph()
-    G.add_edges_from([(1, 2), (2, 3), (3, 4), (4, 1)])
+def point_line_distance(point, line):
+    """Calculates the Euclidean distance between a point and a line segment.
 
-    # Define the coordinates of the new node
-    new_node_coords = (2.5, 2.5)
+    Args:
+        point: A tuple or list of two floats, representing the coordinates of the point.
+        line: A tuple or list of two tuples or lists of two floats, representing the coordinates of the endpoints of the line segment.
 
-    # Find the nearest edge to the new node
-    nearest_edge = None
-    nearest_edge_dist = float("inf")
-    for u, v in G.edges():
-        edge = LineString([(u, v), G.nodes[u]["pos"], G.nodes[v]["pos"]])
-        node = Point(new_node_coords)
-        dist = edge.distance(node)
-        if dist < nearest_edge_dist:
-            nearest_edge = (u, v)
-            nearest_edge_dist = dist
+    Returns:
+        A float representing the Euclidean distance between the point and the line segment.
+    """
+    x1, y1 = line[0]
+    x2, y2 = line[1]
+    x0, y0 = point
+    numerator = abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
+    denominator = math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
+    return numerator / denominator
 
-    # Calculate the distance between the new node and the nearest point on the nearest edge
-    edge = LineString([nearest_edge, G.nodes[nearest_edge[0]]["pos"], G.nodes[nearest_edge[1]]["pos"]])
-    node = Point(new_node_coords)
-    nearest_point = edge.interpolate(edge.project(node))
-    nearest_point_dist = nearest_point.distance(node)
 
-    # Add the new node to the graph and connect it to the nearest point on the nearest edge
-    # new_node = max(G.nodes) + 1
-    G.add_node(new_node_coords, pos=new_node_coords)
-    G.add_edge(new_node_coords, nearest_edge[0] if nearest_point_dist < 0.5 else nearest_edge[1])
+def project_point_onto_line(point, endpoint1, endpoint2):
+    """Calculates the projection of a point onto a line segment defined by two endpoints.
 
-    # Print the resulting graph
-    print(G.nodes)
+    Args:
+        point: A tuple or list of two floats, representing the coordinates of the point.
+        endpoint1: A tuple or list of two floats, representing the coordinates of the first endpoint.
+        endpoint2: A tuple or list of two floats, representing the coordinates of the second endpoint.
+
+    Returns:
+        A tuple of two floats representing the coordinates of the projection point.
+    """
+    x1, y1 = endpoint1
+    x2, y2 = endpoint2
+    x0, y0 = point
+    dx, dy = x2 - x1, y2 - y1
+    dot = dx * (x0 - x1) + dy * (y0 - y1)
+    length_squared = dx**2 + dy**2
+    if length_squared == 0:
+        return endpoint1
+    t = max(0, min(1, dot / length_squared))
+    x = x1 + t * dx
+    y = y1 + t * dy
+    return (x, y)
+
+
+def point_distance(point1, point2):
+    return ((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2) ** 0.5
+
+
+def add_points_to_graph(graph, points):
+    nodes = list(graph.nodes())
+    kdtree = KDTree(nodes)
+    for point in points:
+        add_point_to_graph(kdtree, graph, point)
+
+
+def add_point_to_graph(kdtree, graph, new_point):
+    # If the node is already in the graph, do not add it
+    if new_point in graph.nodes():
+        return
+
+    # Create a KDTree from the nodes of the graph
+    nodes = list(graph.nodes())
+    # Find the nearest edge to the new point
+    _, nearest_node_index = kdtree.query(new_point)
+    nearest_node = nodes[nearest_node_index]
+    nearest_edge = min(graph.edges(nearest_node), key=lambda e: point_line_distance(new_point, e))
+
+    # Calculate the projection of the new point onto the nearest edge
+    endpoint1, endpoint2 = nearest_edge
+    projection_point = project_point_onto_line(new_point, endpoint1, endpoint2)
+
+    graph.add_node(new_point, pos=new_point)
+    # TODO check whether the new point is on the edge, if to do not add the projected point
+
+    # If the projected point is the same point as a existing node, do not add an extra edge
+    if projection_point == nearest_node:
+        graph.add_edge(new_point, nearest_node)
+    elif projection_point == new_point:
+        # point_distance(projection_point, new_point) < 0.1:
+        # If the distance from the projection point to the new_point is 0
+        graph.remove_edge(endpoint1, endpoint2)
+        graph.add_edge(new_point, endpoint1)
+        graph.add_edge(new_point, endpoint2)
+    else:
+        # Add the new node and connect it to the projection point and the new point
+        # Remove the nearest edge from the graph and add two new edges to the projection point
+        graph.remove_edge(endpoint1, endpoint2)
+        graph.add_node(projection_point, pos=projection_point)
+        graph.add_edge(new_point, projection_point)
+        graph.add_edge(projection_point, endpoint1)
+        graph.add_edge(projection_point, endpoint2)
 
 
 def dataset_test():
@@ -374,6 +433,13 @@ def dataset_test():
 
         # Create a GeometryCollection with the geometries and their types
         G = naive_visibility_graph(geometries["boundary"], geometries["obstacles"], reduced_visibility=True)
+
+        start_points = [trajectory.coords[0] for trajectory in list(geometries["tasks"].geoms)]
+        end_points = [trajectory.coords[-1] for trajectory in list(geometries["tasks"].geoms)]
+        start_points.extend(end_points)
+        # Add new point to the graph
+        add_points_to_graph(G, end_points)
+        print(G)
         options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
         # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
         nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
@@ -386,36 +452,6 @@ def dataset_test():
             plt.plot(xi, yi)
         plt.show()
         plt.clf()
-
-
-def convert_dataset_to_geojson():
-    files = Utility.getAllCoverageFiles("AC300")
-
-    for file_name in files:
-        with open(file_name) as json_file:
-            data = json.load(json_file)
-        holes = []
-        for obs in data["holes"]:
-            hole = Polygon(obs)
-            holes.append(hole)
-
-        obstacles = MultiPolygon(holes)
-        polygon = Polygon(data["polygon"])
-
-        lines = []
-        for line in data["lines"]:
-            lines.append(LineString([line["start"], line["end"]]))
-
-        tasks = MultiLineString(lines)
-        feature_collection = geojson.FeatureCollection(
-            [
-                geojson.Feature(geometry=polygon.__geo_interface__, id="boundary"),
-                geojson.Feature(geometry=obstacles.__geo_interface__, id="obstacles"),
-                geojson.Feature(geometry=tasks.__geo_interface__, id="tasks"),
-            ]
-        )
-        with open(file_name, "w") as f:
-            geojson.dump(feature_collection, f)
 
 
 if __name__ == "__main__":
