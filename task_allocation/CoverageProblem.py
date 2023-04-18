@@ -1,6 +1,6 @@
 import random
-from typing import List
 
+import networkx as nx
 import numpy as np
 import shapely.geometry
 from geojson import FeatureCollection
@@ -32,6 +32,12 @@ class CoverageProblem:
 
         # Add all the task endpoints
         VisibilityGraph.add_points_to_graph(self.travel_graph, end_points)
+        # Add a cost based on the euclidean distance for each edge
+        nx.set_edge_attributes(
+            self.travel_graph,
+            {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in self.travel_graph.edges()},
+            "cost",
+        )
         print("Travel graph ", self.travel_graph)
         # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
 

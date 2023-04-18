@@ -1,4 +1,5 @@
 import timeit
+from typing import List
 
 import numpy as np
 
@@ -21,18 +22,17 @@ class runner:
         self.tasks = np.array(self.coverage_problem.getTasks())
         self.task_num = int(len(self.tasks))  # number of geoms
         self.robot_num = self.coverage_problem.getNumberOfRobots()
-
         # TODO sampling of initial state should be based able to be based on distance/batterylife
         if agents is None:
             # if initial_state is None:
             initial_state = self.coverage_problem.generate_random_point_in_problem()
             self.robot_list = []
-            # TODO construct task objects from the self.tasks list
             for i in range(self.robot_num):
                 self.robot_list.append(
                     CBBA.agent(
                         id=i,
                         state=initial_state,
+                        travel_graph=self.coverage_problem.travel_graph,
                         tasks=self.tasks,
                         agent_num=self.robot_num,
                         L_t=task_capacity,

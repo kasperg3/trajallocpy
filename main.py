@@ -117,9 +117,9 @@ if __name__ == "__main__":
             args.show_plots,
         )
     else:
-        ds = "VM25"
-        n_agents = 2
-        capacity = 2000
+        ds = "AC300"
+        n_agents = 5
+        capacity = 600
         use_point_est = False
         main(
             dataset_name=ds,

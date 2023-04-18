@@ -3,6 +3,7 @@ import math
 import random
 from typing import List
 
+import networkx as nx
 import numpy as np
 import shapely
 
@@ -13,6 +14,7 @@ class agent:
     def __init__(
         self,
         state,
+        travel_graph: nx.Graph,
         id=None,
         agent_num=None,
         L_t=None,
@@ -20,6 +22,7 @@ class agent:
         color=None,
         point_estimation=False,
     ):
+        self.travel_graph = travel_graph
         self.tasks = copy.deepcopy(tasks)
         self.task_num = len(tasks)
         self.use_single_point_estimation = point_estimation
@@ -128,6 +131,9 @@ class agent:
         return total_dist, total_task_length
 
     def getTravelCost(self, start, end):
+        # TODO Calculate the distance based on the travel graph
+        # TODO add the initial position of the agents, or else the cost cannot be calculated
+        nx.astar_path(self.travel_graph, start, end, weight="cost")
         # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
         dist = [(a - b) ** 2 for a, b in zip(start, end)]
@@ -456,5 +462,6 @@ class consensus_algorithm:
         pass
 
     def solve():
+        pass
         pass
         pass
