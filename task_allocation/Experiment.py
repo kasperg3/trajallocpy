@@ -152,7 +152,7 @@ class runner:
 
             # Plot
             if self.plot:
-                plotter.setTitle("Time Step:{}, Consensus".format(t))
+                plotter.setTitle("Time Step:{}".format(t))
                 for robot in self.robot_list:
                     plotter.plotAgents(robot, self.tasks, t)
                 plotter.pause(0.1)

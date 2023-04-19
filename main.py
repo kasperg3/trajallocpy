@@ -118,8 +118,8 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 5
-        capacity = 600
+        n_agents = 10
+        capacity = 400
         use_point_est = False
         main(
             dataset_name=ds,
@@ -127,6 +127,6 @@ if __name__ == "__main__":
             number_of_agents=n_agents,
             capacity=capacity,
             point_estimation=False,
-            show_plots=True,
+            show_plots=False,
             debug=False,
         )

@@ -1,3 +1,4 @@
+import math
 import random
 
 import networkx as nx
@@ -23,7 +24,7 @@ class CoverageProblem:
 
         # Create a GeometryCollection with the geometries and their types
         self.travel_graph = VisibilityGraph.naive_visibility_graph(
-            geometries["boundary"], geometries["obstacles"], reduced_visibility=True
+            geometries["boundary"], geometries["obstacles"], reduced_visibility=False
         )
 
         start_points = [trajectory.coords[0] for trajectory in list(geometries["tasks"].geoms)]
@@ -33,11 +34,13 @@ class CoverageProblem:
         # Add all the task endpoints
         VisibilityGraph.add_points_to_graph(self.travel_graph, start_points)
         # Add a cost based on the euclidean distance for each edge
-        # TODO should this cost be the time instead of distance?
+        edge_attributes = {
+            e: math.sqrt(sum([(a - b) ** 2 for a, b in zip(e[0], e[1])])) for e in self.travel_graph.edges()
+        }
         nx.set_edge_attributes(
-            self.travel_graph,
-            {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in self.travel_graph.edges()},
-            "cost",
+            G=self.travel_graph,
+            values=edge_attributes,
+            name="cost",
         )
         print("Travel graph ", self.travel_graph)
 
@@ -79,4 +82,5 @@ class CoverageProblem:
         while True:
             point = shapely.geometry.Point(random.uniform(minx, maxx), random.uniform(miny, maxy))  # noqa: S311
             if not self.__restricted_areas.contains(point) and self.__search_area.contains(point):
+                return point
                 return point

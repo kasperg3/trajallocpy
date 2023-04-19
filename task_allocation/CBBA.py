@@ -131,14 +131,34 @@ class agent:
 
     @cache
     def getTravelCost(self, start, end):
-        # TODO Calculate the distance based on the travel graph
-        # TODO add the initial position of the agents, or else the cost cannot be calculated
-        nx.astar_path(self.travel_graph, start, end, weight="cost")
+        # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
+        # TODO Which method to use, dijkstra or astar
+        # nx.dijkstra_path(self.travel_graph, start, end, weight="cost")
+
+        # TODO investigate whether it is possible to provide a function in the graph creation to calculate the cost
+        def heuristic(a, b):
+            (x1, y1) = a
+            (x2, y2) = b
+            return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+
+        dist = nx.astar_path_length(self.travel_graph, start, end, heuristic=heuristic, weight="cost")
+        # path = nx.astar_path(self.travel_graph, start, end, heuristic=heuristic, weight="cost")
+
+        # dist = sum(
+        #     [
+        #         ((path[i + 1][0] - path[i][0]) ** 2 + (path[i + 1][1] - path[i][1]) ** 2) ** 0.5
+        #         for i in range(len(path) - 1)
+        #     ]
+        # )
+
         # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
-        dist = [(a - b) ** 2 for a, b in zip(start, end)]
-        dist = math.sqrt(sum(dist))
+        # dist = [(a - b) ** 2 for a, b in zip(start, end)]
+        # dist = math.sqrt(sum(dist))
         result = dist / self.max_velocity
+
+        # TODO are we assuming that the drone will interpolate the paths and thereby only stop in the ends?
+
         # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
 

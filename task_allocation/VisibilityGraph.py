@@ -95,29 +95,8 @@ def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon, reduced_visibi
         if not intersects_obstacle:
             visibility_graph.add_edge(u, v)
 
-    # Add a cost based on the euclidean distance for each edge
-    nx.set_edge_attributes(
-        visibility_graph,
-        {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in visibility_graph.edges()},
-        "cost",
-    )
     print(visibility_graph)
     return visibility_graph
-
-
-@Utility.timing()
-def a_star_path(start, end, G: nx.Graph):
-    def dist(a, b):
-        (x1, y1) = a
-        (x2, y2) = b
-        return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
-
-    return nx.astar_path(G, start, end, heuristic=dist, weight="cost")
-
-
-@Utility.timing()
-def dijkstra_path(start, end, G: nx.Graph):
-    return nx.astar_path(G, start, end, weight="cost")
 
 
 def point_line_distance(point, line):
@@ -201,20 +180,20 @@ def add_point_to_graph(kdtree, graph, new_point):
 
     # Add the new point
     graph.add_node(new_point, pos=new_point)
-
+    # TODO Figure out whether redundant/self refs. edges should be removed
     # If the projected point is the same point as a existing node, do not add an extra edge
     if projection_point == nearest_node:
         add_edge(graph, new_point, nearest_node)
     elif projection_point == new_point:
         # point_distance(projection_point, new_point) < 0.1:
         # If the distance from the projection point to the new_point is 0
-        graph.remove_edge(endpoint1, endpoint2)
+        # graph.remove_edge(endpoint1, endpoint2)
         add_edge(graph, new_point, endpoint1)
         add_edge(graph, new_point, endpoint2)
     else:
         # Add the new node and connect it to the projection point and the new point
         # Remove the nearest edge from the graph and add two new edges to the projection point
-        graph.remove_edge(endpoint1, endpoint2)
+        # graph.remove_edge(endpoint1, endpoint2)
         graph.add_node(projection_point, pos=projection_point)
         # TODO sometimes the projectionpoint and endpoint is the same, why is this the case?
         add_edge(graph, new_point, projection_point)
