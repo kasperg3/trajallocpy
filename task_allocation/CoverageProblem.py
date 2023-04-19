@@ -23,7 +23,7 @@ class CoverageProblem:
         self.__search_area = geometries["boundary"]
 
         # Create a GeometryCollection with the geometries and their types
-        self.travel_graph = VisibilityGraph.naive_visibility_graph(
+        self.travel_graph = VisibilityGraph.visibility_graph(
             geometries["boundary"], geometries["obstacles"], reduced_visibility=False
         )
 

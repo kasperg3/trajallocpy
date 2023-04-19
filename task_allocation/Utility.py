@@ -1,14 +1,13 @@
 import os
 import time
-from typing import List
 
-import matplotlib
 import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
 from matplotlib.lines import Line2D
 from matplotlib.patches import Polygon as PolygonPatch
 
-from task_allocation import CBBA, CoverageProblem, Task
+from task_allocation import CBBA
 
 
 class Plotter:
@@ -135,15 +134,15 @@ def timing(name=None):
 
 
 # TODO create a function to plot graphs
-# def plotGraph():
-#         options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
-#         nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
-#         nx.draw_networkx_nodes(G, nx.get_node_attributes(G, "pos"), node_color="tab:blue", **options)
+def plotGraph(G, boundary, obstacles):
+    options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
+    nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
+    nx.draw_networkx_nodes(G, nx.get_node_attributes(G, "pos"), node_color="tab:blue", **options)
 
-#         x, y = geometries["boundary"].exterior.xy
-#         plt.plot(x, y)
-#         for poly in geometries["obstacles"].geoms:
-#             xi, yi = poly.exterior.xy
-#             plt.plot(xi, yi)
-#         plt.show()
-#         plt.clf()
+    x, y = boundary.exterior.xy
+    plt.plot(x, y)
+    for poly in obstacles.geoms:
+        xi, yi = poly.exterior.xy
+        plt.plot(xi, yi)
+    plt.show()
+    plt.clf()

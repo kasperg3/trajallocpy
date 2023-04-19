@@ -47,7 +47,7 @@ def cross_product(u, v):
 
 
 @Utility.timing()
-def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon, reduced_visibility=True):
+def visibility_graph(polygon: Polygon, holes: MultiPolygon, reduced_visibility=True):
     # Create a NetworkX graph to represent the visibility graph
     visibility_graph = construct_graph(polygon, holes)
     # Only compare the combinations which are unique
@@ -95,7 +95,6 @@ def naive_visibility_graph(polygon: Polygon, holes: MultiPolygon, reduced_visibi
         if not intersects_obstacle:
             visibility_graph.add_edge(u, v)
 
-    print(visibility_graph)
     return visibility_graph
 
 
@@ -146,11 +145,11 @@ def point_distance(point1, point2):
     return ((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2) ** 0.5
 
 
-def add_points_to_graph(graph, points):
+def add_points_to_graph(graph, points, is_visibility=False):
     nodes = list(graph.nodes())
     kdtree = KDTree(nodes)
     for point in points:
-        add_point_to_graph(kdtree, graph, point)
+        add_point_to_graph(kdtree, graph, point, is_visibility=is_visibility)
 
 
 def add_edge(graph, point1, point2):
@@ -161,7 +160,7 @@ def add_edge(graph, point1, point2):
         # print("Trying to create edges to the same point: ", point1, ",", point2)
 
 
-def add_point_to_graph(kdtree, graph, new_point):
+def add_point_to_graph(kdtree, graph, new_point, is_visibility):
     # If the node is already in the graph, do not add it
     if new_point in graph.nodes():
         return
@@ -180,6 +179,8 @@ def add_point_to_graph(kdtree, graph, new_point):
 
     # Add the new point
     graph.add_node(new_point, pos=new_point)
+    # TODO add edges to all other visibile nodes as well, not including the task nodes
+
     # TODO Figure out whether redundant/self refs. edges should be removed
     # If the projected point is the same point as a existing node, do not add an extra edge
     if projection_point == nearest_node:

@@ -65,7 +65,6 @@ class agent:
         if state is None:
             raise Exception("ERROR: Initial state cannot be None")
         else:
-            # TODO add this as a feature
             self.set_state(state.coords[0])
         # socre function parameters
         self.Lambda = 0.95
@@ -132,9 +131,6 @@ class agent:
     @cache
     def getTravelCost(self, start, end):
         # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
-        # TODO Which method to use, dijkstra or astar
-        # nx.dijkstra_path(self.travel_graph, start, end, weight="cost")
-
         # TODO investigate whether it is possible to provide a function in the graph creation to calculate the cost
         def heuristic(a, b):
             (x1, y1) = a
