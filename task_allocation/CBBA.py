@@ -1,11 +1,11 @@
 import copy
 import math
 import random
+from functools import cache
 from typing import List
 
 import networkx as nx
 import numpy as np
-import shapely
 
 from task_allocation.Task import TrajectoryTask
 
@@ -15,9 +15,9 @@ class agent:
         self,
         state,
         travel_graph: nx.Graph,
-        id=None,
+        id,
         agent_num=None,
-        L_t=None,
+        capacity=None,
         tasks=None,
         color=None,
         point_estimation=False,
@@ -51,10 +51,10 @@ class agent:
         # Path
         self.path = []
         # Maximum task capacity
-        if L_t is None:
-            self.L_t = 999999
+        if capacity is None:
+            raise Exception("Error: agent capacity cannot be None")
         else:
-            self.L_t = L_t
+            self.capacity = capacity
 
         # Local Clock
         self.time_step = 0
@@ -63,11 +63,10 @@ class agent:
 
         # initialize state
         if state is None:
-            raise Exception("ERROR: Initial state cannot be NONE")
+            raise Exception("ERROR: Initial state cannot be None")
         else:
             # TODO add this as a feature
-            point = np.random.normal(np.array(state.coords[0]))
-            self.set_state((point[0], point[1]))
+            self.set_state(state.coords[0])
         # socre function parameters
         self.Lambda = 0.95
 
@@ -83,8 +82,8 @@ class agent:
     def getBundle(self):
         return self.bundle
 
-    def tau(self, j):
-        pass
+    # def tau(self, j):
+    #     pass
 
     def set_state(self, state):
         self.state = state
@@ -130,6 +129,7 @@ class agent:
             total_dist += total_task_length
         return total_dist, total_task_length
 
+    @cache
     def getTravelCost(self, start, end):
         # TODO Calculate the distance based on the travel graph
         # TODO add the initial position of the agents, or else the cost cannot be calculated
@@ -249,7 +249,7 @@ class agent:
         return (best_pos, c, reverse)
 
     def build_bundle(self):
-        while self.getTotalTravelCost(self.getPathTasks()) <= self.L_t:
+        while self.getTotalTravelCost(self.getPathTasks()) <= self.capacity:
             best_pos, c, reverse = self.getCij()
             h = c > self.winning_bids
 
@@ -454,14 +454,4 @@ class agent:
         """
         Do nothing
         """
-        pass
-
-
-class consensus_algorithm:
-    def __init__(self) -> None:
-        pass
-
-    def solve():
-        pass
-        pass
         pass

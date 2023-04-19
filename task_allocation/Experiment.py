@@ -2,8 +2,9 @@ import timeit
 from typing import List
 
 import numpy as np
+import shapely
 
-from task_allocation import CBBA, CoverageProblem, Utility
+from task_allocation import CBBA, CoverageProblem, Utility, VisibilityGraph
 
 
 class runner:
@@ -20,22 +21,25 @@ class runner:
         # Task definition
         self.coverage_problem = coverage_problem
         self.tasks = np.array(self.coverage_problem.getTasks())
-        self.task_num = int(len(self.tasks))  # number of geoms
+        self.task_num = int(len(self.tasks))
         self.robot_num = self.coverage_problem.getNumberOfRobots()
-        # TODO sampling of initial state should be based able to be based on distance/batterylife
         if agents is None:
-            # if initial_state is None:
             initial_state = self.coverage_problem.generate_random_point_in_problem()
             self.robot_list = []
+
             for i in range(self.robot_num):
+                # TODO It should be possible to initialise with or without a random noise
+                robot_state = shapely.geometry.Point(np.random.normal(np.array(initial_state.xy)))
+                # TODO add a node to the travel graph of the initial agent states
+                VisibilityGraph.add_points_to_graph(self.coverage_problem.travel_graph, [robot_state.coords[0]])
                 self.robot_list.append(
                     CBBA.agent(
                         id=i,
-                        state=initial_state,
+                        state=robot_state,
                         travel_graph=self.coverage_problem.travel_graph,
                         tasks=self.tasks,
                         agent_num=self.robot_num,
-                        L_t=task_capacity,
+                        capacity=task_capacity,
                         point_estimation=use_point_estimation,
                     )
                 )

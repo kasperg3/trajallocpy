@@ -31,15 +31,15 @@ class CoverageProblem:
         start_points.extend(end_points)
 
         # Add all the task endpoints
-        VisibilityGraph.add_points_to_graph(self.travel_graph, end_points)
+        VisibilityGraph.add_points_to_graph(self.travel_graph, start_points)
         # Add a cost based on the euclidean distance for each edge
+        # TODO should this cost be the time instead of distance?
         nx.set_edge_attributes(
             self.travel_graph,
             {e: ((e[0][0] - e[1][0]) ** 2 + (e[0][1] - e[0][1]) ** 2) ** 0.5 for e in self.travel_graph.edges()},
             "cost",
         )
         print("Travel graph ", self.travel_graph)
-        # print(dijkstra_path((polygon.boundary.coords[0]), (holes[0].boundary.coords[0]), G))
 
         # convert geometries to tasks
         tasks = []
@@ -74,7 +74,7 @@ class CoverageProblem:
     def setNumberOfRobots(self, n):
         self.__n_robots = n
 
-    def generate_random_point_in_problem(self):
+    def generate_random_point_in_problem(self) -> shapely.geometry.Point:
         minx, miny, maxx, maxy = self.__search_area.bounds
         while True:
             point = shapely.geometry.Point(random.uniform(minx, maxx), random.uniform(miny, maxy))  # noqa: S311
