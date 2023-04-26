@@ -15,7 +15,7 @@ class Plotter:
         self.fig, self.environmentAx = plt.subplots()
 
         # Plot tasks
-        self.plotTasks(tasks)
+        # self.plotTasks(tasks)
 
         # Plot agents
         robot_pos = np.array([r.state for r in robot_list])
@@ -138,7 +138,7 @@ def timing(name=None):
     return decorator
 
 
-def plotGraph(G, boundary, obstacles):
+def plotGraph(G, boundary, obstacles, tasks=None):
     graph_fig = plt.figure("travel graph")
     options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
     nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
@@ -149,4 +149,11 @@ def plotGraph(G, boundary, obstacles):
     for poly in obstacles.geoms:
         xi, yi = poly.exterior.xy
         plt.plot(xi, yi)
-    plt.pause(0.5)
+    if tasks is not None:
+        for t in tasks:
+            plt.plot(
+                *t.trajectory.xy,
+                "b--",
+                linewidth=1,
+            )
+    plt.pause(0.01)

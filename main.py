@@ -62,7 +62,7 @@ def main(
             use_point_estimation=point_estimation,
         )
 
-        Utility.plotGraph(cp.travel_graph, cp.getSearchArea(), cp.getRestrictedAreas())
+        Utility.plotGraph(cp.travel_graph, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
         exp.solve(profiling_enabled=False, debug=debug)
 
         # Save the results in a csv file
