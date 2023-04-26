@@ -112,7 +112,7 @@ class runner:
 
         # Plot the search area and restricted area
         plotter.plotPolygon(self.coverage_problem.getSearchArea(), color=(0, 0, 0, 0.5))
-        plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(1, 0, 0, 0.2), fill=True)
+        plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(0, 0, 0, 0.2), fill=True)
         self.start_time = timeit.default_timer()
 
         while True:

@@ -24,7 +24,7 @@ class CoverageProblem:
 
         # Create a GeometryCollection with the geometries and their types
         self.travel_graph = VisibilityGraph.visibility_graph(
-            geometries["boundary"], geometries["obstacles"], reduced_visibility=True
+            geometries["boundary"], geometries["obstacles"], reduced_visibility=False
         )
 
         # Add all the task endpoints

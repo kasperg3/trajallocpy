@@ -139,8 +139,8 @@ def timing(name=None):
 
 
 def plotGraph(G, boundary, obstacles, tasks=None):
-    graph_fig = plt.figure("travel graph")
-    options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
+    plt.figure("travel graph")
+    options = {"edgecolors": "tab:gray", "node_size": 20, "alpha": 0.7}
     nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
     nx.draw_networkx_nodes(G, nx.get_node_attributes(G, "pos"), node_color="tab:blue", **options)
 
