@@ -24,24 +24,18 @@ class CoverageProblem:
 
         # Create a GeometryCollection with the geometries and their types
         self.travel_graph = VisibilityGraph.visibility_graph(
-            geometries["boundary"], geometries["obstacles"], reduced_visibility=False
+            geometries["boundary"], geometries["obstacles"], reduced_visibility=True
         )
 
+        # Add all the task endpoints
         start_points = [trajectory.coords[0] for trajectory in list(geometries["tasks"].geoms)]
         end_points = [trajectory.coords[-1] for trajectory in list(geometries["tasks"].geoms)]
         start_points.extend(end_points)
-
-        # Add all the task endpoints
         VisibilityGraph.add_points_to_graph(self.travel_graph, start_points)
-        # Add a cost based on the euclidean distance for each edge
-        edge_attributes = {
-            e: math.sqrt(sum([(a - b) ** 2 for a, b in zip(e[0], e[1])])) for e in self.travel_graph.edges()
-        }
-        nx.set_edge_attributes(
-            G=self.travel_graph,
-            values=edge_attributes,
-            name="cost",
-        )
+
+        # TODO add edges to all other visibile nodes as well, not including the task nodes
+        # Alternatively the edges between any task nodes can be removed
+
         print("Travel graph ", self.travel_graph)
 
         # convert geometries to tasks
@@ -82,5 +76,4 @@ class CoverageProblem:
         while True:
             point = shapely.geometry.Point(random.uniform(minx, maxx), random.uniform(miny, maxy))  # noqa: S311
             if not self.__restricted_areas.contains(point) and self.__search_area.contains(point):
-                return point
                 return point

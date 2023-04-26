@@ -1,5 +1,5 @@
 import math
-from itertools import combinations
+from itertools import combinations, product
 
 import networkx as nx
 import numpy as np
@@ -79,23 +79,29 @@ def visibility_graph(polygon: Polygon, holes: MultiPolygon, reduced_visibility=T
         node_combinations = edges
 
     for u, v in node_combinations:
-        line = LineString([u, v])
-        intersects_obstacle = False
-
-        # Check if the line is outside the polygon
-        if not line.within(polygon):
-            intersects_obstacle = True
-        elif not holes.is_empty:
-            # Check if the line is intersecting any of the obstacles
-            for obstacle in holes.geoms:
-                if line.crosses(obstacle) or line.within(obstacle):
-                    intersects_obstacle = True
-                    break
-
-        if not intersects_obstacle:
+        if is_visible(polygon, holes, u, v):
             visibility_graph.add_edge(u, v)
 
+    # Add cost
+    add_euclidean_cost_to_edges(graph=visibility_graph)
+
     return visibility_graph
+
+
+def is_visible(polygon, holes, u, v):
+    intersects_obstacle = False
+
+    line = LineString([u, v])
+    # Check if the line is outside the polygon
+    if not line.within(polygon):
+        intersects_obstacle = True
+    elif not holes.is_empty:
+        # Check if the line is intersecting any of the obstacles
+        for obstacle in holes.geoms:
+            if line.crosses(obstacle) or line.within(obstacle):
+                intersects_obstacle = True
+                break
+    return not intersects_obstacle
 
 
 def point_line_distance(point, line):
@@ -113,6 +119,8 @@ def point_line_distance(point, line):
     x0, y0 = point
     numerator = abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
     denominator = math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
+    if denominator == 0:
+        return 10000000000
     return numerator / denominator
 
 
@@ -145,22 +153,39 @@ def point_distance(point1, point2):
     return ((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2) ** 0.5
 
 
-def add_points_to_graph(graph, points, is_visibility=False):
+def add_euclidean_cost_to_edges(graph):
+    # Add a cost based on the euclidean distance for each edge
+    edge_attributes = {e: math.sqrt((e[1][0] - e[0][0]) ** 2 + (e[1][1] - e[0][1]) ** 2) for e in graph.edges()}
+    nx.set_edge_attributes(
+        G=graph,
+        values=edge_attributes,
+        name="cost",
+    )
+
+
+def add_points_to_graph(graph, points, connect_to_visible_points=False, polygon=None, holes=None):
     nodes = list(graph.nodes())
     kdtree = KDTree(nodes)
     for point in points:
-        add_point_to_graph(kdtree, graph, point, is_visibility=is_visibility)
+        add_point_to_graph(kdtree, graph, point)
+
+    # edges to check for visibility TODO This does not work as intended!
+    if connect_to_visible_points:
+        edges = list(product(nodes, points))
+        for u, v in edges:
+            if is_visible(polygon, holes, u, v):
+                graph.add_edge(u, v)
+
+    # Add a cost based on the euclidean distance for each edge
+    add_euclidean_cost_to_edges(graph=graph)
 
 
 def add_edge(graph, point1, point2):
     if point1 != point2:
         graph.add_edge(point1, point2)
-    else:
-        pass
-        # print("Trying to create edges to the same point: ", point1, ",", point2)
 
 
-def add_point_to_graph(kdtree, graph, new_point, is_visibility):
+def add_point_to_graph(kdtree, graph: nx.Graph, new_point):
     # If the node is already in the graph, do not add it
     if new_point in graph.nodes():
         return
@@ -170,8 +195,8 @@ def add_point_to_graph(kdtree, graph, new_point, is_visibility):
     # Find the nearest edge to the new point
     _, nearest_node_index = kdtree.query(new_point)
     nearest_node = nodes[nearest_node_index]
-    # TODO investigate what happens if the new_point is at the endpoint of a edge
-    nearest_edge = min(graph.edges(nearest_node), key=lambda e: point_line_distance(new_point, e))
+    # TODO investigate what happens if the new_point is at the endpoint of an edge
+    nearest_edge = min(graph.edges(), key=lambda e: point_line_distance(new_point, e))
 
     # Calculate the projection of the new point onto the nearest edge
     endpoint1, endpoint2 = nearest_edge
@@ -179,7 +204,6 @@ def add_point_to_graph(kdtree, graph, new_point, is_visibility):
 
     # Add the new point
     graph.add_node(new_point, pos=new_point)
-    # TODO add edges to all other visibile nodes as well, not including the task nodes
 
     # TODO Figure out whether redundant/self refs. edges should be removed
     # If the projected point is the same point as a existing node, do not add an extra edge
@@ -188,13 +212,13 @@ def add_point_to_graph(kdtree, graph, new_point, is_visibility):
     elif projection_point == new_point:
         # point_distance(projection_point, new_point) < 0.1:
         # If the distance from the projection point to the new_point is 0
-        # graph.remove_edge(endpoint1, endpoint2)
+        graph.remove_edge(endpoint1, endpoint2)
         add_edge(graph, new_point, endpoint1)
         add_edge(graph, new_point, endpoint2)
     else:
         # Add the new node and connect it to the projection point and the new point
         # Remove the nearest edge from the graph and add two new edges to the projection point
-        # graph.remove_edge(endpoint1, endpoint2)
+        graph.remove_edge(endpoint1, endpoint2)
         graph.add_node(projection_point, pos=projection_point)
         # TODO sometimes the projectionpoint and endpoint is the same, why is this the case?
         add_edge(graph, new_point, projection_point)

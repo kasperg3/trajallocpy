@@ -25,6 +25,7 @@ class agent:
         self.travel_graph = travel_graph
         self.tasks = copy.deepcopy(tasks)
         self.task_num = len(tasks)
+        self.number_of_robots = agent_num
         self.use_single_point_estimation = point_estimation
         if color is None:
             self.color = (
@@ -74,6 +75,37 @@ class agent:
 
     def getPathTasks(self) -> List[TrajectoryTask]:
         return self.tasks[self.path]
+
+    def getTravelPath(self):
+        assigned_tasks = self.tasks[self.path]
+        full_path = []
+
+        for i in range(len(assigned_tasks)):
+            task_coordinates = []
+            if i == 0:
+                coordinate_from = self.state
+                coordinate_to = assigned_tasks[i].start
+            else:
+                task_coordinates.append(assigned_tasks[i - 1].start)
+                task_coordinates.append(assigned_tasks[i - 1].end)
+
+                coordinate_from = assigned_tasks[i - 1].end
+                coordinate_to = assigned_tasks[i].start
+
+            path_to_task = nx.astar_path(
+                self.travel_graph,
+                coordinate_from,
+                coordinate_to,
+                heuristic=lambda a, b: ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5,
+                weight="cost",
+            )
+            full_path.extend(task_coordinates)
+            full_path.extend(path_to_task)
+            if i == len(assigned_tasks) - 1:
+                full_path.append(assigned_tasks[i].start)
+                full_path.append(assigned_tasks[i].end)
+
+        return full_path
 
     def getPath(self):
         return self.path
@@ -131,21 +163,24 @@ class agent:
     @cache
     def getTravelCost(self, start, end):
         # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
-        # TODO investigate whether it is possible to provide a function in the graph creation to calculate the cost
-        def heuristic(a, b):
-            (x1, y1) = a
-            (x2, y2) = b
-            return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
 
-        dist = nx.astar_path_length(self.travel_graph, start, end, heuristic=heuristic, weight="cost")
-        # path = nx.astar_path(self.travel_graph, start, end, heuristic=heuristic, weight="cost")
+        # dist = nx.astar_path_length(self.travel_graph, start, end, heuristic=heuristic, weight="cost")
+        path = nx.astar_path(
+            self.travel_graph,
+            start,
+            end,
+            heuristic=lambda a, b: ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5,
+            weight="cost",
+        )
 
-        # dist = sum(
-        #     [
-        #         ((path[i + 1][0] - path[i][0]) ** 2 + (path[i + 1][1] - path[i][1]) ** 2) ** 0.5
-        #         for i in range(len(path) - 1)
-        #     ]
-        # )
+        dist = math.sqrt(
+            sum(
+                [
+                    ((path[i + 1][0] - path[i][0]) ** 2 + (path[i + 1][1] - path[i][1]) ** 2)
+                    for i in range(len(path) - 1)
+                ]
+            )
+        )
 
         # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance

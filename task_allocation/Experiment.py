@@ -31,7 +31,13 @@ class runner:
                 # TODO It should be possible to initialise with or without a random noise
                 robot_state = shapely.geometry.Point(np.random.normal(np.array(initial_state.xy)))
                 # TODO add a node to the travel graph of the initial agent states
-                VisibilityGraph.add_points_to_graph(self.coverage_problem.travel_graph, [robot_state.coords[0]])
+                VisibilityGraph.add_points_to_graph(
+                    self.coverage_problem.travel_graph,
+                    [robot_state.coords[0]]
+                    # connect_to_visible_points=True,
+                    # polygon=self.coverage_problem.getSearchArea(),
+                    # holes=self.coverage_problem.getRestrictedAreas(),
+                )
                 self.robot_list.append(
                     CBBA.agent(
                         id=i,
@@ -150,14 +156,14 @@ class runner:
                     converged = robot.update_task()
                     converged_list.append(converged)
 
-            # Plot
-            if self.plot:
-                plotter.setTitle("Time Step:{}".format(t))
-                for robot in self.robot_list:
-                    plotter.plotAgents(robot, self.tasks, t)
-                plotter.pause(0.1)
-
             if debug:
+                # Plot
+                if self.plot:
+                    plotter.setTitle("Time Step:{}".format(t))
+                    for robot in self.robot_list:
+                        plotter.plotAgent(robot)
+                    plotter.pause(0.1)
+
                 print("Bundle")
                 for robot in self.robot_list:
                     print(robot.getBundle())
@@ -185,7 +191,7 @@ class runner:
 
         if self.plot:
             for robot in self.robot_list:
-                plotter.plotAgents(robot, self.tasks, 0)
+                plotter.plotAgent(robot)
 
         self.end_time = timeit.default_timer()
         if self.plot:

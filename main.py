@@ -62,6 +62,7 @@ def main(
             use_point_estimation=point_estimation,
         )
 
+        Utility.plotGraph(cp.travel_graph, cp.getSearchArea(), cp.getRestrictedAreas())
         exp.solve(profiling_enabled=False, debug=debug)
 
         # Save the results in a csv file
@@ -87,6 +88,15 @@ def main(
                 number_of_agents,
             ]
         )
+
+        # TODO in Experiment, create a scenario builder, where the mission or experiment can be conducted:
+        # It should be able to replan the mission at different point of time.
+        # The algorithm should be aware of which missions have already been executed and not being able to bid on these.
+        # exp.
+
+        # TODO
+        # visualize the graphs
+        # Do Replanning
 
         # Save the results to the csv
         saveResults(experiment_title, results)
@@ -118,8 +128,8 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 10
-        capacity = 400
+        n_agents = 2
+        capacity = 1800
         use_point_est = False
         main(
             dataset_name=ds,
@@ -127,6 +137,6 @@ if __name__ == "__main__":
             number_of_agents=n_agents,
             capacity=capacity,
             point_estimation=False,
-            show_plots=False,
-            debug=False,
+            show_plots=True,
+            debug=True,
         )

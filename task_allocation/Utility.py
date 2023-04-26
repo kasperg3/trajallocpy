@@ -40,19 +40,24 @@ class Plotter:
         self.environmentAx.legend(handles=handles)
         self.assign_plots = []
 
-    def plotAgents(self, robot: CBBA.agent, task, iteration):
+    def plotAgent(self, robot: CBBA.agent):
         task_x = [robot.state[0]]
         task_y = [robot.state[1]]
-        for s in robot.getPathTasks():
-            task_x.append(s.start[0])
-            task_x.append(s.end[0])
-            task_y.append(s.start[1])
-            task_y.append(s.end[1])
+
+        for s in robot.getTravelPath():
+            task_x.append(s[0])
+            task_y.append(s[1])
+
+        # for s in robot.getPathTasks():
+        #     task_x.append(s.start[0])
+        #     task_x.append(s.end[0])
+        #     task_y.append(s.start[1])
+        #     task_y.append(s.end[1])
 
         self.x_data = task_x
         self.y_data = task_y
 
-        if iteration == 0:
+        if len(self.assign_plots) < robot.number_of_robots:
             (assign_line,) = self.environmentAx.plot(
                 self.x_data,
                 self.y_data,
@@ -133,8 +138,8 @@ def timing(name=None):
     return decorator
 
 
-# TODO create a function to plot graphs
 def plotGraph(G, boundary, obstacles):
+    graph_fig = plt.figure("travel graph")
     options = {"edgecolors": "tab:gray", "node_size": 50, "alpha": 0.7}
     nx.draw_networkx_edges(G, nx.get_node_attributes(G, "pos"), width=1.0, alpha=0.5)
     nx.draw_networkx_nodes(G, nx.get_node_attributes(G, "pos"), node_color="tab:blue", **options)
@@ -144,5 +149,4 @@ def plotGraph(G, boundary, obstacles):
     for poly in obstacles.geoms:
         xi, yi = poly.exterior.xy
         plt.plot(xi, yi)
-    plt.show()
-    plt.clf()
+    plt.pause(0.5)
