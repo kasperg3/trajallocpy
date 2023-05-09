@@ -4,12 +4,9 @@ import os
 import sys
 
 import geojson
-import matplotlib.pyplot as plt
-import networkx as nx
 import numpy as np
-from shapely.geometry import LineString, MultiLineString, MultiPolygon, Polygon, shape
 
-from task_allocation import CoverageProblem, Experiment, Utility, VisibilityGraph
+from task_allocation import CoverageProblem, Experiment, Utility
 
 
 def saveResults(experiment_title, results, directory="experiments/"):
@@ -92,11 +89,18 @@ def main(
         # TODO in Experiment, create a scenario builder, where the mission or experiment can be conducted:
         # It should be able to replan the mission at different point of time.
         # The algorithm should be aware of which missions have already been executed and not being able to bid on these.
-        # exp.
 
-        # TODO
-        # visualize the graphs
-        # Do Replanning
+        # Find a way of "playing" a scenario and doing replanning and removing/adding tasks dynamically
+        # Read litterature
+        # TODO:
+        # Scenariobuilder
+        # Ability to jump to a point in time
+        # remove/add tasks/agents at a certain time
+        # evaluate the performance by spawning a survivor at location which a single task will cover
+        # The survivor/survivors should be randomly sampled
+
+        # What happens when an agent leaves the group:
+        # * unallocate not finished tasks
 
         # Save the results to the csv
         saveResults(experiment_title, results)
@@ -128,9 +132,10 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 2
-        capacity = 1800
+        n_agents = 4
+        capacity = 1000
         use_point_est = False
+
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
@@ -138,5 +143,5 @@ if __name__ == "__main__":
             capacity=capacity,
             point_estimation=False,
             show_plots=True,
-            debug=True,
+            debug=False,
         )

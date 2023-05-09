@@ -16,6 +16,12 @@
 ![AC300 task example](https://github.com/kasperg3/CoverageTasks/blob/498c7cf2e65521f9a4e9524781397434f7d96bd5/.assets/AC300AC70008tasks.png)
 
 
+# Running 
+
+# Installing as a package
+python3 setup.py sdist 
+
+pip install dist/TrajectoryTaskAllocation.tar.gz
 
 ## Coverage task dataset
 This repository uses dataset format given in: https://github.com/kasperg3/CoverageTasks 
@@ -26,6 +32,8 @@ This repository uses dataset format given in: https://github.com/kasperg3/Covera
 
 * Website: https://blog.grontved.dk
 * GitHub: [@kasperg3](https://github.com/kasperg3)
+
+
 
 
 # Show your support
