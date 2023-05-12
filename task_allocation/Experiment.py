@@ -3,16 +3,16 @@ import timeit
 import numpy as np
 import shapely
 
-from task_allocation import CBBA, CoverageProblem, Utility, VisibilityGraph
+from task_allocation import CBBA, Agent, CoverageProblem, Utility, VisibilityGraph
 
 
 class runner:
     def __init__(
         self,
         coverage_problem: CoverageProblem.CoverageProblem,
+        agents: Agent,
         enable_plotting=False,
         max_iterations=100,
-        agents=None,
         initial_state=None,
         task_capacity=None,
         use_point_estimation=False,
@@ -21,37 +21,49 @@ class runner:
         self.coverage_problem = coverage_problem
         self.tasks = np.array(self.coverage_problem.getTasks())
         self.task_num = int(len(self.tasks))
-        self.robot_num = self.coverage_problem.getNumberOfRobots()
-        if agents is None:
-            initial_state = self.coverage_problem.generate_random_point_in_problem()
-            self.robot_list = []
+        self.robot_num = len(agents)
+        # if agents is None:
+        #     initial_state = self.coverage_problem.generate_random_point_in_problem()
+        #     self.robot_list = []
 
-            for i in range(self.robot_num):
-                # TODO It should be possible to initialise with or without a random noise
-                robot_state = shapely.geometry.Point(np.random.normal(np.array(initial_state.xy)))
-                # TODO add a node to the travel graph of the initial agent states
-                VisibilityGraph.add_points_to_graph(
-                    self.coverage_problem.travel_graph,
-                    [robot_state.coords[0]]
-                    # connect_to_visible_points=True,
-                    # polygon=self.coverage_problem.getSearchArea(),
-                    # holes=self.coverage_problem.getRestrictedAreas(),
-                )
-                self.robot_list.append(
-                    CBBA.agent(
-                        id=i,
-                        state=robot_state,
-                        travel_graph=self.coverage_problem.travel_graph,
-                        tasks=self.tasks,
-                        agent_num=self.robot_num,
-                        capacity=task_capacity,
-                        point_estimation=use_point_estimation,
-                    )
-                )
-        else:
-            self.robot_list = agents
+        #     for i in range(self.robot_num):
+        #         # TODO It should be possible to initialise with or without a random noise
+        #         robot_state = shapely.geometry.Point(np.random.normal(np.array(initial_state.xy)))
+        #         # TODO add a node to the travel graph of the initial agent states
+        #         VisibilityGraph.add_points_to_graph(
+        #             self.coverage_problem.travel_graph,
+        #             [robot_state.coords[0]]
+        #             # connect_to_visible_points=True,
+        #             # polygon=self.coverage_problem.getSearchArea(),
+        #             # holes=self.coverage_problem.getRestrictedAreas(),
+        #         )
+        #         self.robot_list.append(
+        #             CBBA.agent(
+        #                 id=i,
+        #                 state=robot_state,
+        #                 travel_graph=self.coverage_problem.travel_graph,
+        #                 tasks=self.tasks,
+        #                 agent_num=self.robot_num,
+        #                 capacity=task_capacity,
+        #                 point_estimation=use_point_estimation,
+        #             )
+        #         )
+        # else:
 
-        self.communication_graph = coverage_problem.getCommunicationGraph()
+        for agent in agents:
+            CBBA.agent(
+                id=agent.id,
+                state=agent.position,
+                travel_graph=self.coverage_problem.travel_graph,
+                tasks=self.tasks,
+                agent_num=len(agents),
+                capacity=agent.capacity,
+            )
+            # make sure that the agent position is connected to the travelgraph
+            VisibilityGraph.add_points_to_graph(self.coverage_problem.travel_graph, agent.position)
+        self.robot_list = agents
+
+        self.communication_graph = np.ones((len(agents), len(agents)))
         self.max_t = max_iterations
         self.plot = enable_plotting
 
@@ -140,11 +152,7 @@ class runner:
                 connected = list(connected)
                 connected.remove(robot_id)
 
-                Y = (
-                    {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected}
-                    if len(connected) > 0
-                    else None
-                )
+                Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected} if len(connected) > 0 else None
 
                 robot.receive_message(Y)
 

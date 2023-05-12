@@ -6,7 +6,7 @@ import sys
 import geojson
 import numpy as np
 
-from task_allocation import CoverageProblem, Experiment, Utility
+from task_allocation import Agent, CoverageProblem, Experiment, Utility
 
 
 def saveResults(experiment_title, results, directory="experiments/"):
@@ -31,6 +31,9 @@ def saveResults(experiment_title, results, directory="experiments/"):
         writer.writerows(results)
 
 
+import shapely
+
+
 def main(
     dataset_name,
     experiment_title,
@@ -50,14 +53,15 @@ def main(
         with open(file_name) as json_file:
             features = geojson.load(json_file)["features"]
 
-        cp = CoverageProblem.CoverageProblem(features, number_of_robots=number_of_agents)
-        exp = Experiment.runner(
-            coverage_problem=cp,
-            enable_plotting=show_plots,
-            max_iterations=200,
-            task_capacity=capacity,
-            use_point_estimation=point_estimation,
-        )
+        cp = CoverageProblem.CoverageProblem(features)
+
+        # TODO Define agents
+        agent_list = [
+            Agent.agent(0, cp.generate_random_point_in_problem().coords.xy, 1000),
+            Agent.agent(1, cp.generate_random_point_in_problem().coords.xy, 1000),
+        ]
+
+        exp = Experiment.runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
         if show_plots:
             Utility.plotGraph(cp.travel_graph, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
         exp.solve(profiling_enabled=False, debug=debug)
@@ -85,22 +89,6 @@ def main(
                 number_of_agents,
             ]
         )
-
-        # TODO in Experiment, create a scenario builder, where the mission or experiment can be conducted:
-        # It should be able to replan the mission at different point of time.
-        # The algorithm should be aware of which missions have already been executed and not being able to bid on these.
-
-        # Find a way of "playing" a scenario and doing replanning and removing/adding tasks dynamically
-        # Read litterature
-        # TODO:
-        # Scenariobuilder
-        # Ability to jump to a point in time
-        # remove/add tasks/agents at a certain time
-        # evaluate the performance by spawning a survivor at location which a single task will cover
-        # The survivor/survivors should be randomly sampled
-
-        # What happens when an agent leaves the group:
-        # * unallocate not finished tasks
 
         # Save the results to the csv
         saveResults(experiment_title, results)

@@ -12,7 +12,7 @@
     "python.analysis.typeCheckingMode": "off",
     "python.formatting.blackArgs": [
         "--line-length",
-        "120"
+        "150"
     ],
     "isort.args": ["--profile", "black"],
     "autoDocstring.docstringFormat": "numpy"

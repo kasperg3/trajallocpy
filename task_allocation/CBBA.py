@@ -147,13 +147,9 @@ class agent:
             # Add the cost of travelling to the first task
             total_dist = np.linalg.norm(np.array(self.state) - np.array(finalTaskList[0].start))
             for t_index in range(len(finalTaskList) - 1):
-                total_dist += np.linalg.norm(
-                    np.array(finalTaskList[t_index].end) - np.array(finalTaskList[t_index + 1].start)
-                )
+                total_dist += np.linalg.norm(np.array(finalTaskList[t_index].end) - np.array(finalTaskList[t_index + 1].start))
             for t_index in range(len(finalTaskList)):
-                total_task_length += np.linalg.norm(
-                    np.array(finalTaskList[t_index].start) - np.array(finalTaskList[t_index].end)
-                )
+                total_task_length += np.linalg.norm(np.array(finalTaskList[t_index].start) - np.array(finalTaskList[t_index].end))
             # Add the cost of returning home
             total_dist += np.linalg.norm(np.array(self.state) - np.array(finalTaskList[-1].end))
             # Add the total task length
@@ -173,14 +169,7 @@ class agent:
             weight="cost",
         )
 
-        dist = math.sqrt(
-            sum(
-                [
-                    ((path[i + 1][0] - path[i][0]) ** 2 + (path[i + 1][1] - path[i][1]) ** 2)
-                    for i in range(len(path) - 1)
-                ]
-            )
-        )
+        dist = math.sqrt(sum([((path[i + 1][0] - path[i][0]) ** 2 + (path[i + 1][1] - path[i][1]) ** 2) for i in range(len(path) - 1)]))
 
         # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
@@ -193,11 +182,7 @@ class agent:
         # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
 
-        result = (
-            math.sqrt(4 * dist / self.max_acceleration)
-            if dist < d_a
-            else self.max_velocity / self.max_acceleration + dist / self.max_velocity
-        )
+        result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
 
         return result  # the cost of travelling in seconds!
         # return np.linalg.norm(start - end) / self.velocity # Old and less efficient
@@ -212,9 +197,7 @@ class agent:
             travel_cost = self.getTravelCost(self.state, self.tasks[self.path[0]].start)
             S_p += self.Lambda ** (travel_cost) * self.tasks[self.path[0]].reward
             for p_idx in range(len(self.path) - 1):
-                travel_cost += self.getTravelCost(
-                    self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start
-                )
+                travel_cost += self.getTravelCost(self.tasks[self.path[p_idx]].end, self.tasks[self.path[p_idx + 1]].start)
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[self.path[p_idx]])
         return S_p
 
@@ -244,9 +227,7 @@ class agent:
         # Use a single point instead of greedily optimising the direction
         if self.use_single_point_estimation:
             for p_idx in range(len(temp_path) - 1):
-                travel_cost += self.getTravelCost(
-                    self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start
-                )
+                travel_cost += self.getTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start)
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
         else:
             for p_idx in range(len(temp_path) - 1):
@@ -401,9 +382,7 @@ class agent:
                         if (s_k[m] >= self.timestamps[m]) and (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
                         # Tie Breaker
-                        elif (s_k[m] >= self.timestamps[m]) and (
-                            abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id
-                        ):
+                        elif (s_k[m] >= self.timestamps[m]) and (abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id):
                             self.__update(j, y_kj, z_kj)
                     # Rule 10
                     elif z_ij == k:

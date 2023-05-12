@@ -1,3 +1,6 @@
 numpy
 shapely
-geopandas
+geojson
+scipy
+networkx
+matplotlib
