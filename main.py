@@ -37,9 +37,6 @@ import shapely
 def main(
     dataset_name,
     experiment_title,
-    number_of_agents,
-    capacity=None,
-    point_estimation=False,
     show_plots=True,
     debug=False,
 ):
@@ -53,12 +50,23 @@ def main(
         with open(file_name) as json_file:
             features = geojson.load(json_file)["features"]
 
-        cp = CoverageProblem.CoverageProblem(features)
+        geometries = {
+            "obstacles": shapely.MultiPolygon(),
+            "tasks": shapely.MultiLineString(),
+            "boundary": shapely.Polygon(),
+        }
+        for feature in features:
+            if feature["geometry"]:
+                geometries[feature["id"]] = shapely.geometry.shape(feature["geometry"])
 
-        # TODO Define agents
+        cp = CoverageProblem.CoverageProblem(restricted_areas=geometries["obstacles"], search_area=geometries["boundary"], tasks=geometries["tasks"])
+
         agent_list = [
-            Agent.agent(0, cp.generate_random_point_in_problem().coords.xy, 1000),
-            Agent.agent(1, cp.generate_random_point_in_problem().coords.xy, 1000),
+            Agent.agent(0, cp.generate_random_point_in_problem().coords.xy, 500),
+            Agent.agent(1, cp.generate_random_point_in_problem().coords.xy, 500),
+            Agent.agent(2, cp.generate_random_point_in_problem().coords.xy, 500),
+            Agent.agent(3, cp.generate_random_point_in_problem().coords.xy, 500),
+            Agent.agent(4, cp.generate_random_point_in_problem().coords.xy, 500),
         ]
 
         exp = Experiment.runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
@@ -86,7 +94,7 @@ def main(
                 iterations,
                 computeTime,
                 cp.getNumberOfTasks(),
-                number_of_agents,
+                len(agent_list),
             ]
         )
 
@@ -127,9 +135,6 @@ if __name__ == "__main__":
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
-            number_of_agents=n_agents,
-            capacity=capacity,
-            point_estimation=False,
             show_plots=True,
             debug=False,
         )

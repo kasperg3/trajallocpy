@@ -7,16 +7,7 @@ from task_allocation import CBBA, Agent, CoverageProblem, Utility, VisibilityGra
 
 
 class runner:
-    def __init__(
-        self,
-        coverage_problem: CoverageProblem.CoverageProblem,
-        agents: Agent,
-        enable_plotting=False,
-        max_iterations=100,
-        initial_state=None,
-        task_capacity=None,
-        use_point_estimation=False,
-    ):
+    def __init__(self, coverage_problem: CoverageProblem.CoverageProblem, agents: Agent, enable_plotting=False):
         # Task definition
         self.coverage_problem = coverage_problem
         self.tasks = np.array(self.coverage_problem.getTasks())
@@ -49,22 +40,23 @@ class runner:
         #             )
         #         )
         # else:
+        self.robot_list = []
 
         for agent in agents:
-            CBBA.agent(
-                id=agent.id,
-                state=agent.position,
-                travel_graph=self.coverage_problem.travel_graph,
-                tasks=self.tasks,
-                agent_num=len(agents),
-                capacity=agent.capacity,
+            self.robot_list.append(
+                CBBA.agent(
+                    id=agent.id,
+                    state=shapely.Point(agent.position),
+                    travel_graph=self.coverage_problem.travel_graph,
+                    tasks=self.tasks,
+                    agent_num=len(agents),
+                    capacity=agent.capacity,
+                )
             )
             # make sure that the agent position is connected to the travelgraph
-            VisibilityGraph.add_points_to_graph(self.coverage_problem.travel_graph, agent.position)
-        self.robot_list = agents
+            VisibilityGraph.add_points_to_graph(self.coverage_problem.travel_graph, shapely.Point(agent.position).coords)
 
         self.communication_graph = np.ones((len(agents), len(agents)))
-        self.max_t = max_iterations
         self.plot = enable_plotting
 
     def evaluateSolution(self):
@@ -119,7 +111,7 @@ class runner:
             pr = cProfile.Profile()
             pr.enable()
         t = 0  # Iteration number
-        plotter = Utility.Plotter(self.tasks, self.robot_list, self.communication_graph)
+        plotter = Utility.Plotter(self.robot_list, self.communication_graph)
 
         # Plot the search area and restricted area
         plotter.plotPolygon(self.coverage_problem.getSearchArea(), color=(0, 0, 0, 0.5))

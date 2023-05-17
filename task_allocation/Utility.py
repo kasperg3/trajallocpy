@@ -11,11 +11,8 @@ from task_allocation import CBBA
 
 
 class Plotter:
-    def __init__(self, tasks, robot_list, communication_graph):
+    def __init__(self, robot_list, communication_graph):
         self.fig, self.environmentAx = plt.subplots()
-
-        # Plot tasks
-        # self.plotTasks(tasks)
 
         # Plot agents
         robot_pos = np.array([r.state for r in robot_list])
@@ -106,12 +103,7 @@ def loadDataset(directory, route_data_name, holes_name, outer_poly_name):
         # Check if it is a directory
         if os.path.isdir(filepath):
             csv_files += loadDataset(filepath, route_data_name, holes_name, outer_poly_name)
-        elif (
-            os.path.isfile(filepath)
-            and filepath.endswith(route_data_name)
-            or filepath.endswith(outer_poly_name)
-            or filepath.endswith(holes_name)
-        ):
+        elif os.path.isfile(filepath) and filepath.endswith(route_data_name) or filepath.endswith(outer_poly_name) or filepath.endswith(holes_name):
             csv_files.append(filepath)
     return csv_files
 
