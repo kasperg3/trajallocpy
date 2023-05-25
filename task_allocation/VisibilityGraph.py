@@ -92,8 +92,9 @@ def is_visible(polygon, holes, u, v):
     intersects_obstacle = False
 
     line = LineString([u, v])
-    # Check if the line is outside the polygon
-    if not line.within(polygon):
+    # Check if the line is outside the polygon and the line is not touching the polygon
+    # "Touching" is not overlapping but has a common coordinate
+    if not line.within(polygon) and not line.touches(polygon):
         intersects_obstacle = True
     elif not holes.is_empty:
         # Check if the line is intersecting any of the obstacles
@@ -163,15 +164,16 @@ def add_euclidean_cost_to_edges(graph):
     )
 
 
-def add_points_to_graph(graph, points, connect_to_visible_points=False, polygon=None, holes=None):
+def add_points_to_graph(graph: nx.Graph, points, connect_to_visible_points=False, polygon=None, holes=None):
     nodes = list(graph.nodes())
     kdtree = KDTree(nodes)
     for point in points:
+        # graph.add_node(point, pos=point)
         add_point_to_graph(kdtree, graph, point)
 
     # edges to check for visibility TODO This does not work as intended!
     if connect_to_visible_points:
-        edges = list(product(nodes, points))
+        edges = list(combinations(graph.nodes(), 2))
         for u, v in edges:
             if is_visible(polygon, holes, u, v):
                 graph.add_edge(u, v)

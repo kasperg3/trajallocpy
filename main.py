@@ -5,6 +5,7 @@ import sys
 
 import geojson
 import numpy as np
+import shapely
 
 from task_allocation import Agent, CoverageProblem, Experiment, Utility
 
@@ -29,9 +30,6 @@ def saveResults(experiment_title, results, directory="experiments/"):
         writer = csv.writer(csvfile)
         writer.writerow(results_header)
         writer.writerows(results)
-
-
-import shapely
 
 
 def main(
@@ -72,8 +70,8 @@ def main(
         exp = Experiment.runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
         if show_plots:
             Utility.plotGraph(cp.travel_graph, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
-        exp.solve(profiling_enabled=False, debug=debug)
-
+        allocations = exp.solve(profiling_enabled=False, debug=debug)
+        print(allocations)
         # Save the results in a csv file
         (
             totalRouteLength,
@@ -103,6 +101,8 @@ def main(
 
 
 if __name__ == "__main__":
+    seed = 135239
+    np.random.seed(seed)
     # main()
     parser = argparse.ArgumentParser(description="Calculates a conflict free task allocation")
     parser.add_argument("--dataset", type=str, help="The name of the dataset")

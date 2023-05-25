@@ -160,11 +160,13 @@ class agent:
     def getTravelCost(self, start, end):
         # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
 
-        # dist = nx.astar_path_length(self.travel_graph, start, end, heuristic=heuristic, weight="cost")
+        # dist = nx.astar_path_length(
+        #     self.travel_graph, start, end, heuristic=lambda a, b: math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2), weight="cost"
+        # )
         path = nx.astar_path(
             self.travel_graph,
-            start,
             end,
+            start,
             heuristic=lambda a, b: ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5,
             weight="cost",
         )

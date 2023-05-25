@@ -7,39 +7,12 @@ from task_allocation import CBBA, Agent, CoverageProblem, Utility, VisibilityGra
 
 
 class runner:
-    def __init__(self, coverage_problem: CoverageProblem.CoverageProblem, agents: Agent, enable_plotting=False):
+    def __init__(self, coverage_problem: CoverageProblem.CoverageProblem, agents: list[Agent.agent], enable_plotting=False):
         # Task definition
         self.coverage_problem = coverage_problem
         self.tasks = np.array(self.coverage_problem.getTasks())
         self.task_num = int(len(self.tasks))
         self.robot_num = len(agents)
-        # if agents is None:
-        #     initial_state = self.coverage_problem.generate_random_point_in_problem()
-        #     self.robot_list = []
-
-        #     for i in range(self.robot_num):
-        #         # TODO It should be possible to initialise with or without a random noise
-        #         robot_state = shapely.geometry.Point(np.random.normal(np.array(initial_state.xy)))
-        #         # TODO add a node to the travel graph of the initial agent states
-        #         VisibilityGraph.add_points_to_graph(
-        #             self.coverage_problem.travel_graph,
-        #             [robot_state.coords[0]]
-        #             # connect_to_visible_points=True,
-        #             # polygon=self.coverage_problem.getSearchArea(),
-        #             # holes=self.coverage_problem.getRestrictedAreas(),
-        #         )
-        #         self.robot_list.append(
-        #             CBBA.agent(
-        #                 id=i,
-        #                 state=robot_state,
-        #                 travel_graph=self.coverage_problem.travel_graph,
-        #                 tasks=self.tasks,
-        #                 agent_num=self.robot_num,
-        #                 capacity=task_capacity,
-        #                 point_estimation=use_point_estimation,
-        #             )
-        #         )
-        # else:
         self.robot_list = []
 
         for agent in agents:
@@ -54,7 +27,13 @@ class runner:
                 )
             )
             # make sure that the agent position is connected to the travelgraph
-            VisibilityGraph.add_points_to_graph(self.coverage_problem.travel_graph, shapely.Point(agent.position).coords)
+            VisibilityGraph.add_points_to_graph(
+                self.coverage_problem.travel_graph,
+                shapely.Point(agent.position).coords,
+                connect_to_visible_points=True,
+                polygon=coverage_problem.getSearchArea(),
+                holes=coverage_problem.getRestrictedAreas(),
+            )
 
         self.communication_graph = np.ones((len(agents), len(agents)))
         self.plot = enable_plotting
@@ -101,6 +80,15 @@ class runner:
         )
 
     def solve(self, profiling_enabled=False, debug=False):
+        """_summary_
+
+        Parameters
+        ----------
+        profiling_enabled : bool, optional
+            _description_, by default False
+        debug : bool, optional
+            _description_, by default False
+        """
         if profiling_enabled:
             print("Profiling enabled!")
             import cProfile
@@ -111,11 +99,13 @@ class runner:
             pr = cProfile.Profile()
             pr.enable()
         t = 0  # Iteration number
-        plotter = Utility.Plotter(self.robot_list, self.communication_graph)
 
-        # Plot the search area and restricted area
-        plotter.plotPolygon(self.coverage_problem.getSearchArea(), color=(0, 0, 0, 0.5))
-        plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(0, 0, 0, 0.2), fill=True)
+        if self.plot:
+            plotter = Utility.Plotter(self.robot_list, self.communication_graph)
+
+            # Plot the search area and restricted area
+            plotter.plotPolygon(self.coverage_problem.getSearchArea(), color=(0, 0, 0, 0.5))
+            plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(0, 0, 0, 0.2), fill=True)
         self.start_time = timeit.default_timer()
 
         while True:
@@ -184,14 +174,20 @@ class runner:
             ps.print_stats(100)
             pr.disable()
 
+        self.end_time = timeit.default_timer()
+
         print("Robot Routes")
+        result = {}
         for robot in self.robot_list:
             print(robot.getPath())
+            # TODO this should not be calculated here, but rather while solving...
+            result[robot.id] = robot.getTravelPath()
 
         if self.plot:
             for robot in self.robot_list:
                 plotter.plotAgent(robot)
 
-        self.end_time = timeit.default_timer()
         if self.plot:
             plotter.show()
+
+        return result

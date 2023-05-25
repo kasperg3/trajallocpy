@@ -23,7 +23,11 @@ class CoverageProblem:
         start_points = [trajectory.coords[0] for trajectory in list(tasks.geoms)]
         end_points = [trajectory.coords[-1] for trajectory in list(tasks.geoms)]
         start_points.extend(end_points)
-        VisibilityGraph.add_points_to_graph(self.travel_graph, start_points)
+        VisibilityGraph.add_points_to_graph(
+            self.travel_graph,
+            start_points,
+            # connect_to_visible_points=True, polygon=search_area, holes=restricted_areas
+        )
 
         print("Travel graph ", self.travel_graph)
         task_list = []
