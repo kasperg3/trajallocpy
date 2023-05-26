@@ -99,6 +99,7 @@ def is_visible(polygon, holes, u, v):
     elif not holes.is_empty:
         # Check if the line is intersecting any of the obstacles
         for obstacle in holes.geoms:
+            # TODO line.crosses fails if the line is touching the obstacle
             if line.crosses(obstacle) or line.within(obstacle):
                 intersects_obstacle = True
                 break
@@ -168,12 +169,12 @@ def add_points_to_graph(graph: nx.Graph, points, connect_to_visible_points=False
     nodes = list(graph.nodes())
     kdtree = KDTree(nodes)
     for point in points:
-        # graph.add_node(point, pos=point)
         add_point_to_graph(kdtree, graph, point)
 
-    # edges to check for visibility TODO This does not work as intended!
+    # edges to check for visibility
     if connect_to_visible_points:
-        edges = list(combinations(graph.nodes(), 2))
+        edges = list(product(points, graph.nodes()))
+        # edges = list(combinations(graph.nodes(), 2))
         for u, v in edges:
             if is_visible(polygon, holes, u, v):
                 graph.add_edge(u, v)
@@ -193,10 +194,10 @@ def add_point_to_graph(kdtree, graph: nx.Graph, new_point):
         return
 
     # Create a KDTree from the nodes of the graph
-    nodes = list(graph.nodes())
-    # Find the nearest edge to the new point
-    _, nearest_node_index = kdtree.query(new_point)
-    nearest_node = nodes[nearest_node_index]
+    # nodes = list(graph.nodes())
+    # # Find the nearest edge to the new point
+    # _, nearest_node_index = kdtree.query(new_point)
+    # nearest_node = nodes[nearest_node_index]
     # TODO investigate what happens if the new_point is at the endpoint of an edge
     nearest_edge = min(graph.edges(), key=lambda e: point_line_distance(new_point, e))
 
@@ -209,20 +210,20 @@ def add_point_to_graph(kdtree, graph: nx.Graph, new_point):
 
     # TODO Figure out whether redundant/self refs. edges should be removed
     # If the projected point is the same point as a existing node, do not add an extra edge
-    if projection_point == nearest_node:
-        add_edge(graph, new_point, nearest_node)
-    elif projection_point == new_point:
-        # point_distance(projection_point, new_point) < 0.1:
-        # If the distance from the projection point to the new_point is 0
-        graph.remove_edge(endpoint1, endpoint2)
-        add_edge(graph, new_point, endpoint1)
-        add_edge(graph, new_point, endpoint2)
-    else:
-        # Add the new node and connect it to the projection point and the new point
-        # Remove the nearest edge from the graph and add two new edges to the projection point
-        graph.remove_edge(endpoint1, endpoint2)
-        graph.add_node(projection_point, pos=projection_point)
-        # TODO sometimes the projectionpoint and endpoint is the same, why is this the case?
-        add_edge(graph, new_point, projection_point)
-        add_edge(graph, projection_point, endpoint2)
-        add_edge(graph, projection_point, endpoint1)
+    # if projection_point == nearest_node:
+    #     add_edge(graph, new_point, nearest_node)
+    # if projection_point == new_point:
+    #     # point_distance(projection_point, new_point) < 0.1:
+    #     # If the distance from the projection point to the new_point is 0
+    #     # graph.remove_edge(endpoint1, endpoint2)
+    #     add_edge(graph, new_point, endpoint1)
+    #     add_edge(graph, new_point, endpoint2)
+    # else:
+    # Add the new node and connect it to the projection point and the new point
+    # Remove the nearest edge from the graph and add two new edges to the projection point
+    # graph.remove_edge(endpoint1, endpoint2)
+    graph.add_node(projection_point, pos=projection_point)
+    # TODO sometimes the projectionpoint and endpoint is the same, why is this the case?
+    add_edge(graph, new_point, projection_point)
+    add_edge(graph, projection_point, endpoint2)
+    add_edge(graph, projection_point, endpoint1)

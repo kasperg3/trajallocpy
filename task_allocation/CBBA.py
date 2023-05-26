@@ -160,18 +160,18 @@ class agent:
     def getTravelCost(self, start, end):
         # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
 
-        # dist = nx.astar_path_length(
-        #     self.travel_graph, start, end, heuristic=lambda a, b: math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2), weight="cost"
-        # )
-        path = nx.astar_path(
-            self.travel_graph,
-            end,
-            start,
-            heuristic=lambda a, b: ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5,
-            weight="cost",
+        dist = nx.astar_path_length(
+            self.travel_graph, start, end, heuristic=lambda a, b: math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2), weight="cost"
         )
+        # path = nx.astar_path(
+        #     self.travel_graph,
+        #     end,
+        #     start,
+        #     heuristic=lambda a, b: ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5,
+        #     weight="cost",
+        # )
 
-        dist = math.sqrt(sum([((path[i + 1][0] - path[i][0]) ** 2 + (path[i + 1][1] - path[i][1]) ** 2) for i in range(len(path) - 1)]))
+        # dist = math.sqrt(sum([((path[i + 1][0] - path[i][0]) ** 2 + (path[i + 1][1] - path[i][1]) ** 2) for i in range(len(path) - 1)]))
 
         # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance

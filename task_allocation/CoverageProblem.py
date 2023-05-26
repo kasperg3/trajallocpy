@@ -1,7 +1,6 @@
 import random
 
 import shapely.geometry
-from geojson import FeatureCollection
 
 from task_allocation import Task, VisibilityGraph
 
@@ -24,9 +23,7 @@ class CoverageProblem:
         end_points = [trajectory.coords[-1] for trajectory in list(tasks.geoms)]
         start_points.extend(end_points)
         VisibilityGraph.add_points_to_graph(
-            self.travel_graph,
-            start_points,
-            # connect_to_visible_points=True, polygon=search_area, holes=restricted_areas
+            self.travel_graph, start_points, connect_to_visible_points=True, polygon=search_area, holes=restricted_areas
         )
 
         print("Travel graph ", self.travel_graph)
@@ -53,5 +50,4 @@ class CoverageProblem:
         while True:
             point = shapely.geometry.Point(random.uniform(minx, maxx), random.uniform(miny, maxy))  # noqa: S311
             if not self.__restricted_areas.contains(point) and self.__search_area.contains(point):
-                return point
                 return point

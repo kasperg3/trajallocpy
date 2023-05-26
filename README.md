@@ -19,7 +19,7 @@
 # Running 
 
 # Installing as a package
-pip wheel . -v --build-option --no-deps
+python3 setup.py bdist_wheel
 
 pip install dist/TrajectoryTaskAllocation...
 

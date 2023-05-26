@@ -43,8 +43,8 @@ def main(
 
     results = []
     files = Utility.getAllCoverageFiles(dataset_name)
-
     for file_name in files:
+        print(file_name)
         with open(file_name) as json_file:
             features = geojson.load(json_file)["features"]
 
@@ -71,7 +71,7 @@ def main(
         if show_plots:
             Utility.plotGraph(cp.travel_graph, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
         allocations = exp.solve(profiling_enabled=False, debug=debug)
-        print(allocations)
+        # print(allocations)
         # Save the results in a csv file
         (
             totalRouteLength,
@@ -109,12 +109,7 @@ if __name__ == "__main__":
     parser.add_argument("--experiment_name", type=str, help="The name of the experiment")
     parser.add_argument("--n_robots", type=int, help="The number of robots to include")
     parser.add_argument("--capacity", type=int, help="The capacity of the robots given in minutes")
-    parser.add_argument(
-        "--point_estimation",
-        default=False,
-        type=bool,
-        help="Bool for wether to use point estimation",
-    )
+    parser.add_argument("--point_estimation", default=False, type=bool, help="Bool for wether to use point estimation")
     parser.add_argument("--show_plots", default=False, type=bool, help="whether to show plots")
     args = parser.parse_args()
     if len(sys.argv) > 1:
@@ -129,12 +124,12 @@ if __name__ == "__main__":
     else:
         ds = "AC300"
         n_agents = 4
-        capacity = 1000
+        capacity = 750
         use_point_est = False
 
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
-            show_plots=True,
+            show_plots=False,
             debug=False,
         )

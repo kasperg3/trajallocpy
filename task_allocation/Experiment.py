@@ -14,7 +14,7 @@ class runner:
         self.task_num = int(len(self.tasks))
         self.robot_num = len(agents)
         self.robot_list = []
-
+        # TODO add all agent positions to the travelgraph before creating the cbba agents!!!!!
         for agent in agents:
             self.robot_list.append(
                 CBBA.agent(
@@ -40,6 +40,7 @@ class runner:
 
     def evaluateSolution(self):
         travel_length = 0
+
         total_path_length = 0
         total_task_length = 0
         total_path_cost = 0
@@ -110,10 +111,11 @@ class runner:
 
         while True:
             converged_list = []
-
-            print("Iteration {}".format(t + 1))
+            if debug:
+                print("Iteration {}".format(t + 1))
             # Phase 1: Auction Process
             for robot in self.robot_list:
+                # TODO parellalize this!
                 robot.build_bundle()
             if debug:
                 print("Bundle")
