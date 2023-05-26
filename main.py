@@ -35,6 +35,8 @@ def saveResults(experiment_title, results, directory="experiments/"):
 def main(
     dataset_name,
     experiment_title,
+    n_agents,
+    capacity,
     show_plots=True,
     debug=False,
 ):
@@ -58,14 +60,10 @@ def main(
                 geometries[feature["id"]] = shapely.geometry.shape(feature["geometry"])
 
         cp = CoverageProblem.CoverageProblem(restricted_areas=geometries["obstacles"], search_area=geometries["boundary"], tasks=geometries["tasks"])
-
-        agent_list = [
-            Agent.agent(0, cp.generate_random_point_in_problem().coords.xy, 500),
-            Agent.agent(1, cp.generate_random_point_in_problem().coords.xy, 500),
-            Agent.agent(2, cp.generate_random_point_in_problem().coords.xy, 500),
-            Agent.agent(3, cp.generate_random_point_in_problem().coords.xy, 500),
-            Agent.agent(4, cp.generate_random_point_in_problem().coords.xy, 500),
-        ]
+        agent_list = []
+        initial_location = cp.generate_random_point_in_problem().coords.xy
+        for id in range(n_agents):
+            agent_list.append(Agent.agent(id, initial_location, capacity))
 
         exp = Experiment.runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
         if show_plots:
@@ -114,12 +112,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if len(sys.argv) > 1:
         main(
-            args.dataset,
-            args.experiment_name,
-            args.n_robots,
-            args.capacity,
-            args.point_estimation,
-            args.show_plots,
+            dataset_name=args.dataset,
+            experiment_title=args.experiment_name,
+            n_agents=args.n_robots,
+            capacity=args.capacity,
+            show_plots=args.show_plots,
         )
     else:
         ds = "AC300"
@@ -130,6 +127,8 @@ if __name__ == "__main__":
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
+            n_agents=n_agents,
+            capacity=capacity,
             show_plots=False,
             debug=False,
         )
