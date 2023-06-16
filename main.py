@@ -55,21 +55,23 @@ def main(
             "tasks": shapely.MultiLineString(),
             "boundary": shapely.Polygon(),
         }
+
         for feature in features:
             if feature["geometry"]:
                 geometries[feature["id"]] = shapely.geometry.shape(feature["geometry"])
 
+        # Initialize coverage problem and the agents
         cp = CoverageProblem.CoverageProblem(restricted_areas=geometries["obstacles"], search_area=geometries["boundary"], tasks=geometries["tasks"])
         agent_list = []
         initial_location = cp.generate_random_point_in_problem().coords.xy
         for id in range(n_agents):
             agent_list.append(Agent.agent(id, initial_location, capacity))
 
-        exp = Experiment.runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
-        if show_plots:
-            Utility.plotGraph(cp.travel_graph, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
+        exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
+        # if show_plots:
+        #     Utility.plotGraph(cp.environment, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
+
         allocations = exp.solve(profiling_enabled=False, debug=debug)
-        # print(allocations)
         # Save the results in a csv file
         (
             totalRouteLength,
@@ -121,14 +123,13 @@ if __name__ == "__main__":
     else:
         ds = "AC300"
         n_agents = 4
-        capacity = 750
-        use_point_est = False
+        capacity = 500
 
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
-            show_plots=False,
+            show_plots=True,
             debug=False,
         )

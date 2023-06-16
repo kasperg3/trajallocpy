@@ -38,10 +38,11 @@ class Plotter:
         self.assign_plots = []
 
     def plotAgent(self, robot: CBBA.agent):
-        task_x = [robot.state[0]]
-        task_y = [robot.state[1]]
-
-        for s in robot.getTravelPath():
+        task_x = []
+        task_y = []
+        p = robot.getTravelPath()
+        print(p)
+        for s in p:
             task_x.append(s[0])
             task_y.append(s[1])
 

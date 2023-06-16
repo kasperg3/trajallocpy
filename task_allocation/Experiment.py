@@ -3,10 +3,10 @@ import timeit
 import numpy as np
 import shapely
 
-from task_allocation import CBBA, Agent, CoverageProblem, Utility, VisibilityGraph
+from task_allocation import CBBA, Agent, CoverageProblem, Utility
 
 
-class runner:
+class Runner:
     def __init__(self, coverage_problem: CoverageProblem.CoverageProblem, agents: list[Agent.agent], enable_plotting=False):
         # Task definition
         self.coverage_problem = coverage_problem
@@ -20,19 +20,11 @@ class runner:
                 CBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
-                    travel_graph=self.coverage_problem.travel_graph,
+                    environment=self.coverage_problem.environment,
                     tasks=self.tasks,
                     agent_num=len(agents),
                     capacity=agent.capacity,
                 )
-            )
-            # make sure that the agent position is connected to the travelgraph
-            VisibilityGraph.add_points_to_graph(
-                self.coverage_problem.travel_graph,
-                shapely.Point(agent.position).coords,
-                connect_to_visible_points=True,
-                polygon=coverage_problem.getSearchArea(),
-                holes=coverage_problem.getRestrictedAreas(),
             )
 
         self.communication_graph = np.ones((len(agents), len(agents)))
@@ -193,3 +185,8 @@ class runner:
             plotter.show()
 
         return result
+
+
+class Evaluator:
+    def __init__(self):
+        pass

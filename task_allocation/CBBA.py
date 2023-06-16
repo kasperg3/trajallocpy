@@ -14,7 +14,7 @@ class agent:
     def __init__(
         self,
         state,
-        travel_graph: nx.Graph,
+        environment,
         id,
         agent_num=None,
         capacity=None,
@@ -22,7 +22,7 @@ class agent:
         color=None,
         point_estimation=False,
     ):
-        self.travel_graph = travel_graph
+        self.environment = environment
         self.tasks = copy.deepcopy(tasks)
         self.task_num = len(tasks)
         self.number_of_robots = agent_num
@@ -79,32 +79,11 @@ class agent:
     def getTravelPath(self):
         assigned_tasks = self.tasks[self.path]
         full_path = []
-
-        for i in range(len(assigned_tasks)):
-            task_coordinates = []
-            if i == 0:
-                coordinate_from = self.state
-                coordinate_to = assigned_tasks[i].start
-            else:
-                task_coordinates.append(assigned_tasks[i - 1].start)
-                task_coordinates.append(assigned_tasks[i - 1].end)
-
-                coordinate_from = assigned_tasks[i - 1].end
-                coordinate_to = assigned_tasks[i].start
-
-            path_to_task = nx.astar_path(
-                self.travel_graph,
-                coordinate_from,
-                coordinate_to,
-                heuristic=lambda a, b: ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5,
-                weight="cost",
-            )
-            full_path.extend(task_coordinates)
-            full_path.extend(path_to_task)
-            if i == len(assigned_tasks) - 1:
-                full_path.append(assigned_tasks[i].start)
-                full_path.append(assigned_tasks[i].end)
-
+        path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, verify=False)
+        full_path.extend(path)
+        for i in range(len(assigned_tasks) - 1):
+            path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, verify=False)
+            full_path.extend(path)
         return full_path
 
     def getPath(self):
@@ -159,10 +138,10 @@ class agent:
     @cache
     def getTravelCost(self, start, end):
         # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
-
-        dist = nx.astar_path_length(
-            self.travel_graph, start, end, heuristic=lambda a, b: math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2), weight="cost"
-        )
+        path, dist = self.environment.find_shortest_path(start, end, verify=False)
+        # dist = nx.astar_path_length(
+        #     self.travel_graph, start, end, heuristic=lambda a, b: math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2), weight="cost"
+        # )
         # path = nx.astar_path(
         #     self.travel_graph,
         #     end,
