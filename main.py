@@ -6,6 +6,8 @@ import sys
 import geojson
 import numpy as np
 import shapely
+from shapely.affinity import scale
+from shapely.ops import transform
 
 from task_allocation import Agent, CoverageProblem, Experiment, Utility
 
@@ -60,8 +62,10 @@ def main(
             if feature["geometry"]:
                 geometries[feature["id"]] = shapely.geometry.shape(feature["geometry"])
 
-        # Initialize coverage problem and the agents
-        cp = CoverageProblem.CoverageProblem(restricted_areas=geometries["obstacles"], search_area=geometries["boundary"], tasks=geometries["tasks"])
+            # Initialize coverage problem and the agents
+        scaled_poly = scale(geometries["boundary"], xfact=1.01, yfact=1.01)
+
+        cp = CoverageProblem.CoverageProblem(restricted_areas=geometries["obstacles"], search_area=scaled_poly, tasks=geometries["tasks"])
         agent_list = []
         initial_location = cp.generate_random_point_in_problem().coords.xy
         for id in range(n_agents):
@@ -123,7 +127,7 @@ if __name__ == "__main__":
     else:
         ds = "AC300"
         n_agents = 4
-        capacity = 500
+        capacity = 600
 
         main(
             dataset_name=ds,

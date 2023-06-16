@@ -79,11 +79,13 @@ class agent:
     def getTravelPath(self):
         assigned_tasks = self.tasks[self.path]
         full_path = []
-        path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, verify=False)
-        full_path.extend(path)
-        for i in range(len(assigned_tasks) - 1):
-            path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, verify=False)
+        if len(assigned_tasks) > 0:
+            path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, verify=False)
             full_path.extend(path)
+            for i in range(len(assigned_tasks) - 1):
+                path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, verify=False)
+                full_path.extend(path)
+            full_path.append(assigned_tasks[-1].end)
         return full_path
 
     def getPath(self):

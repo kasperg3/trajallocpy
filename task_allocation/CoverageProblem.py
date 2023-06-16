@@ -22,7 +22,7 @@ class CoverageProblem:
         for polygon in restricted_areas.geoms:
             polygon_tuples = list(polygon.exterior.coords[:-1])
             holes.append(polygon_tuples)
-        self.environment.store(list(search_area.exterior.coords[:-1]), holes, validate=True)
+        self.environment.store(list(search_area.exterior.coords[:-1]), holes, validate=False)
 
         task_list = []
         for id, trajectory in enumerate(tasks.geoms):
