@@ -1,11 +1,15 @@
 import argparse
 import csv
 import os
+import random
 import sys
 
 import geojson
 import numpy as np
 import shapely
+from shapely import geometry
+from shapely.affinity import scale
+from shapely.ops import transform
 
 from task_allocation import Agent, CoverageProblem, Experiment, Utility
 
@@ -46,7 +50,6 @@ def main(
     results = []
     files = Utility.getAllCoverageFiles(dataset_name)
     for file_name in files:
-        print(file_name)
         with open(file_name) as json_file:
             features = geojson.load(json_file)["features"]
 
@@ -55,21 +58,44 @@ def main(
             "tasks": shapely.MultiLineString(),
             "boundary": shapely.Polygon(),
         }
+
         for feature in features:
             if feature["geometry"]:
-                geometries[feature["id"]] = shapely.geometry.shape(feature["geometry"])
+                geometries[feature["id"]] = geometry.shape(feature["geometry"])
 
-        cp = CoverageProblem.CoverageProblem(restricted_areas=geometries["obstacles"], search_area=geometries["boundary"], tasks=geometries["tasks"])
+        print(file_name, " Tasks: ", len(list(geometries["tasks"].geoms)))
+        # Initialize coverage problem and the agents
+        geometries["boundary"] = scale(geometries["boundary"], xfact=1.01, yfact=1.01)
+
+        # Scale each polygon in the MultiPolygon
+        scaled_polygons = []
+        for polygon in geometries["obstacles"].geoms:
+            scaled_polygon = scale(polygon, xfact=0.99, yfact=0.99, origin="centroid")
+            scaled_polygons.append(scaled_polygon)
+
+        # Create a new MultiPolygon with scaled polygons
+        scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
+
+        cp = CoverageProblem.CoverageProblem(restricted_areas=scaled_multi_polygon, search_area=geometries["boundary"], tasks=geometries["tasks"])
         agent_list = []
         initial_location = cp.generate_random_point_in_problem().coords.xy
         for id in range(n_agents):
-            agent_list.append(Agent.agent(id, initial_location, capacity))
+            agent_list.append(Agent.agent(id, cp.generate_random_point_in_problem().coords.xy, capacity))  # type: ignore
 
-        exp = Experiment.runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
-        if show_plots:
-            Utility.plotGraph(cp.travel_graph, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
+        exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
+        # if show_plots:
+        #     Utility.plotGraph(cp.environment, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
+
         allocations = exp.solve(profiling_enabled=False, debug=debug)
-        # print(allocations)
+
+        # replanning
+        exp.add_time(100)
+        exp.replan()
+
+        # TODO find a way of adding an agent based on id instead of index in a list
+        # This has some more work to it as this requires the index querying in cbba to be done based on hash indexing
+        # exp.add_agent(Agent.agent(id=))
+
         # Save the results in a csv file
         (
             totalRouteLength,
@@ -101,7 +127,7 @@ def main(
 if __name__ == "__main__":
     seed = 135239
     np.random.seed(seed)
-    # main()
+    random.seed(seed)
     parser = argparse.ArgumentParser(description="Calculates a conflict free task allocation")
     parser.add_argument("--dataset", type=str, help="The name of the dataset")
     parser.add_argument("--experiment_name", type=str, help="The name of the experiment")
@@ -120,15 +146,14 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 4
-        capacity = 750
-        use_point_est = False
+        n_agents = 6
+        capacity = 1000
 
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
-            show_plots=False,
-            debug=False,
+            show_plots=True,
+            debug=True,
         )

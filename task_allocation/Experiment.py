@@ -3,16 +3,13 @@ import timeit
 import numpy as np
 import shapely
 
-from task_allocation import CBBA, Agent, CoverageProblem, Utility, VisibilityGraph
+from task_allocation import CBBA, Agent, CoverageProblem, Utility
 
 
-class runner:
+class Runner:
     def __init__(self, coverage_problem: CoverageProblem.CoverageProblem, agents: list[Agent.agent], enable_plotting=False):
         # Task definition
         self.coverage_problem = coverage_problem
-        self.tasks = np.array(self.coverage_problem.getTasks())
-        self.task_num = int(len(self.tasks))
-        self.robot_num = len(agents)
         self.robot_list = []
         # TODO add all agent positions to the travelgraph before creating the cbba agents!!!!!
         for agent in agents:
@@ -20,23 +17,16 @@ class runner:
                 CBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
-                    travel_graph=self.coverage_problem.travel_graph,
-                    tasks=self.tasks,
-                    agent_num=len(agents),
+                    environment=self.coverage_problem.environment,
+                    tasks=np.array(self.coverage_problem.getTasks()),
+                    number_of_agents=len(agents),
                     capacity=agent.capacity,
                 )
-            )
-            # make sure that the agent position is connected to the travelgraph
-            VisibilityGraph.add_points_to_graph(
-                self.coverage_problem.travel_graph,
-                shapely.Point(agent.position).coords,
-                connect_to_visible_points=True,
-                polygon=coverage_problem.getSearchArea(),
-                holes=coverage_problem.getRestrictedAreas(),
             )
 
         self.communication_graph = np.ones((len(agents), len(agents)))
         self.plot = enable_plotting
+        self.progressed_time = 0
 
     def evaluateSolution(self):
         travel_length = 0
@@ -151,8 +141,7 @@ class runner:
                 # Plot
                 if self.plot:
                     plotter.setTitle("Time Step:{}".format(t))
-                    for robot in self.robot_list:
-                        plotter.plotAgent(robot)
+                    plotter.plotAgents(self.robot_list)
                     plotter.pause(0.1)
 
                 print("Bundle")
@@ -164,7 +153,7 @@ class runner:
 
             t += 1
 
-            if sum(converged_list) == self.robot_num:
+            if sum(converged_list) == len(self.robot_list):
                 break
         self.iterations = t
 
@@ -186,10 +175,67 @@ class runner:
             result[robot.id] = robot.getTravelPath()
 
         if self.plot:
-            for robot in self.robot_list:
-                plotter.plotAgent(robot)
-
+            plotter.plotAgents(self.robot_list)
         if self.plot:
             plotter.show()
 
         return result
+
+    def plan(self):
+        while True:
+            converged_list = []
+            # Phase 1: Auction Process
+            for robot in self.robot_list:
+                robot.build_bundle()
+
+            # Communication stage
+            # Send winning bid list to neighbors (depend on env)
+            message_pool = [robot.send_message() for robot in self.robot_list]
+            for robot_id, robot in enumerate(self.robot_list):
+                # Recieve winning bidlist from neighbors
+                g = self.communication_graph[robot_id]
+
+                (connected,) = np.where(g == 1)
+                connected = list(connected)
+                connected.remove(robot_id)
+
+                Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected} if len(connected) > 0 else None
+
+                robot.receive_message(Y)
+
+            # Phase 2: Consensus Process
+            for robot in self.robot_list:
+                # Update local information and decision
+                if Y is not None:
+                    converged = robot.update_task()
+                    converged_list.append(converged)
+
+            if sum(converged_list) == len(self.robot_list):
+                break
+
+    def replan(self):
+        for r in self.robot_list:
+            # For each task in the robots list which has been completed
+
+            for p in r.path:
+                # TODO figure out which tasks have already been completed by the agents and set reward to 0
+                pass
+
+        # Replan the problem using the new information
+        self.plan()
+
+    def add_agent(self, agent: Agent):
+        # TODO: Add an agent to self.robot_list
+
+        # Initialize a new agent using the existing tasks/agents
+
+        # Update the existing agents matrices to include the new agent
+        pass
+
+    def add_time(self, time_in_seconds):
+        self.progressed_time = time_in_seconds
+
+
+class Evaluator:
+    def __init__(self):
+        pass
