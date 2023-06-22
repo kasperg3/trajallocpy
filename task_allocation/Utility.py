@@ -37,25 +37,23 @@ class Plotter:
         self.environmentAx.legend(handles=handles)
         self.assign_plots = []
 
-    def plotAgent(self, robot: CBBA.agent):
+    def plotAgents(self, robot_list: list[CBBA.agent]):
+        for robot in robot_list:
+            self.plotAgent(robot, len(robot_list))
+
+    def plotAgent(self, robot: CBBA.agent, total_number_of_robots):
         task_x = []
         task_y = []
         p = robot.getTravelPath()
-        print(p)
+
         for s in p:
             task_x.append(s[0])
             task_y.append(s[1])
 
-        # for s in robot.getPathTasks():
-        #     task_x.append(s.start[0])
-        #     task_x.append(s.end[0])
-        #     task_y.append(s.start[1])
-        #     task_y.append(s.end[1])
-
         self.x_data = task_x
         self.y_data = task_y
 
-        if len(self.assign_plots) < robot.number_of_robots:
+        if len(self.assign_plots) < total_number_of_robots:
             (assign_line,) = self.environmentAx.plot(
                 self.x_data,
                 self.y_data,

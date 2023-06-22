@@ -16,7 +16,7 @@ class agent:
         state,
         environment,
         id,
-        agent_num=None,
+        number_of_agents=None,
         capacity=None,
         tasks=None,
         color=None,
@@ -25,7 +25,6 @@ class agent:
         self.environment = environment
         self.tasks = copy.deepcopy(tasks)
         self.task_num = len(tasks)
-        self.number_of_robots = agent_num
         self.use_single_point_estimation = point_estimation
         if color is None:
             self.color = (
@@ -60,7 +59,7 @@ class agent:
         # Local Clock
         self.time_step = 0
         # Time Stamp List
-        self.timestamps = {a: self.time_step for a in range(agent_num)}
+        self.timestamps = {a: self.time_step for a in range(number_of_agents)}
 
         # initialize state
         if state is None:
@@ -140,7 +139,7 @@ class agent:
     @cache
     def getTravelCost(self, start, end):
         # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
-        path, dist = self.environment.find_shortest_path(start, end, verify=False)
+        # path, dist = self.environment.find_shortest_path(start, end, verify=False)
         # dist = nx.astar_path_length(
         #     self.travel_graph, start, end, heuristic=lambda a, b: math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2), weight="cost"
         # )
@@ -156,8 +155,8 @@ class agent:
 
         # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
-        # dist = [(a - b) ** 2 for a, b in zip(start, end)]
-        # dist = math.sqrt(sum(dist))
+        dist = [(a - b) ** 2 for a, b in zip(start, end)]
+        dist = math.sqrt(sum(dist))
         result = dist / self.max_velocity
 
         # TODO are we assuming that the drone will interpolate the paths and thereby only stop in the ends?
@@ -229,12 +228,16 @@ class agent:
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
 
         # Add the cost for returning home
-        travel_cost += self.getTravelCost(self.state, self.tasks[temp_path[-1]].end)
+        travel_cost += self.getTravelCost(self.tasks[temp_path[-1]].end, self.state)
         S_p += self.getTimeDiscountedReward(
             travel_cost,
             self.tasks[-1],
         )
         return S_p, is_reversed
+
+    def getTasksAtTime(self, tau):
+        for i, task in enumerate(self.getPathTasks()):
+            self.getTravelCost()
 
     def getCij(self):
         """

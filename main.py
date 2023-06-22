@@ -6,6 +6,7 @@ import sys
 import geojson
 import numpy as np
 import shapely
+from shapely import geometry
 from shapely.affinity import scale
 from shapely.ops import transform
 
@@ -60,22 +61,31 @@ def main(
 
         for feature in features:
             if feature["geometry"]:
-                geometries[feature["id"]] = shapely.geometry.shape(feature["geometry"])
+                geometries[feature["id"]] = geometry.shape(feature["geometry"])
 
-            # Initialize coverage problem and the agents
+        # Initialize coverage problem and the agents
         scaled_poly = scale(geometries["boundary"], xfact=1.01, yfact=1.01)
 
         cp = CoverageProblem.CoverageProblem(restricted_areas=geometries["obstacles"], search_area=scaled_poly, tasks=geometries["tasks"])
         agent_list = []
         initial_location = cp.generate_random_point_in_problem().coords.xy
         for id in range(n_agents):
-            agent_list.append(Agent.agent(id, initial_location, capacity))
+            agent_list.append(Agent.agent(id, initial_location, capacity))  # type: ignore
 
         exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
         # if show_plots:
         #     Utility.plotGraph(cp.environment, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
 
         allocations = exp.solve(profiling_enabled=False, debug=debug)
+
+        # replanning
+        exp.add_time(100)
+        exp.replan()
+
+        # TODO find a way of adding an agent based on id instead of index in a list
+        # This has some more work to it as this requires the index querying in cbba to be done based on hash indexing
+        # exp.add_agent(Agent.agent(id=))
+
         # Save the results in a csv file
         (
             totalRouteLength,
@@ -126,8 +136,8 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 4
-        capacity = 600
+        n_agents = 3
+        capacity = 100000
 
         main(
             dataset_name=ds,
