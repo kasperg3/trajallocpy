@@ -139,27 +139,13 @@ class agent:
     @cache
     def getTravelCost(self, start, end):
         # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
-        # path, dist = self.environment.find_shortest_path(start, end, verify=False)
-        # dist = nx.astar_path_length(
-        #     self.travel_graph, start, end, heuristic=lambda a, b: math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2), weight="cost"
-        # )
-        # path = nx.astar_path(
-        #     self.travel_graph,
-        #     end,
-        #     start,
-        #     heuristic=lambda a, b: ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5,
-        #     weight="cost",
-        # )
-
-        # dist = math.sqrt(sum([((path[i + 1][0] - path[i][0]) ** 2 + (path[i + 1][1] - path[i][1]) ** 2) for i in range(len(path) - 1)]))
+        path, dist = self.environment.find_shortest_path(start, end, verify=False)
 
         # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
-        dist = [(a - b) ** 2 for a, b in zip(start, end)]
-        dist = math.sqrt(sum(dist))
+        # dist = [(a - b) ** 2 for a, b in zip(start, end)]
+        # dist = math.sqrt(sum(dist))
         result = dist / self.max_velocity
-
-        # TODO are we assuming that the drone will interpolate the paths and thereby only stop in the ends?
 
         # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
@@ -167,7 +153,6 @@ class agent:
         result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
 
         return result  # the cost of travelling in seconds!
-        # return np.linalg.norm(start - end) / self.velocity # Old and less efficient
 
     def getTimeDiscountedReward(self, cost, task: TrajectoryTask):
         return self.Lambda ** (cost) * task.reward

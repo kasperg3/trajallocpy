@@ -20,10 +20,11 @@ class CoverageProblem:
         self.environment = PolygonEnvironment()
         holes = []
         for polygon in restricted_areas.geoms:
-            polygon_tuples = list(polygon.exterior.coords[:-1])
-            holes.append(polygon_tuples)
-        self.environment.store(list(search_area.exterior.coords[:-1]), holes, validate=False)
+            holes.append(list(polygon.exterior.coords[:-1]))
+        shapely.geometry.polygon.orient(search_area, 1.0)
 
+        self.environment.store(list(shapely.geometry.polygon.orient(search_area, 1.0).exterior.coords[:-1]), holes, validate=True)
+        self.environment.prepare()
         task_list = []
         for id, trajectory in enumerate(tasks.geoms):
             task_list.append(Task.TrajectoryTask(id, trajectory, trajectory.coords[0], trajectory.coords[-1]))
@@ -47,5 +48,4 @@ class CoverageProblem:
         while True:
             point = shapely.geometry.Point(random.uniform(minx, maxx), random.uniform(miny, maxy))  # noqa: S311
             if not self.__restricted_areas.contains(point) and self.__search_area.contains(point):
-                return point
                 return point
