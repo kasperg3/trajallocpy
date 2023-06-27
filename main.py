@@ -70,21 +70,15 @@ def main(
         # Scale each polygon in the MultiPolygon
         scaled_polygons = []
         for polygon in geometries["obstacles"].geoms:
-            scaled_polygon = scale(polygon, xfact=0.99, yfact=0.99, origin="centroid")
+            scaled_polygon = scale(polygon, xfact=0.95, yfact=0.95, origin="centroid")
             scaled_polygons.append(scaled_polygon)
 
         # Create a new MultiPolygon with scaled polygons
         scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
 
         cp = CoverageProblem.CoverageProblem(restricted_areas=scaled_multi_polygon, search_area=geometries["boundary"], tasks=geometries["tasks"])
-        agent_list = []
-        initial_location = cp.generate_random_point_in_problem().coords.xy
-        for id in range(n_agents):
-            agent_list.append(Agent.agent(id, cp.generate_random_point_in_problem().coords.xy, capacity))  # type: ignore
-
+        agent_list = [Agent.agent(id, cp.generate_random_point_in_problem().coords.xy, capacity) for id in range(n_agents)]
         exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
-        # if show_plots:
-        #     Utility.plotGraph(cp.environment, cp.getSearchArea(), cp.getRestrictedAreas(), cp.getTasks())
 
         allocations = exp.solve(profiling_enabled=False, debug=debug)
 
@@ -125,7 +119,7 @@ def main(
 
 
 if __name__ == "__main__":
-    seed = 135239
+    seed = 1352323
     np.random.seed(seed)
     random.seed(seed)
     parser = argparse.ArgumentParser(description="Calculates a conflict free task allocation")
@@ -146,14 +140,14 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 6
-        capacity = 1000
+        n_agents = 2
+        capacity = 10000
 
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
-            show_plots=True,
+            show_plots=False,
             debug=True,
         )
