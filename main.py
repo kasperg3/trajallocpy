@@ -62,8 +62,11 @@ def main(
         for feature in features:
             if feature["geometry"]:
                 geometries[feature["id"]] = geometry.shape(feature["geometry"])
+        number_of_tasks = len(list(geometries["tasks"].geoms))
 
-        print(file_name, " Tasks: ", len(list(geometries["tasks"].geoms)))
+        print(file_name, " Tasks: ", number_of_tasks)
+        # if number_of_tasks > 250:
+        #     continue
         # Initialize coverage problem and the agents
         geometries["boundary"] = scale(geometries["boundary"], xfact=1.01, yfact=1.01)
 
@@ -77,7 +80,8 @@ def main(
         scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
 
         cp = CoverageProblem.CoverageProblem(restricted_areas=scaled_multi_polygon, search_area=geometries["boundary"], tasks=geometries["tasks"])
-        agent_list = [Agent.agent(id, cp.generate_random_point_in_problem().coords.xy, capacity) for id in range(n_agents)]
+        initial = cp.generate_random_point_in_problem().coords.xy
+        agent_list = [Agent.agent(id, initial, capacity) for id in range(n_agents)]
         exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
         allocations = exp.solve(profiling_enabled=False, debug=debug)
@@ -141,7 +145,7 @@ if __name__ == "__main__":
     else:
         ds = "AC300"
         n_agents = 2
-        capacity = 10000
+        capacity = 1500
 
         main(
             dataset_name=ds,
@@ -149,5 +153,5 @@ if __name__ == "__main__":
             n_agents=n_agents,
             capacity=capacity,
             show_plots=False,
-            debug=True,
+            debug=False,
         )

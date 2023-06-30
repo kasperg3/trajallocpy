@@ -4,7 +4,6 @@ import random
 from functools import cache
 from typing import List
 
-import networkx as nx
 import numpy as np
 
 from task_allocation.Task import TrajectoryTask
@@ -145,11 +144,10 @@ class agent:
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
         # dist = [(a - b) ** 2 for a, b in zip(start, end)]
         # dist = math.sqrt(sum(dist))
-        result = dist / self.max_velocity
+        # result = dist / self.max_velocity
 
         # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
-
         result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
 
         return result  # the cost of travelling in seconds!

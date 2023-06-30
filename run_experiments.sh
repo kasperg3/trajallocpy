@@ -23,13 +23,19 @@
 # python3 main.py --dataset=AC300 --route_file_name=mem_inf_route_data0 --experiment_name=point_1robots_infcapacity_AC300 --point_estimation=True --n_robots=1 --capacity=9000 > logs/point_1robots_infcapacity_AC300.txt &
 
 
-# python3.10 main.py --dataset=AC300  --n_robots=14 --capacity=300  --experiment_name=14robots_300capacity_AC300 > logs/trajectory_14robots_300capacity_AC300.tx &
-# python3.10 main.py --dataset=AC300 --n_robots=12 --capacity=300 --experiment_name=12robots_300capacity_AC300 > logs/trajectory_12robots_300capacity_AC300.tx &
-# python3.10 main.py --dataset=AC300 --n_robots=10 --capacity=300 --experiment_name=10robots_300capacity_AC300 > logs/trajectory_10robots_300capacity_AC300.tx &
-# python3.10 main.py --dataset=AC300 --n_robots=8 --capacity=375  --experiment_name=8robots_375capacity_AC300 > logs/trajectory_8robots_375capacity_AC300.txt &
-python3.10 main.py --dataset=AC300 --n_robots=6 --capacity=1500  --experiment_name=6robots_500capacity_AC300 > logs/trajectory_6robots_500capacity_AC300.txt &
-python3.10 main.py --dataset=AC300 --n_robots=4 --capacity=1500  --experiment_name=4robots_750capacity_AC300 > logs/trajectory_4robots_750capacity_AC300.txt &
-python3.10 main.py --dataset=AC300 --n_robots=2 --capacity=1500 --experiment_name=2robots_1500capacity_AC300 > logs/trajectory_2robots_1500capacity_AC300.txt &
+# python3.10 main.py --dataset=AC300  --n_robots=14 --capacity=1000  --experiment_name=14robots_1000capacity_AC300 > logs/14robots_1000capacity_AC300.tx &
+# python3.10 main.py --dataset=AC300 --n_robots=12 --capacity=1000 --experiment_name=12robots_1000capacity_AC300 > logs/12robots_1000capacity_AC300.tx &
+# python3.10 main.py --dataset=AC300 --n_robots=10 --capacity=1000 --experiment_name=10robots_1000capacity_AC300 > logs/10robots_1000capacity_AC300.tx &
+# python3.10 main.py --dataset=AC300 --n_robots=8 --capacity=1000  --experiment_name=8robots_1000capacity_AC300 > logs/8robots_1000capacity_AC300.txt &
+# python3.10 main.py --dataset=AC300 --n_robots=6 --capacity=1500  --experiment_name=6robots_1500capacity_AC300 > logs/6robots_1500capacity_AC300.txt &
+# python3.10 main.py --dataset=AC300 --n_robots=4 --capacity=1500  --experiment_name=4robots_1500capacity_AC300 > logs/4robots_1500capacity_AC300.txt &
+# python3.10 main.py --dataset=AC300 --n_robots=2 --capacity=2000 --experiment_name=2robots_2000capacity_AC300 > logs/2robots_2000capacity_AC300.txt &
 # python3.10 main.py --dataset=AC300 --n_robots=1 --capacity=99999 > logs/trajectory_1robots_infcapacity_AC300.txt &
+
+
+python3.10 main.py --dataset=VM25 --n_robots=5 --capacity=3500 --experiment_name=5robots_3500capacity_VM25 > logs/5robots_3500capacity_VM25.txt &
+python3.10 main.py --dataset=VM25 --n_robots=4 --capacity=4000 --experiment_name=4robots_4000capacity_VM25 > logs/4robots_4000capacity_VM25.txt &
+python3.10 main.py --dataset=VM25 --n_robots=3 --capacity=7000 --experiment_name=3robots_7000capacity_VM25 > logs/3robots_7000capacity_VM25.txt &
+python3.10 main.py --dataset=VM25 --n_robots=2 --capacity=10000 --experiment_name=2robots_10000capacity_VM25 > logs/2robots_10000capacity_VM25.txt &
 
 wait

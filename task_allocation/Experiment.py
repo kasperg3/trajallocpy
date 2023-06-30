@@ -101,8 +101,8 @@ class Runner:
 
         while True:
             converged_list = []
-            if debug:
-                print("Iteration {}".format(t + 1))
+
+            print("Iteration {}".format(t + 1))
             # Phase 1: Auction Process
             for robot in self.robot_list:
                 # TODO parellalize this!
