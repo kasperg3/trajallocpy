@@ -87,8 +87,8 @@ def main(
         allocations = exp.solve(profiling_enabled=False, debug=debug)
 
         # replanning
-        exp.add_time(100)
-        exp.replan()
+        # exp.add_time(100)
+        # exp.replan()
 
         # TODO find a way of adding an agent based on id instead of index in a list
         # This has some more work to it as this requires the index querying in cbba to be done based on hash indexing

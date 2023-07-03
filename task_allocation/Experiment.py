@@ -213,17 +213,6 @@ class Runner:
             if sum(converged_list) == len(self.robot_list):
                 break
 
-    def replan(self):
-        for r in self.robot_list:
-            # For each task in the robots list which has been completed
-
-            for p in r.path:
-                # TODO figure out which tasks have already been completed by the agents and set reward to 0
-                pass
-
-        # Replan the problem using the new information
-        self.plan()
-
     def add_agent(self, agent: Agent):
         # TODO: Add an agent to self.robot_list
 

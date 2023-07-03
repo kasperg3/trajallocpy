@@ -32,10 +32,13 @@
 # python3.10 main.py --dataset=AC300 --n_robots=2 --capacity=2000 --experiment_name=2robots_2000capacity_AC300 > logs/2robots_2000capacity_AC300.txt &
 # python3.10 main.py --dataset=AC300 --n_robots=1 --capacity=99999 > logs/trajectory_1robots_infcapacity_AC300.txt &
 
-
-python3.10 main.py --dataset=VM25 --n_robots=5 --capacity=3500 --experiment_name=5robots_3500capacity_VM25 > logs/5robots_3500capacity_VM25.txt &
-python3.10 main.py --dataset=VM25 --n_robots=4 --capacity=4000 --experiment_name=4robots_4000capacity_VM25 > logs/4robots_4000capacity_VM25.txt &
-python3.10 main.py --dataset=VM25 --n_robots=3 --capacity=7000 --experiment_name=3robots_7000capacity_VM25 > logs/3robots_7000capacity_VM25.txt &
-python3.10 main.py --dataset=VM25 --n_robots=2 --capacity=10000 --experiment_name=2robots_10000capacity_VM25 > logs/2robots_10000capacity_VM25.txt &
+python3.10 main.py --dataset=AC300  --n_robots=14 --capacity=400  --experiment_name=14robots_500capacity_AC300 > logs/14robots_500capacity_AC300.tx &
+python3.10 main.py --dataset=AC300 --n_robots=12 --capacity=400 --experiment_name=12robots_500capacity_AC300 > logs/12robots_500capacity_AC300.tx &
+python3.10 main.py --dataset=AC300 --n_robots=10 --capacity=400 --experiment_name=10robots_500capacity_AC300 > logs/10robots_500capacity_AC300.tx &
+python3.10 main.py --dataset=AC300 --n_robots=8 --capacity=500  --experiment_name=8robots_500capacity_AC300 > logs/8robots_500capacity_AC300.txt &
+python3.10 main.py --dataset=AC300 --n_robots=6 --capacity=500  --experiment_name=6robots_500capacity_AC300 > logs/6robots_500capacity_AC300.txt &
+python3.10 main.py --dataset=AC300 --n_robots=4 --capacity=750  --experiment_name=4robots_750capacity_AC300 > logs/4robots_750capacity_AC300.txt &
+python3.10 main.py --dataset=AC300 --n_robots=2 --capacity=1500 --experiment_name=2robots_1500capacity_AC300 > logs/2robots_1500capacity_AC300.txt &
+# python3.10 main.py --dataset=AC300 --n_robots=1 --capacity=99999 > logs/trajectory_1robots_infcapacity_AC300.txt &
 
 wait
