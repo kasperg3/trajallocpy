@@ -145,13 +145,13 @@ if __name__ == "__main__":
     else:
         ds = "AC300"
         n_agents = 2
-        capacity = 1500
+        capacity = 1200
 
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
-            show_plots=False,
+            show_plots=True,
             debug=False,
         )
