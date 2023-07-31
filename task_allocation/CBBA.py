@@ -198,24 +198,15 @@ class agent:
             for p_idx in range(len(temp_path) - 1):
                 if p_idx == n - 1:
                     # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
-                    temp_cost, is_reversed = self.getMinTravelCost(
-                        self.tasks[temp_path[p_idx]].end,
-                        self.tasks[temp_path[p_idx + 1]],
-                    )
+                    temp_cost, is_reversed = self.getMinTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]])
                     travel_cost += temp_cost
                 else:
-                    travel_cost += self.getTravelCost(
-                        self.tasks[temp_path[p_idx]].end,
-                        self.tasks[temp_path[p_idx + 1]].start,
-                    )
+                    travel_cost += self.getTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start)
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
 
         # Add the cost for returning home
         travel_cost += self.getTravelCost(self.tasks[temp_path[-1]].end, self.state)
-        S_p += self.getTimeDiscountedReward(
-            travel_cost,
-            self.tasks[-1],
-        )
+        S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[-1]])
         return S_p, is_reversed
 
     def getTasksAtTime(self, tau):
