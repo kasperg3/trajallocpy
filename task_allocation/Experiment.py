@@ -3,7 +3,7 @@ import timeit
 import numpy as np
 import shapely
 
-from task_allocation import CBBA, Agent, CoverageProblem, Utility
+from task_allocation import ACBBA, Agent, CoverageProblem, Utility
 
 
 class Runner:
@@ -14,7 +14,7 @@ class Runner:
         # TODO add all agent positions to the travelgraph before creating the cbba agents!!!!!
         for agent in agents:
             self.robot_list.append(
-                CBBA.agent(
+                ACBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
