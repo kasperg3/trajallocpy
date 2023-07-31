@@ -1,7 +1,7 @@
 import copy
 import math
 import random
-from datetime import datetime
+import time
 from functools import cache
 from typing import List
 
@@ -23,8 +23,8 @@ class agent:
         point_estimation=False,
     ):
         self.environment = environment
-        self.tasks = copy.deepcopy(tasks)
-        self.task_num = len(tasks)
+        self.tasks = {x.id: x for x in copy.deepcopy(tasks)}
+
         self.use_single_point_estimation = point_estimation
         if color is None:
             self.color = (
@@ -43,9 +43,11 @@ class agent:
         self.id = id
 
         # Local Winning Agent List
-        self.winning_agents = np.ones(self.task_num, dtype=np.int8) * self.id
+        self.z = {}
         # Local Winning Bid List
-        self.winning_bids = np.array([0 for _ in range(self.task_num)], dtype=np.float64)
+        self.y = {}
+        # Time Stamp List
+        self.t = {}
         # Bundle
         self.bundle = []
         # Path
@@ -56,9 +58,6 @@ class agent:
         else:
             self.capacity = capacity
 
-        # Time Stamp List
-        self.timestamps = {a: datetime.now() for a in range(number_of_agents)}
-
         # initialize state
         if state is None:
             raise Exception("ERROR: Initial state cannot be None")
@@ -67,11 +66,14 @@ class agent:
         # socre function parameters
         self.Lambda = 0.95
 
-        self.removal_list = np.zeros(self.task_num, dtype=np.int8)
+        self.removal_list = {}
         self.removal_threshold = 15
 
     def getPathTasks(self) -> List[TrajectoryTask]:
-        return self.tasks[self.path]
+        result = []
+        for task in self.path:
+            result.append(self.tasks.get(task))
+        return result
 
     def getTravelPath(self):
         assigned_tasks = self.tasks[self.path]
@@ -95,7 +97,7 @@ class agent:
         self.state = state
 
     def send_message(self):
-        return self.winning_bids.tolist(), self.winning_agents.tolist(), self.timestamps
+        return self.y, self.z, self.t
 
     def receive_message(self, Y):
         self.Y = Y
@@ -180,43 +182,21 @@ class agent:
         is_reversed = False
         # travel cost to first task
         travel_cost = self.getTravelCost(self.state, self.tasks[temp_path[0]].start)
-        S_p = self.getTimeDiscountedReward(
-            travel_cost,
-            self.tasks[temp_path[0]],
-        )
+        S_p = self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[0]])
 
-        # Use a single point instead of greedily optimising the direction
-        if self.use_single_point_estimation:
-            for p_idx in range(len(temp_path) - 1):
+        for p_idx in range(len(temp_path) - 1):
+            if p_idx == n - 1:
+                # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
+                temp_cost, is_reversed = self.getMinTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]])
+                travel_cost += temp_cost
+            else:
                 travel_cost += self.getTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start)
-                S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
-        else:
-            for p_idx in range(len(temp_path) - 1):
-                if p_idx == n - 1:
-                    # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
-                    temp_cost, is_reversed = self.getMinTravelCost(
-                        self.tasks[temp_path[p_idx]].end,
-                        self.tasks[temp_path[p_idx + 1]],
-                    )
-                    travel_cost += temp_cost
-                else:
-                    travel_cost += self.getTravelCost(
-                        self.tasks[temp_path[p_idx]].end,
-                        self.tasks[temp_path[p_idx + 1]].start,
-                    )
-                S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
+            S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
 
         # Add the cost for returning home
         travel_cost += self.getTravelCost(self.tasks[temp_path[-1]].end, self.state)
-        S_p += self.getTimeDiscountedReward(
-            travel_cost,
-            self.tasks[-1],
-        )
+        S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[-1]])
         return S_p, is_reversed
-
-    def getTasksAtTime(self, tau):
-        for i, task in enumerate(self.getPathTasks()):
-            self.getTravelCost()
 
     def getCij(self):
         """
@@ -225,100 +205,102 @@ class agent:
         # Calculate Sp_i
         S_p = self.calculatePathReward()
         # init
-        best_pos = np.zeros(self.task_num, dtype=int)
-        c = np.zeros(self.task_num)
-        reverse = np.zeros(self.task_num)
+        best_pos = None
+        c = 0
+        reverse = None
+        best_task = None
         # try all tasks
-        for j in range(self.task_num):
-            # If already in bundle list
-            if j in self.bundle or self.removal_list[j] > self.removal_threshold:
-                c[j] = 0  # Minimum Score
+        for j, task in self.tasks.items():
+            # If already in the bundle list
+            if j in self.bundle:
+                c = 0  # Minimum Score
             else:
                 # for each j calculate the path reward at each location in the local path
                 for n in range(len(self.path) + 1):
                     S_pj, should_be_reversed = self.calculatePathRewardWithNewTask(j, n)
                     c_ijn = S_pj - S_p
-                    if c[j] <= c_ijn:
-                        c[j] = c_ijn  # Store the cost
-                        best_pos[j] = n
-                        reverse[j] = should_be_reversed
+                    if c <= c_ijn and c > self.y.get(j, -1):
+                        c = c_ijn  # Store the cost
+                        best_pos = n
+                        reverse = should_be_reversed
+                        best_task = j
 
-        return (best_pos, c, reverse)
+        # reverse the task with max reward if necesarry
+        if reverse:
+            self.tasks[j].reverse()
+
+        return best_task, best_pos, c
 
     def build_bundle(self):
         while self.getTotalTravelCost(self.getPathTasks()) <= self.capacity:
-            best_pos, c, reverse = self.getCij()
-            h = c > self.winning_bids
-
-            if sum(h) == 0:  # No valid task
+            J_i, n_J, c = self.getCij()
+            if J_i is None:
                 break
-
-            c[~h] = 0
-            J_i = np.argmax(c)
-            n_J = best_pos[J_i]
-
-            # reverse the task with max reward if necesarry
-            if reverse[J_i]:
-                self.tasks[J_i].reverse()
-
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
 
-            self.winning_bids[J_i] = c[J_i]
-            self.winning_agents[J_i] = self.id
+            self.y[J_i] = c
+            self.z[J_i] = self.id
+            self.t[J_i] = int(time.monotonic())  # Update the time of the winning bet
 
     def update_task(self):
         id_list = list(self.Y.keys())
         id_list.insert(0, self.id)
 
         # Update time list
-        for id in list(self.timestamps.keys()):
+        for id in list(self.t.keys()):
             if id in id_list:
-                self.timestamps[id] = datetime.now()
+                self.t[id] = int(time.monotonic())
             else:
                 s_list = []
                 for neighbor_id in id_list[1:]:
                     s_list.append(self.Y[neighbor_id][2][id])
                 if len(s_list) > 0:
-                    self.timestamps[id] = max(s_list)
+                    self.t[id] = max(s_list)
+
+        rebroadcast_information = {}
 
         # Update Process
-        for j in range(self.task_num):
-            for k in id_list[1:]:
-                y_k = self.Y[k][0]
-                z_k = self.Y[k][1]
-                s_k = self.Y[k][2]
+        for k in self.Y:
+            for j in self.tasks:
+                y_k = self.Y[k][0]  # Winning bids
+                z_k = self.Y[k][1]  # Winning agent
+                t_k = self.Y[k][2]  # Timestamps
                 i = self.id
 
-                z_ij = self.winning_agents[j]
-                z_kj = z_k[j]
-                y_kj = y_k[j]
-                y_ij = self.winning_bids[j]
+                z_ij = self.z.get(j, None)
+                z_kj = z_k.get(j, None)
+
+                y_ij = self.y.get(j, -1.0)
+                y_kj = y_k.get(j, -1.0)
+
+                t_ij = self.t.get(j, 0)
+                t_kj = t_k.get(j, 0)
                 # Rule Based Update
                 # Rule 1~4
                 if z_kj == k:
                     # Rule 1
                     if z_ij == self.id:
                         if y_kj > y_ij:
-                            self.__update(j, y_kj, z_kj)
+                            self.__update(j, y_kj, z_kj, t_kj)
                         elif abs(y_kj - y_ij) < np.finfo(float).eps:  # Tie Breaker
                             if k < self.id:
-                                self.__update(j, y_kj, z_kj)
+                                self.__update(j, y_kj, z_kj, t_kj)
                         else:
                             self.__leave()
                     # Rule 2
                     elif z_ij == k:
-                        self.__update(j, y_kj, z_kj)
+                        self.__update(j, y_kj, z_kj, t_kj)
                     # Rule 3
                     elif z_ij != -1:
                         m = z_ij
-                        if (s_k[m] > self.timestamps[m]) or (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj)
+                        if (t_kj > t_ij) or (y_kj > y_ij):
+                            self.__update(j, y_kj, z_kj, t_kj)
                         elif abs(y_kj - y_ij) < np.finfo(float).eps and k < self.id:  # Tie Breaker
-                            self.__update(j, y_kj, z_kj)
+                            self.__update(j, y_kj, z_kj, t_kj)
                     # Rule 4
                     elif z_ij == -1:
-                        self.__update(j, y_kj, z_kj)
+                        self.__update(j, y_kj, z_kj, t_kj)
                     else:
                         raise Exception("Error while updating")
                 # Rule 5~8
@@ -332,7 +314,7 @@ class agent:
                     # Rule 7
                     elif z_ij != -1:
                         m = z_ij
-                        if s_k[m] > self.timestamps[m]:
+                        if t_kj > t_ij:
                             self.__reset(j)
                     # Rule 8
                     elif z_ij == -1:
@@ -344,38 +326,38 @@ class agent:
                     m = z_kj
                     # Rule 9
                     if z_ij == i:
-                        if (s_k[m] >= self.timestamps[m]) and (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj)
+                        if (t_kj >= t_ij) and (y_kj > y_ij):
+                            self.__update(j, y_kj, z_kj, t_kj)
                         # Tie Breaker
-                        elif (s_k[m] >= self.timestamps[m]) and (abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id):
-                            self.__update(j, y_kj, z_kj)
+                        elif (t_kj >= t_ij) and (abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id):
+                            self.__update(j, y_kj, z_kj, t_kj)
                     # Rule 10
                     elif z_ij == k:
-                        if s_k[m] > self.timestamps[m]:
-                            self.__update(j, y_kj, z_kj)
+                        if t_kj > t_ij:
+                            self.__update(j, y_kj, z_kj, t_kj)
                         else:
                             self.__reset(j)
                     # Rule 11
                     elif z_ij == m:
-                        if s_k[m] > self.timestamps[m]:
-                            self.__update(j, y_kj, z_kj)
+                        if t_kj > t_ij:
+                            self.__update(j, y_kj, z_kj, t_kj)
                     # Rule 12
                     elif z_ij != -1:
                         n = z_ij
-                        if (s_k[m] > self.timestamps[m]) and (s_k[n] > self.timestamps[n]):
-                            self.__update(j, y_kj, z_kj)
-                        elif (s_k[m] > self.timestamps[m]) and (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj)
+                        if (t_kj > t_ij) and (t_k[n] > self.t[n]):
+                            self.__update(j, y_kj, z_kj, t_kj)
+                        elif (t_kj > t_ij) and (y_kj > y_ij):
+                            self.__update(j, y_kj, z_kj, t_kj)
                         # Tie Breaker
-                        elif (s_k[m] > self.timestamps[m]) and (abs(y_kj - y_ij) < np.finfo(float).eps):
+                        elif (t_kj > t_ij) and (abs(y_kj - y_ij) < np.finfo(float).eps):
                             if m < n:
-                                self.__update(j, y_kj, z_kj)
-                        elif (s_k[n] > self.timestamps[n]) and (self.timestamps[m] > s_k[m]):
-                            self.__update(j, y_kj, z_kj)
+                                self.__update(j, y_kj, z_kj, t_kj)
+                        elif (t_k[n] > self.t[n]) and (t_ij > t_kj):
+                            self.__update(j, y_kj, z_kj, t_kj)
                     # Rule 13
                     elif z_ij == -1:
-                        if s_k[m] > self.timestamps[m]:
-                            self.__update(j, y_kj, z_kj)
+                        if t_kj > t_ij:
+                            self.__update(j, y_kj, z_kj, t_kj)
                     else:
                         raise Exception("Error while updating")
                 # Rule 14~17
@@ -385,12 +367,12 @@ class agent:
                         self.__leave()
                     # Rule 15
                     elif z_ij == k:
-                        self.__update(j, y_kj, z_kj)
+                        self.__update(j, y_kj, z_kj, t_kj)
                     # Rule 16
                     elif z_ij != -1:
                         m = z_ij
-                        if s_k[m] > self.timestamps[m]:
-                            self.__update(j, y_kj, z_kj)
+                        if t_kj > t_ij:
+                            self.__update(j, y_kj, z_kj, t_kj)
                     # Rule 17
                     elif z_ij == -1:
                         self.__leave()
@@ -399,18 +381,20 @@ class agent:
                 else:
                     raise Exception("Error while updating")
 
+        # TODO the code under here into the update funciton instead
+
         n_bar = len(self.bundle)
         # Get n_bar
         for n in range(len(self.bundle)):
             b_n = self.bundle[n]
-            if self.winning_agents[b_n] != self.id and n_bar > n:
+            if self.z[b_n] != self.id and n_bar > n:
                 n_bar = n  # Find the minimum n in the agents bundle
 
         b_idx1 = copy.deepcopy(self.bundle[n_bar + 1 :])
 
         if len(b_idx1) > 0:
-            self.winning_bids[b_idx1] = 0
-            self.winning_agents[b_idx1] = -1
+            self.y[b_idx1] = 0
+            self.z[b_idx1] = -1
 
         tasks_to_delete = self.bundle[n_bar:]
 
@@ -429,19 +413,34 @@ class agent:
 
         return converged
 
-    def __update(self, j, y_kj, z_kj):
+    def __update(self, j, y_kj, z_kj, t_kj):
         """
         Update values
         """
-        self.winning_bids[j] = y_kj
-        self.winning_agents[j] = z_kj
+        self.y[j] = y_kj
+        self.z[j] = z_kj
+        self.t[j] = t_kj
+        # self.__update_path(j)
+
+    def __update_path(self, Job):
+        if Job not in self.b:
+            return
+        index = self.b.index(Job)
+        b_retry = self.b[index + 1 :]
+        for job in b_retry:
+            self.y[job] = float("inf")
+            self.z[job] = None
+            self.t[Job] = datetime.now()
+
+        self.b = self.b[:index]
+        self.p = self.p[:index]
 
     def __reset(self, j):
         """
         Reset values
         """
-        self.winning_bids[j] = 0
-        self.winning_agents[j] = -1  # -1 means "none"
+        self.y[j] = 0
+        self.z[j] = -1  # -1 means "none"
 
     def __leave(self):
         """

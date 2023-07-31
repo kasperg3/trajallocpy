@@ -6,7 +6,7 @@ import shapely
 
 @dataclass
 class TrajectoryTask:
-    task_id: int
+    id: int
     trajectory: shapely.LineString  # List of points
     start: shapely.Point
     end: shapely.Point

@@ -1,8 +1,10 @@
+import numpy as np
 import rclpy
+import shapely
 from rclpy.node import Node
 from std_msgs.msg import String
 
-from task_allocation import Agent, CoverageProblem, Experiment, Utility
+from task_allocation import ACBBA, Agent, CoverageProblem, Experiment, Utility
 
 
 class RosAgent(Node):
@@ -48,10 +50,21 @@ class RosAgent(Node):
         # self.bid_info_publisher(agent.send_message())
 
 
-def main(args=None):
+def main(coverage_problem: CoverageProblem.CoverageProblem, agents: list[Agent.agent], enable_plotting=False, args=None):
     # Load the problem
-
+    robot_list = []
     # Instanciate the agents
+    for agent in agents:
+        robot_list.append(
+            ACBBA.agent(
+                id=agent.id,
+                state=shapely.Point(agent.position),
+                environment=coverage_problem.environment,
+                tasks=np.array(coverage_problem.getTasks()),
+                number_of_agents=len(agents),
+                capacity=agent.capacity,
+            )
+        )
 
     rclpy.init(args=args)
     agent = RosAgent(id=1)
