@@ -248,7 +248,7 @@ class agent:
     def __update_time(self, task):
         self.t[task] = int(time.monotonic())
 
-    def __action_rule(self, k, task, z_kj, y_kj, z_ij, y_ij, t_kj, t_ij, sender_info):
+    def __action_rule(self, k, task, z_kj, y_kj,  t_kj,z_ij, y_ij, t_ij, sender_info):
         eps = 5
         i = self.id
         if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
@@ -295,7 +295,7 @@ class agent:
                     self.__reset(task)
                     return sender_info
 
-            elif z_ij == None:  # Rule 1.4
+            elif z_ij == -1:  # Rule 1.4
                 self.__update(y_kj, z_kj, t_kj, task)
                 return sender_info
 
@@ -312,7 +312,7 @@ class agent:
                 self.__leave()
                 return {"y": self.y, "z": self.z, "t": self.t}
 
-            elif z_ij == None:
+            elif z_ij == -1:
                 self.__reset(task)
                 return {"y": self.y, "z": self.z, "t": self.t}
 
@@ -366,11 +366,11 @@ class agent:
                     self.__leave()
                     return {"y": self.y, "z": self.z, "t": self.t}
 
-            elif z_ij is None: # Rule 3.5
+            elif z_ij == -1: # Rule 3.5
                 self.__update(y_kj, z_kj, t_kj, task)
                 return sender_info
 
-        elif z_kj is None:  # Rule 4 Agent k thinks None is z_kj
+        elif z_kj == -1:  # Rule 4 Agent k thinks None is z_kj
             if z_ij == i:
                 self.__leave()
                 return {"y": self.y, "z": self.z, "t": self.t}
@@ -384,7 +384,7 @@ class agent:
                     self.__update(y_kj, z_kj, t_kj, task)
                     return sender_info
 
-            elif z_ij is None:
+            elif z_ij == -1:
                 self.__leave()
                 return None
         # Default leave and rebroadcast
@@ -419,22 +419,24 @@ class agent:
             for j in self.tasks:
                 # Recieve info
                 y_kj = self.Y[k][0].get(j,0)  # Winning bids
-                z_kj = self.Y[k][1].get(j,None)  # Winning agent
+                z_kj = self.Y[k][1].get(j,-1)  # Winning agent
                 t_kj = self.Y[k][2].get(j,0)  # Timestamps
-                sender_info = {"y": self.Y[k][0], "z": self.Y[k][1].get(j), "t": self.Y[k][2]}
+                sender_info = {"y": self.Y[k][0], "z": self.Y[k][1], "t": self.Y[k][2]}
 
                 # Own info
-                y_ij = self.y.get(j,-1)
-                z_ij = self.z.get(j,None)
+                y_ij = self.y.get(j,0)
+                z_ij = self.z.get(j,-1)
                 t_ij = self.t.get(j,0)
 
-                rebroadcast = self.__action_rule(k, j, z_kj, y_kj, z_ij, y_ij, t_kj, t_ij, sender_info)
+                rebroadcast = self.__action_rule(k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij, sender_info=sender_info)
                 if rebroadcast:
                     # self.__rebroadcast(rebroadcast)
                     update += 1
+                    # print({"a": k, "y": y_kj, "z": z_kj, "t": t_kj, "task": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij})
                     self.message_history.append(
                         {"a": k, "y": y_kj, "z": z_kj, "t": t_kj, "task": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij}
                     )
+                    
         return update
 
     def __update(self, y_kj, z_kj, t_kj, j):
@@ -452,8 +454,8 @@ class agent:
         index = self.bundle.index(task)
         b_retry = self.bundle[index + 1 :]
         for idx in b_retry:
-            self.y[idx] = float("inf")
-            self.z[idx] = None
+            self.y[idx] = 0
+            self.z[idx] = -1
             self.t[idx] = int(time.monotonic())
 
         removal_list = self.bundle[index:]
@@ -464,9 +466,8 @@ class agent:
         
 
     def __reset(self, task):
-        self.leave = False
-        self.y[task] = float("inf")
-        self.z[task] = None
+        self.y[task] = 0
+        self.z[task] = -1
         self.t[task] = int(time.monotonic())
         self.__update_path(task)
 
