@@ -152,6 +152,6 @@ if __name__ == "__main__":
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
-            show_plots=True,
+            show_plots=False,
             debug=True,
         )

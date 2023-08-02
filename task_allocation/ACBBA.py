@@ -233,6 +233,7 @@ class agent:
         return best_task, best_pos, c
 
     def build_bundle(self):
+        bundle_time = int(time.monotonic())
         while self.getTotalTravelCost(self.getPathTasks()) <= self.capacity:
             J_i, n_J, c = self.getCij()
             if J_i is None:
@@ -242,26 +243,13 @@ class agent:
 
             self.y[J_i] = c
             self.z[J_i] = self.id
-            self.t[J_i] = int(time.monotonic())  # Update the time of the winning bet
+            self.t[J_i] = bundle_time   # Update the time of the winning bet
 
-    def __update_time(self, Job):
-        self.t[Job] = int(time.monotonic())
+    def __update_time(self, task):
+        self.t[task] = int(time.monotonic())
 
     def __action_rule(self, k, task, z_kj, y_kj, z_ij, y_ij, t_kj, t_ij, sender_info):
-        if y_kj is None or z_kj is None or t_kj is None:
-            y_kj = float("inf")
-            z_kj = None
-            t_kj = 0
-
-        if y_ij is None or z_ij is None or t_ij is None:
-            y_ij = float("inf")
-            z_ij = None
-            t_ij = 0
-
-        t_kj = t_kj // 1
-        t_ij = t_ij // 1
-
-        eps = np.finfo(float).eps
+        eps = 5
         i = self.id
         if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
             if z_ij == i:  # Rule 1.1
@@ -318,8 +306,7 @@ class agent:
 
             elif z_ij == k:
                 self.__reset(task)
-                self.__update_time(task)
-                return {"y": self.y, "z": self.z, "t": self.t}
+                return sender_info
 
             elif z_ij != i and z_ij != k:
                 self.__leave()
@@ -343,14 +330,18 @@ class agent:
                     self.__update_time(task)
                     return {"y": self.y, "z": self.z, "t": self.t}
 
-            elif z_ij == k:
-                self.__update(y_kj, z_kj, t_kj, task)
-                return sender_info
-
-            elif z_kj == z_ij:
-                if t_kj > t_ij:
+            elif z_ij == k: # Rule 3.2
+                if t_kj >= t_ij:    
                     self.__update(y_kj, z_kj, t_kj, task)
                     return sender_info
+                elif t_kj < t_ij:
+                    self.__reset(task)
+                    return sender_info
+                
+            elif z_kj == z_ij: # Rule 3.3
+                if t_kj > t_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return None
                 elif abs(t_kj - t_ij) <= eps:
                     self.__leave()
                     return None
@@ -358,7 +349,7 @@ class agent:
                     self.__leave()
                     return None
 
-            elif z_ij != i and z_ij != k:
+            elif z_ij != i and z_ij != k: # Rule 3.4
                 if y_kj > y_ij and t_kj >= t_ij:
                     self.__update(y_kj, z_kj, t_kj, task)
                     return sender_info
@@ -375,11 +366,11 @@ class agent:
                     self.__leave()
                     return {"y": self.y, "z": self.z, "t": self.t}
 
-            elif z_ij == None:
+            elif z_ij is None: # Rule 3.5
                 self.__update(y_kj, z_kj, t_kj, task)
                 return sender_info
 
-        elif z_kj == None:  # Rule 4 Agent k thinks None is z_kj
+        elif z_kj is None:  # Rule 4 Agent k thinks None is z_kj
             if z_ij == i:
                 self.__leave()
                 return {"y": self.y, "z": self.z, "t": self.t}
@@ -393,7 +384,7 @@ class agent:
                     self.__update(y_kj, z_kj, t_kj, task)
                     return sender_info
 
-            elif z_ij == None:
+            elif z_ij is None:
                 self.__leave()
                 return None
         # Default leave and rebroadcast
@@ -427,22 +418,22 @@ class agent:
         for k in self.Y:
             for j in self.tasks:
                 # Recieve info
-                y_kj = self.Y[k][0].get(j)  # Winning bids
-                z_kj = self.Y[k][1].get(j)  # Winning agent
-                t_kj = self.Y[k][2].get(j)  # Timestamps
-                sender_info = {"y": y_kj, "z": z_kj, "t": t_kj}
+                y_kj = self.Y[k][0].get(j,0)  # Winning bids
+                z_kj = self.Y[k][1].get(j,None)  # Winning agent
+                t_kj = self.Y[k][2].get(j,0)  # Timestamps
+                sender_info = {"y": self.Y[k][0], "z": self.Y[k][1].get(j), "t": self.Y[k][2]}
 
                 # Own info
-                z_ij = self.z.get(j)
-                y_ij = self.y.get(j)
-                t_ij = self.t.get(j)
+                y_ij = self.y.get(j,-1)
+                z_ij = self.z.get(j,None)
+                t_ij = self.t.get(j,0)
 
                 rebroadcast = self.__action_rule(k, j, z_kj, y_kj, z_ij, y_ij, t_kj, t_ij, sender_info)
                 if rebroadcast:
                     # self.__rebroadcast(rebroadcast)
                     update += 1
                     self.message_history.append(
-                        {"k": k, "y": y_kj, "z": z_kj, "t": t_kj, "Job": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij}
+                        {"a": k, "y": y_kj, "z": z_kj, "t": t_kj, "task": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij}
                     )
         return update
 
@@ -465,21 +456,19 @@ class agent:
             self.z[idx] = None
             self.t[idx] = int(time.monotonic())
 
-        self.bundle = self.bundle[:index]
-        self.path = [num for num in self.path if num not in self.bundle[index:]]
+        removal_list = self.bundle[index:]
         # TODO make sure to reimplement removel threshold
-        # self.removal_list[self.bundle[n_bar]] = self.removal_list[self.bundle[n_bar]] + 1
-
-    def __leave(self):
-        self.leave = True
-        pass
+        # self.removal_list[self.bundle[index]] = self.removal_list[self.bundle[index]] + 1
+        self.path = [num for num in self.path if num not in removal_list]
+        self.bundle = self.bundle[:index]
+        
 
     def __reset(self, task):
         self.leave = False
         self.y[task] = float("inf")
         self.z[task] = None
-        self.__update_path(task)
         self.t[task] = int(time.monotonic())
+        self.__update_path(task)
 
     def __leave(self):
         """
