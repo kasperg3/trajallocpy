@@ -68,6 +68,7 @@ class agent:
 
         self.removal_list = {}
         self.removal_threshold = 15
+        self.message_history = []
 
     def getPathTasks(self) -> List[TrajectoryTask]:
         result = []
@@ -76,7 +77,7 @@ class agent:
         return result
 
     def getTravelPath(self):
-        assigned_tasks = self.tasks[self.path]
+        assigned_tasks = self.getPathTasks()
         full_path = []
         if len(assigned_tasks) > 0:
             path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, verify=False)
@@ -243,204 +244,242 @@ class agent:
             self.z[J_i] = self.id
             self.t[J_i] = int(time.monotonic())  # Update the time of the winning bet
 
+    def __update_time(self, Job):
+        self.t[Job] = int(time.monotonic())
+
+    def __action_rule(self, k, task, z_kj, y_kj, z_ij, y_ij, t_kj, t_ij, sender_info):
+        if y_kj is None or z_kj is None or t_kj is None:
+            y_kj = float("inf")
+            z_kj = None
+            t_kj = 0
+
+        if y_ij is None or z_ij is None or t_ij is None:
+            y_ij = float("inf")
+            z_ij = None
+            t_ij = 0
+
+        t_kj = t_kj // 1
+        t_ij = t_ij // 1
+
+        eps = np.finfo(float).eps
+        i = self.id
+        if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
+            if z_ij == i:  # Rule 1.1
+                if y_kj > y_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+                elif y_kj == y_ij and z_kj < z_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+                elif y_kj < y_ij:
+                    self.__update_time(task)
+                    return {"y": self.y, "z": self.z, "t": self.t}
+
+            elif z_ij == k:  # Rule 1.2
+                if t_kj > t_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return None
+                elif abs(t_kj - t_ij) < eps:
+                    self.__leave()
+                    return None
+                elif t_kj < t_ij:
+                    self.__leave()
+                    return None
+
+            elif z_ij != i and z_ij != k:  # Rule 1.3
+                if y_kj > y_ij and t_kj >= t_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+
+                elif y_kj < y_ij and t_kj <= t_ij:
+                    self.__leave()
+                    return {"y": self.y, "z": self.z, "t": self.t}
+
+                elif y_kj == y_ij:
+                    self.__leave()
+                    return {"y": self.y, "z": self.z, "t": self.t}
+
+                elif y_kj < y_ij and t_kj > t_ij:
+                    self.__reset(task)
+                    return sender_info
+
+                elif y_kj > y_ij and t_kj < t_ij:
+                    self.__reset(task)
+                    return sender_info
+
+            elif z_ij == None:  # Rule 1.4
+                self.__update(y_kj, z_kj, t_kj, task)
+                return sender_info
+
+        elif z_kj == i:  # Rule 2 Agent k thinks i is z_kj
+            if z_ij == i and (abs(t_kj - t_ij) < eps):  # Rule 2.1
+                self.__leave()
+                return None
+
+            elif z_ij == k:
+                self.__reset(task)
+                self.__update_time(task)
+                return {"y": self.y, "z": self.z, "t": self.t}
+
+            elif z_ij != i and z_ij != k:
+                self.__leave()
+                return {"y": self.y, "z": self.z, "t": self.t}
+
+            elif z_ij == None:
+                self.__reset(task)
+                return {"y": self.y, "z": self.z, "t": self.t}
+
+        elif z_kj != k and z_kj != i:  # Rule 3 Agent k thinks m is z_kj
+            if z_ij == i:  # Rule 3.1
+                if y_kj > y_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+
+                elif y_kj == y_ij and z_kj < z_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+
+                elif y_kj < y_ij:
+                    self.__update_time(task)
+                    return {"y": self.y, "z": self.z, "t": self.t}
+
+            elif z_ij == k:
+                self.__update(y_kj, z_kj, t_kj, task)
+                return sender_info
+
+            elif z_kj == z_ij:
+                if t_kj > t_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+                elif abs(t_kj - t_ij) <= eps:
+                    self.__leave()
+                    return None
+                elif t_kj < t_ij:
+                    self.__leave()
+                    return None
+
+            elif z_ij != i and z_ij != k:
+                if y_kj > y_ij and t_kj >= t_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+
+                elif y_kj < y_ij and t_kj <= t_ij:
+                    self.__leave()
+                    return {"y": self.y, "z": self.z, "t": self.t}
+
+                elif y_kj < y_ij and t_kj > t_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+
+                elif y_kj > y_ij and t_kj < t_ij:
+                    self.__leave()
+                    return {"y": self.y, "z": self.z, "t": self.t}
+
+            elif z_ij == None:
+                self.__update(y_kj, z_kj, t_kj, task)
+                return sender_info
+
+        elif z_kj == None:  # Rule 4 Agent k thinks None is z_kj
+            if z_ij == i:
+                self.__leave()
+                return {"y": self.y, "z": self.z, "t": self.t}
+
+            elif z_ij == k:
+                self.__update(y_kj, z_kj, t_kj, task)
+                return sender_info
+
+            elif z_ij != i and z_ij != k:
+                if t_kj > t_ij:
+                    self.__update(y_kj, z_kj, t_kj, task)
+                    return sender_info
+
+            elif z_ij == None:
+                self.__leave()
+                return None
+        # Default leave and rebroadcast
+        self.__leave()
+        return {"y": self.y, "z": self.z, "t": self.t}
+
+    def __rebroadcast(self, information):
+        y = information["y"]
+        z = information["z"]
+        t = information["t"]
+        # TODO
+        self.__send_information(y, z, t)
+
+    def __receive_information(self):
+        message = self.my_socket.recieve(self.agent)
+        if message is None:
+            return None
+        return message
+
+    def __send_information(self, y, z, t, k=None):
+        msg = {self.agent: {"y": y, "z": z, "t": t}}
+        self.my_socket.send(self.agent, msg, k)
+
     def update_task(self):
-        id_list = list(self.Y.keys())
-        id_list.insert(0, self.id)
+        if self.Y is None:
+            return
 
-        # Update time list
-        for id in list(self.t.keys()):
-            if id in id_list:
-                self.t[id] = int(time.monotonic())
-            else:
-                s_list = []
-                for neighbor_id in id_list[1:]:
-                    s_list.append(self.Y[neighbor_id][2][id])
-                if len(s_list) > 0:
-                    self.t[id] = max(s_list)
-
-        rebroadcast_information = {}
-
+        self.message_history = []
         # Update Process
+        update = 0
         for k in self.Y:
             for j in self.tasks:
-                y_k = self.Y[k][0]  # Winning bids
-                z_k = self.Y[k][1]  # Winning agent
-                t_k = self.Y[k][2]  # Timestamps
-                i = self.id
+                # Recieve info
+                y_kj = self.Y[k][0].get(j)  # Winning bids
+                z_kj = self.Y[k][1].get(j)  # Winning agent
+                t_kj = self.Y[k][2].get(j)  # Timestamps
+                sender_info = {"y": y_kj, "z": z_kj, "t": t_kj}
 
-                z_ij = self.z.get(j, None)
-                z_kj = z_k.get(j, None)
+                # Own info
+                z_ij = self.z.get(j)
+                y_ij = self.y.get(j)
+                t_ij = self.t.get(j)
 
-                y_ij = self.y.get(j, -1.0)
-                y_kj = y_k.get(j, -1.0)
+                rebroadcast = self.__action_rule(k, j, z_kj, y_kj, z_ij, y_ij, t_kj, t_ij, sender_info)
+                if rebroadcast:
+                    # self.__rebroadcast(rebroadcast)
+                    update += 1
+                    self.message_history.append(
+                        {"k": k, "y": y_kj, "z": z_kj, "t": t_kj, "Job": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij}
+                    )
+        return update
 
-                t_ij = self.t.get(j, 0)
-                t_kj = t_k.get(j, 0)
-                # Rule Based Update
-                # Rule 1~4
-                if z_kj == k:
-                    # Rule 1
-                    if z_ij == self.id:
-                        if y_kj > y_ij:
-                            self.__update(j, y_kj, z_kj, t_kj)
-                        elif abs(y_kj - y_ij) < np.finfo(float).eps:  # Tie Breaker
-                            if k < self.id:
-                                self.__update(j, y_kj, z_kj, t_kj)
-                        else:
-                            self.__leave()
-                    # Rule 2
-                    elif z_ij == k:
-                        self.__update(j, y_kj, z_kj, t_kj)
-                    # Rule 3
-                    elif z_ij != -1:
-                        m = z_ij
-                        if (t_kj > t_ij) or (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj, t_kj)
-                        elif abs(y_kj - y_ij) < np.finfo(float).eps and k < self.id:  # Tie Breaker
-                            self.__update(j, y_kj, z_kj, t_kj)
-                    # Rule 4
-                    elif z_ij == -1:
-                        self.__update(j, y_kj, z_kj, t_kj)
-                    else:
-                        raise Exception("Error while updating")
-                # Rule 5~8
-                elif z_kj == i:
-                    # Rule 5
-                    if z_ij == i:
-                        self.__leave()
-                    # Rule 6
-                    elif z_ij == k:
-                        self.__reset(j)
-                    # Rule 7
-                    elif z_ij != -1:
-                        m = z_ij
-                        if t_kj > t_ij:
-                            self.__reset(j)
-                    # Rule 8
-                    elif z_ij == -1:
-                        self.__leave()
-                    else:
-                        raise Exception("Error while updating")
-                # Rule 9~13
-                elif z_kj != -1:
-                    m = z_kj
-                    # Rule 9
-                    if z_ij == i:
-                        if (t_kj >= t_ij) and (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj, t_kj)
-                        # Tie Breaker
-                        elif (t_kj >= t_ij) and (abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id):
-                            self.__update(j, y_kj, z_kj, t_kj)
-                    # Rule 10
-                    elif z_ij == k:
-                        if t_kj > t_ij:
-                            self.__update(j, y_kj, z_kj, t_kj)
-                        else:
-                            self.__reset(j)
-                    # Rule 11
-                    elif z_ij == m:
-                        if t_kj > t_ij:
-                            self.__update(j, y_kj, z_kj, t_kj)
-                    # Rule 12
-                    elif z_ij != -1:
-                        n = z_ij
-                        if (t_kj > t_ij) and (t_k[n] > self.t[n]):
-                            self.__update(j, y_kj, z_kj, t_kj)
-                        elif (t_kj > t_ij) and (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj, t_kj)
-                        # Tie Breaker
-                        elif (t_kj > t_ij) and (abs(y_kj - y_ij) < np.finfo(float).eps):
-                            if m < n:
-                                self.__update(j, y_kj, z_kj, t_kj)
-                        elif (t_k[n] > self.t[n]) and (t_ij > t_kj):
-                            self.__update(j, y_kj, z_kj, t_kj)
-                    # Rule 13
-                    elif z_ij == -1:
-                        if t_kj > t_ij:
-                            self.__update(j, y_kj, z_kj, t_kj)
-                    else:
-                        raise Exception("Error while updating")
-                # Rule 14~17
-                elif z_kj == -1:
-                    # Rule 14
-                    if z_ij == i:
-                        self.__leave()
-                    # Rule 15
-                    elif z_ij == k:
-                        self.__update(j, y_kj, z_kj, t_kj)
-                    # Rule 16
-                    elif z_ij != -1:
-                        m = z_ij
-                        if t_kj > t_ij:
-                            self.__update(j, y_kj, z_kj, t_kj)
-                    # Rule 17
-                    elif z_ij == -1:
-                        self.__leave()
-                    else:
-                        raise Exception("Error while updating")
-                else:
-                    raise Exception("Error while updating")
-
-        # TODO the code under here into the update funciton instead
-
-        n_bar = len(self.bundle)
-        # Get n_bar
-        for n in range(len(self.bundle)):
-            b_n = self.bundle[n]
-            if self.z[b_n] != self.id and n_bar > n:
-                n_bar = n  # Find the minimum n in the agents bundle
-
-        b_idx1 = copy.deepcopy(self.bundle[n_bar + 1 :])
-
-        if len(b_idx1) > 0:
-            self.y[b_idx1] = 0
-            self.z[b_idx1] = -1
-
-        tasks_to_delete = self.bundle[n_bar:]
-
-        # Keep track of how many times this particular task has been removed
-        if len(tasks_to_delete) != 0:
-            self.removal_list[self.bundle[n_bar]] = self.removal_list[self.bundle[n_bar]] + 1
-
-        del self.bundle[n_bar:]
-
-        self.path = [ele for ele in self.path if ele not in tasks_to_delete]
-
-        converged = False
-        # The agent has converged to a solution of no conflicts has been detected
-        if len(tasks_to_delete) == 0:
-            converged = True
-
-        return converged
-
-    def __update(self, j, y_kj, z_kj, t_kj):
+    def __update(self, y_kj, z_kj, t_kj, j):
         """
         Update values
         """
         self.y[j] = y_kj
         self.z[j] = z_kj
         self.t[j] = t_kj
-        # self.__update_path(j)
+        self.__update_path(j)
 
-    def __update_path(self, Job):
-        if Job not in self.b:
+    def __update_path(self, task):
+        if task not in self.bundle:
             return
-        index = self.b.index(Job)
-        b_retry = self.b[index + 1 :]
-        for job in b_retry:
-            self.y[job] = float("inf")
-            self.z[job] = None
-            self.t[Job] = datetime.now()
+        index = self.bundle.index(task)
+        b_retry = self.bundle[index + 1 :]
+        for idx in b_retry:
+            self.y[idx] = float("inf")
+            self.z[idx] = None
+            self.t[idx] = int(time.monotonic())
 
-        self.b = self.b[:index]
-        self.p = self.p[:index]
+        self.bundle = self.bundle[:index]
+        self.path = [num for num in self.path if num not in self.bundle[index:]]
+        # TODO make sure to reimplement removel threshold
+        # self.removal_list[self.bundle[n_bar]] = self.removal_list[self.bundle[n_bar]] + 1
 
-    def __reset(self, j):
-        """
-        Reset values
-        """
-        self.y[j] = 0
-        self.z[j] = -1  # -1 means "none"
+    def __leave(self):
+        self.leave = True
+        pass
+
+    def __reset(self, task):
+        self.leave = False
+        self.y[task] = float("inf")
+        self.z[task] = None
+        self.__update_path(task)
+        self.t[task] = int(time.monotonic())
 
     def __leave(self):
         """

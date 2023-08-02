@@ -131,11 +131,13 @@ class Runner:
                 robot.receive_message(Y)
 
             # Phase 2: Consensus Process
+            messages = 0
             for robot in self.robot_list:
                 # Update local information and decision
-                if Y is not None:
-                    converged = robot.update_task()
-                    converged_list.append(converged)
+                messages += robot.update_task()
+
+            if messages == 0:
+                break
 
             if debug:
                 # Plot
@@ -153,8 +155,6 @@ class Runner:
 
             t += 1
 
-            if sum(converged_list) == len(self.robot_list):
-                break
         self.iterations = t
 
         if profiling_enabled:

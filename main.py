@@ -153,5 +153,5 @@ if __name__ == "__main__":
             n_agents=n_agents,
             capacity=capacity,
             show_plots=True,
-            debug=False,
+            debug=True,
         )
