@@ -233,7 +233,7 @@ class agent:
         return best_task, best_pos, c
 
     def build_bundle(self):
-        bundle_time = int(time.monotonic())
+        bundle_time = time.monotonic()
         while self.getTotalTravelCost(self.getPathTasks()) <= self.capacity:
             J_i, n_J, c = self.getCij()
             if J_i is None:
@@ -246,7 +246,7 @@ class agent:
             self.t[J_i] = bundle_time  # Update the time of the winning bet
 
     def __update_time(self, task):
-        self.t[task] = int(time.monotonic())
+        self.t[task] = time.monotonic()
 
     def __action_rule(self, k, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij, sender_info):
         eps = 5
@@ -299,8 +299,8 @@ class agent:
                 self.__update(y_kj, z_kj, t_kj, task)
                 return sender_info
 
-        elif z_kj == i:  # Rule 2 Agent k thinks i is z_kj
-            if z_ij == i and (abs(t_kj - t_ij) < eps):  # Rule 2.1
+        elif z_kj == i:  # Rule 2 Agent k thinks winning agent is i
+            if z_ij == i and (abs(t_kj - t_ij) < eps):  # Rule 2.1 # Agent i thinks itself is the winner
                 self.__leave()
                 return None
 
@@ -316,7 +316,7 @@ class agent:
                 self.__leave(task)
                 return {"y": self.y, "z": self.z, "t": self.t}
 
-        elif z_kj != k and z_kj != i:  # Rule 3 Agent k thinks m is z_kj
+        elif z_kj != k and z_kj != i:  # Rule 3 Agent k think the winner of task j is not the itself nor agent i
             if z_ij == i:  # Rule 3.1
                 if y_kj > y_ij:
                     self.__update(y_kj, z_kj, t_kj, task)
@@ -452,7 +452,7 @@ class agent:
         for idx in b_retry:
             self.y[idx] = 0
             self.z[idx] = -1
-            self.t[idx] = int(time.monotonic())
+            self.t[idx] = time.monotonic()
 
         removal_list = self.bundle[index:]
         # TODO make sure to reimplement removel threshold
@@ -463,7 +463,7 @@ class agent:
     def __reset(self, task):
         self.y[task] = 0
         self.z[task] = -1
-        self.t[task] = int(time.monotonic())
+        self.t[task] = time.monotonic()
         self.__update_path(task)
 
     def __leave(self):

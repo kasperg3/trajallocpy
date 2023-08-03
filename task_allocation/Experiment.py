@@ -3,7 +3,7 @@ import timeit
 import numpy as np
 import shapely
 
-from task_allocation import ACBBA, Agent, CoverageProblem, Utility
+from task_allocation import ACBBA, CBBA, Agent, CoverageProblem, Utility
 
 
 class Runner:
@@ -135,6 +135,13 @@ class Runner:
                 # Update local information and decision
                 messages += robot.update_task()
 
+            # #CBBA
+            # converged_list = []
+            # for robot in self.robot_list:
+            #     if Y is not None:
+            #         converged = robot.update_task()
+            #         converged_list.append(converged)
+
             if messages == 0:
                 break
 
@@ -152,6 +159,8 @@ class Runner:
                 for robot in self.robot_list:
                     print(robot.getPath())
 
+            if sum(converged_list) == len(self.robot_list):
+                break
             t += 1
 
         self.iterations = t
