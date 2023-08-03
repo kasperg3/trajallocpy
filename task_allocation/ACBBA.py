@@ -213,7 +213,7 @@ class agent:
         # try all tasks
         for j, task in self.tasks.items():
             # If already in the bundle list
-            if j in self.bundle:
+            if j in self.bundle or self.removal_list.get(j, 0) > self.removal_threshold:
                 c = 0  # Minimum Score
             else:
                 # for each j calculate the path reward at each location in the local path
@@ -422,7 +422,7 @@ class agent:
                 y_ij = self.y.get(j, 0)
                 z_ij = self.z.get(j, -1)
                 t_ij = self.t.get(j, 0)
-
+                # TODO parse the information in a better way
                 rebroadcast = self.__action_rule(
                     k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij, sender_info=sender_info
                 )
@@ -454,10 +454,9 @@ class agent:
             self.z[idx] = -1
             self.t[idx] = time.monotonic()
 
-        removal_list = self.bundle[index:]
-        # TODO make sure to reimplement removel threshold
-        # self.removal_list[self.bundle[index]] = self.removal_list[self.bundle[index]] + 1
-        self.path = [num for num in self.path if num not in removal_list]
+        # TODO add removal list when the update action is fixed
+        # self.removal_list[task] = self.removal_list.get(task, 0) + 1
+        self.path = [num for num in self.path if num not in self.bundle[index:]]
         self.bundle = self.bundle[:index]
 
     def __reset(self, task):
