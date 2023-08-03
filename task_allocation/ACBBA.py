@@ -220,7 +220,7 @@ class agent:
                 for n in range(len(self.path) + 1):
                     S_pj, should_be_reversed = self.calculatePathRewardWithNewTask(j, n)
                     c_ijn = S_pj - S_p
-                    if c <= c_ijn and c > self.y.get(j, -1):
+                    if c_ijn > c and c_ijn > self.y.get(j, -1):
                         c = c_ijn  # Store the cost
                         best_pos = n
                         reverse = should_be_reversed
@@ -454,8 +454,7 @@ class agent:
             self.z[idx] = -1
             self.t[idx] = time.monotonic()
 
-        # TODO add removal list when the update action is fixed
-        # self.removal_list[task] = self.removal_list.get(task, 0) + 1
+        self.removal_list[task] = self.removal_list.get(task, 0) + 1
         self.path = [num for num in self.path if num not in self.bundle[index:]]
         self.bundle = self.bundle[:index]
 
