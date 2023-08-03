@@ -243,12 +243,12 @@ class agent:
 
             self.y[J_i] = c
             self.z[J_i] = self.id
-            self.t[J_i] = bundle_time   # Update the time of the winning bet
+            self.t[J_i] = bundle_time  # Update the time of the winning bet
 
     def __update_time(self, task):
         self.t[task] = int(time.monotonic())
 
-    def __action_rule(self, k, task, z_kj, y_kj,  t_kj,z_ij, y_ij, t_ij, sender_info):
+    def __action_rule(self, k, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij, sender_info):
         eps = 5
         i = self.id
         if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
@@ -313,7 +313,7 @@ class agent:
                 return {"y": self.y, "z": self.z, "t": self.t}
 
             elif z_ij == -1:
-                self.__reset(task)
+                self.__leave(task)
                 return {"y": self.y, "z": self.z, "t": self.t}
 
         elif z_kj != k and z_kj != i:  # Rule 3 Agent k thinks m is z_kj
@@ -330,15 +330,15 @@ class agent:
                     self.__update_time(task)
                     return {"y": self.y, "z": self.z, "t": self.t}
 
-            elif z_ij == k: # Rule 3.2
-                if t_kj >= t_ij:    
+            elif z_ij == k:  # Rule 3.2
+                if t_kj >= t_ij:
                     self.__update(y_kj, z_kj, t_kj, task)
                     return sender_info
                 elif t_kj < t_ij:
                     self.__reset(task)
                     return sender_info
-                
-            elif z_kj == z_ij: # Rule 3.3
+
+            elif z_kj == z_ij:  # Rule 3.3
                 if t_kj > t_ij:
                     self.__update(y_kj, z_kj, t_kj, task)
                     return None
@@ -349,47 +349,42 @@ class agent:
                     self.__leave()
                     return None
 
-            elif z_ij != i and z_ij != k: # Rule 3.4
+            elif z_ij != i and z_ij != k:  # Rule 3.4
                 if y_kj > y_ij and t_kj >= t_ij:
                     self.__update(y_kj, z_kj, t_kj, task)
                     return sender_info
-
                 elif y_kj < y_ij and t_kj <= t_ij:
                     self.__leave()
                     return {"y": self.y, "z": self.z, "t": self.t}
-
-                elif y_kj < y_ij and t_kj > t_ij:
-                    self.__update(y_kj, z_kj, t_kj, task)
-                    return sender_info
-
-                elif y_kj > y_ij and t_kj < t_ij:
+                elif y_kj == y_ij:
                     self.__leave()
                     return {"y": self.y, "z": self.z, "t": self.t}
+                elif y_kj < y_ij and t_kj > t_ij:
+                    self.__reset(task)
+                    return sender_info
+                elif y_kj > y_ij and t_kj < t_ij:
+                    self.__reset(task)
+                    return sender_info
 
-            elif z_ij == -1: # Rule 3.5
+            elif z_ij == -1:  # Rule 3.5
                 self.__update(y_kj, z_kj, t_kj, task)
                 return sender_info
 
         elif z_kj == -1:  # Rule 4 Agent k thinks None is z_kj
             if z_ij == i:
-                self.__leave()
-                return {"y": self.y, "z": self.z, "t": self.t}
-
+                return self.__leave()
             elif z_ij == k:
                 self.__update(y_kj, z_kj, t_kj, task)
                 return sender_info
-
             elif z_ij != i and z_ij != k:
                 if t_kj > t_ij:
                     self.__update(y_kj, z_kj, t_kj, task)
                     return sender_info
-
             elif z_ij == -1:
                 self.__leave()
                 return None
         # Default leave and rebroadcast
-        self.__leave()
-        return {"y": self.y, "z": self.z, "t": self.t}
+        return self.__leave()
 
     def __rebroadcast(self, information):
         y = information["y"]
@@ -418,17 +413,19 @@ class agent:
         for k in self.Y:
             for j in self.tasks:
                 # Recieve info
-                y_kj = self.Y[k][0].get(j,0)  # Winning bids
-                z_kj = self.Y[k][1].get(j,-1)  # Winning agent
-                t_kj = self.Y[k][2].get(j,0)  # Timestamps
+                y_kj = self.Y[k][0].get(j, 0)  # Winning bids
+                z_kj = self.Y[k][1].get(j, -1)  # Winning agent
+                t_kj = self.Y[k][2].get(j, 0)  # Timestamps
                 sender_info = {"y": self.Y[k][0], "z": self.Y[k][1], "t": self.Y[k][2]}
 
                 # Own info
-                y_ij = self.y.get(j,0)
-                z_ij = self.z.get(j,-1)
-                t_ij = self.t.get(j,0)
+                y_ij = self.y.get(j, 0)
+                z_ij = self.z.get(j, -1)
+                t_ij = self.t.get(j, 0)
 
-                rebroadcast = self.__action_rule(k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij, sender_info=sender_info)
+                rebroadcast = self.__action_rule(
+                    k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij, sender_info=sender_info
+                )
                 if rebroadcast:
                     # self.__rebroadcast(rebroadcast)
                     update += 1
@@ -436,7 +433,6 @@ class agent:
                     self.message_history.append(
                         {"a": k, "y": y_kj, "z": z_kj, "t": t_kj, "task": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij}
                     )
-                    
         return update
 
     def __update(self, y_kj, z_kj, t_kj, j):
@@ -463,7 +459,6 @@ class agent:
         # self.removal_list[self.bundle[index]] = self.removal_list[self.bundle[index]] + 1
         self.path = [num for num in self.path if num not in removal_list]
         self.bundle = self.bundle[:index]
-        
 
     def __reset(self, task):
         self.y[task] = 0
@@ -475,4 +470,4 @@ class agent:
         """
         Do nothing
         """
-        pass
+        return {"y": self.y, "z": self.z, "t": self.t}
