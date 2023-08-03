@@ -214,7 +214,7 @@ class agent:
         for j, task in self.tasks.items():
             # If already in the bundle list
             if j in self.bundle or self.removal_list.get(j, 0) > self.removal_threshold:
-                c = 0  # Minimum Score
+                continue  # Do not include if already in the bundle
             else:
                 # for each j calculate the path reward at each location in the local path
                 for n in range(len(self.path) + 1):
