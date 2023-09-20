@@ -3,7 +3,7 @@ import timeit
 import numpy as np
 import shapely
 
-from task_allocation import CBBA, Agent, CoverageProblem, Utility
+from task_allocation import ACBBA, CBBA, Agent, CoverageProblem, Utility
 
 
 class Runner:
@@ -14,7 +14,7 @@ class Runner:
         # TODO add all agent positions to the travelgraph before creating the cbba agents!!!!!
         for agent in agents:
             self.robot_list.append(
-                CBBA.agent(
+                ACBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
@@ -105,7 +105,6 @@ class Runner:
             print("Iteration {}".format(t + 1))
             # Phase 1: Auction Process
             for robot in self.robot_list:
-                # TODO parellalize this!
                 robot.build_bundle()
             if debug:
                 print("Bundle")
@@ -131,11 +130,20 @@ class Runner:
                 robot.receive_message(Y)
 
             # Phase 2: Consensus Process
+            messages = 0
             for robot in self.robot_list:
                 # Update local information and decision
-                if Y is not None:
-                    converged = robot.update_task()
-                    converged_list.append(converged)
+                messages += robot.update_task()
+
+            # #CBBA
+            # converged_list = []
+            # for robot in self.robot_list:
+            #     if Y is not None:
+            #         converged = robot.update_task()
+            #         converged_list.append(converged)
+
+            if messages == 0:
+                break
 
             if debug:
                 # Plot
@@ -151,10 +159,10 @@ class Runner:
                 for robot in self.robot_list:
                     print(robot.getPath())
 
-            t += 1
-
             if sum(converged_list) == len(self.robot_list):
                 break
+            t += 1
+
         self.iterations = t
 
         if profiling_enabled:
