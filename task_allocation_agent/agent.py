@@ -1,10 +1,13 @@
+import sys
+
 import numpy as np
 import rclpy
 import shapely
 from rclpy.node import Node
 from std_msgs.msg import String
 
-from task_allocation import ACBBA, Agent, CoverageProblem, Experiment, Utility
+sys.path.append('../trajectory-task-allocation')
+from task_allocation import ACBBA, Agent, CoverageProblem
 
 
 class RosAgent(Node):

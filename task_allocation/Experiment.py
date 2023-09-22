@@ -11,7 +11,6 @@ class Runner:
         # Task definition
         self.coverage_problem = coverage_problem
         self.robot_list = []
-        # TODO add all agent positions to the travelgraph before creating the cbba agents!!!!!
         for agent in agents:
             self.robot_list.append(
                 ACBBA.agent(

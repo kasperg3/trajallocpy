@@ -4,4 +4,4 @@ geojson
 scipy
 networkx
 matplotlib
-extremityplanner[numba]
+extremitypathfinder[numba]
