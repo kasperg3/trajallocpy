@@ -124,18 +124,19 @@ class Runner:
                 connected.remove(robot_id)
 
                 Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected} if len(connected) > 0 else None
+                robot.Y = Y
 
             # Phase 2: Consensus Process
             messages = 0
             for robot in self.robot_list:
                 # Update local information and decision
-                messages += robot.update_task(Y)
+                messages += robot.update_task(robot.Y)
 
             # #CBBA
             # converged_list = []
             # for robot in self.robot_list:
             #     if Y is not None:
-            #         converged = robot.update_task(Y)
+            #         converged = robot.update_task()
             #         converged_list.append(converged)
 
             if messages == 0:
