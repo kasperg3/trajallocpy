@@ -390,18 +390,19 @@ class agent:
         y = information["y"]
         z = information["z"]
         t = information["t"]
-        # TODO
         self.__send_information(y, z, t)
 
     def __receive_information(self):
-        message = self.my_socket.recieve(self.agent)
-        if message is None:
-            return None
-        return message
+        raise NotImplementedError()
+        # message = self.my_socket.recieve(self.agent)
+        # if message is None:
+        #     return None
+        # return message
 
     def __send_information(self, y, z, t, k=None):
-        msg = {self.agent: {"y": y, "z": z, "t": t}}
-        self.my_socket.send(self.agent, msg, k)
+        raise NotImplementedError()
+        # msg = {self.agent: {"y": y, "z": z, "t": t}}
+        # self.my_socket.send(self.agent, msg, k)
 
     def update_task(self):
         if self.Y is None:
@@ -427,7 +428,7 @@ class agent:
                     k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij, sender_info=sender_info
                 )
                 if rebroadcast:
-                    # self.__rebroadcast(rebroadcast)
+                    self.__rebroadcast(rebroadcast)
                     update += 1
                     # print({"a": k, "y": y_kj, "z": z_kj, "t": t_kj, "task": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij})
                     self.message_history.append(

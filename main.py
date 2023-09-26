@@ -58,15 +58,13 @@ def main(
             "tasks": shapely.MultiLineString(),
             "boundary": shapely.Polygon(),
         }
-
+        
         for feature in features:
             if feature["geometry"]:
                 geometries[feature["id"]] = geometry.shape(feature["geometry"])
         number_of_tasks = len(list(geometries["tasks"].geoms))
 
         print(file_name, " Tasks: ", number_of_tasks)
-        # if number_of_tasks > 250:
-        #     continue
         # Initialize coverage problem and the agents
         geometries["boundary"] = scale(geometries["boundary"], xfact=1.01, yfact=1.01)
 
@@ -85,10 +83,6 @@ def main(
         exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
         allocations = exp.solve(profiling_enabled=False, debug=debug)
-
-        # replanning
-        # exp.add_time(100)
-        # exp.replan()
 
         # TODO find a way of adding an agent based on id instead of index in a list
         # This has some more work to it as this requires the index querying in cbba to be done based on hash indexing

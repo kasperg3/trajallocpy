@@ -6,6 +6,6 @@ from dataclasses import dataclass
 class agent:
     id: int
     position: list
-    capacity: int
+    capacity: int # time in seconds
     max_velocity: float = 3  # m/s
     max_acceleration: float = 1  # m/s^2

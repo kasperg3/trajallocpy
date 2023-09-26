@@ -53,6 +53,7 @@ class RosAgent(Node):
         # self.bid_info_publisher(agent.send_message())
 
 
+
 def main(coverage_problem: CoverageProblem.CoverageProblem, agents: list[Agent.agent], enable_plotting=False, args=None):
     # Load the problem
     robot_list = []
