@@ -18,7 +18,6 @@ class Runner:
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
-                    number_of_agents=len(agents),
                     capacity=agent.capacity,
                 )
             )
@@ -92,7 +91,6 @@ class Runner:
 
         if self.plot:
             plotter = Utility.Plotter(self.robot_list, self.communication_graph)
-
             # Plot the search area and restricted area
             plotter.plotPolygon(self.coverage_problem.getSearchArea(), color=(0, 0, 0, 0.5))
             plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(0, 0, 0, 0.2), fill=True)
@@ -114,6 +112,7 @@ class Runner:
                     print(robot.getPath())
 
             # Communication stage
+            # TODO This should be handled internally in the agents
             # Send winning bid list to neighbors (depend on env)
             message_pool = [robot.send_message() for robot in self.robot_list]
             for robot_id, robot in enumerate(self.robot_list):
@@ -126,19 +125,17 @@ class Runner:
 
                 Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected} if len(connected) > 0 else None
 
-                robot.receive_message(Y)
-
             # Phase 2: Consensus Process
             messages = 0
             for robot in self.robot_list:
                 # Update local information and decision
-                messages += robot.update_task()
+                messages += robot.update_task(Y)
 
             # #CBBA
             # converged_list = []
             # for robot in self.robot_list:
             #     if Y is not None:
-            #         converged = robot.update_task()
+            #         converged = robot.update_task(Y)
             #         converged_list.append(converged)
 
             if messages == 0:
@@ -187,46 +184,6 @@ class Runner:
             plotter.show()
 
         return result
-
-    def plan(self):
-        while True:
-            converged_list = []
-            # Phase 1: Auction Process
-            for robot in self.robot_list:
-                robot.build_bundle()
-
-            # Communication stage
-            # Send winning bid list to neighbors (depend on env)
-            message_pool = [robot.send_message() for robot in self.robot_list]
-            for robot_id, robot in enumerate(self.robot_list):
-                # Recieve winning bidlist from neighbors
-                g = self.communication_graph[robot_id]
-
-                (connected,) = np.where(g == 1)
-                connected = list(connected)
-                connected.remove(robot_id)
-
-                Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected} if len(connected) > 0 else None
-
-                robot.receive_message(Y)
-
-            # Phase 2: Consensus Process
-            for robot in self.robot_list:
-                # Update local information and decision
-                if Y is not None:
-                    converged = robot.update_task()
-                    converged_list.append(converged)
-
-            if sum(converged_list) == len(self.robot_list):
-                break
-
-    def add_agent(self, agent: Agent):
-        # TODO: Add an agent to self.robot_list
-
-        # Initialize a new agent using the existing tasks/agents
-
-        # Update the existing agents matrices to include the new agent
-        pass
 
     def add_time(self, time_in_seconds):
         self.progressed_time = time_in_seconds

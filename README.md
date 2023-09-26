@@ -18,6 +18,11 @@
 
 # Running 
 
+pull the submodules with the dataset: 
+
+git submodule update --init
+
+
 # Installing as a package
 python3 setup.py bdist_wheel
 

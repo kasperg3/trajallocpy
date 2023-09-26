@@ -2,6 +2,7 @@ import copy
 import math
 import random
 import time
+from dataclasses import dataclass
 from functools import cache
 from typing import List
 
@@ -10,13 +11,20 @@ import numpy as np
 from task_allocation.Task import TrajectoryTask
 
 
+@dataclass
+class BidInformation:
+    y: dict
+    z: dict
+    t: dict
+    k: int
+
+
 class agent:
     def __init__(
         self,
         state,
         environment,
         id,
-        number_of_agents=None,
         capacity=None,
         tasks=None,
         color=None,
@@ -100,9 +108,6 @@ class agent:
     def send_message(self):
         return self.y, self.z, self.t
 
-    def receive_message(self, Y):
-        self.Y = Y
-
     def getTotalTravelCost(self, task_list: List[TrajectoryTask]):
         total_cost = 0
         if len(task_list) != 0:
@@ -136,14 +141,14 @@ class agent:
 
     @cache
     def getTravelCost(self, start, end):
-        # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
-        path, dist = self.environment.find_shortest_path(start, end, verify=False)
-
-        # Travelcost in seconds
-        # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
-        # dist = [(a - b) ** 2 for a, b in zip(start, end)]
-        # dist = math.sqrt(sum(dist))
-        # result = dist / self.max_velocity
+        # If there is no environment defined, use euclidean
+        if self.environment is None:
+            # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
+            dist = [(a - b) ** 2 for a, b in zip(start, end)]
+            dist = math.sqrt(sum(dist))
+            result = dist / self.max_velocity
+        else:
+            path, dist = self.environment.find_shortest_path(start, end, verify=False)
 
         # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
@@ -214,7 +219,7 @@ class agent:
         for j, task in self.tasks.items():
             # If already in the bundle list
             if j in self.bundle or self.removal_list.get(j, 0) > self.removal_threshold:
-                continue  # Do not include if already in the bundle
+                continue  # Do not include if already in the bundle or if the removal threshold is exceeded
             else:
                 # for each j calculate the path reward at each location in the local path
                 for n in range(len(self.path) + 1):
@@ -248,9 +253,10 @@ class agent:
     def __update_time(self, task):
         self.t[task] = time.monotonic()
 
-    def __action_rule(self, k, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij, sender_info):
+    def __action_rule(self, k, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij, sender_info) -> BidInformation:
         eps = 5
         i = self.id
+        own_info = BidInformation(y=self.y, z=self.z, t=self.t, k=self.id)
         if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
             if z_ij == i:  # Rule 1.1
                 if y_kj > y_ij:
@@ -261,7 +267,7 @@ class agent:
                     return sender_info
                 elif y_kj < y_ij:
                     self.__update_time(task)
-                    return {"y": self.y, "z": self.z, "t": self.t}
+                    return own_info
 
             elif z_ij == k:  # Rule 1.2
                 if t_kj > t_ij:
@@ -281,11 +287,11 @@ class agent:
 
                 elif y_kj < y_ij and t_kj <= t_ij:
                     self.__leave()
-                    return {"y": self.y, "z": self.z, "t": self.t}
+                    return own_info
 
                 elif y_kj == y_ij:
                     self.__leave()
-                    return {"y": self.y, "z": self.z, "t": self.t}
+                    return own_info
 
                 elif y_kj < y_ij and t_kj > t_ij:
                     self.__reset(task)
@@ -310,11 +316,11 @@ class agent:
 
             elif z_ij != i and z_ij != k:
                 self.__leave()
-                return {"y": self.y, "z": self.z, "t": self.t}
+                return own_info
 
             elif z_ij == -1:
-                self.__leave(task)
-                return {"y": self.y, "z": self.z, "t": self.t}
+                self.__leave()
+                return own_info
 
         elif z_kj != k and z_kj != i:  # Rule 3 Agent k think the winner of task j is not the itself nor agent i
             if z_ij == i:  # Rule 3.1
@@ -328,7 +334,7 @@ class agent:
 
                 elif y_kj < y_ij:
                     self.__update_time(task)
-                    return {"y": self.y, "z": self.z, "t": self.t}
+                    return own_info
 
             elif z_ij == k:  # Rule 3.2
                 if t_kj >= t_ij:
@@ -355,10 +361,10 @@ class agent:
                     return sender_info
                 elif y_kj < y_ij and t_kj <= t_ij:
                     self.__leave()
-                    return {"y": self.y, "z": self.z, "t": self.t}
+                    return own_info
                 elif y_kj == y_ij:
                     self.__leave()
-                    return {"y": self.y, "z": self.z, "t": self.t}
+                    return own_info
                 elif y_kj < y_ij and t_kj > t_ij:
                     self.__reset(task)
                     return sender_info
@@ -383,14 +389,14 @@ class agent:
             elif z_ij == -1:
                 self.__leave()
                 return None
-        # Default leave and rebroadcast
+        # Default leave and rebroadcast own info
         return self.__leave()
 
     def __rebroadcast(self, information):
         y = information["y"]
         z = information["z"]
         t = information["t"]
-        self.__send_information(y, z, t)
+        self.send_information(y, z, t, self.id)
 
     def __receive_information(self):
         raise NotImplementedError()
@@ -399,25 +405,32 @@ class agent:
         #     return None
         # return message
 
-    def __send_information(self, y, z, t, k=None):
+    def send_information(self, y, z, t, k):
+        """This function is used for sharing information between agents and is not implemented in this base class
+        Raises
+        ------
+        NotImplementedError
+            _description_
+        """
         raise NotImplementedError()
         # msg = {self.agent: {"y": y, "z": z, "t": t}}
         # self.my_socket.send(self.agent, msg, k)
 
-    def update_task(self):
-        if self.Y is None:
+    def update_task(self, Y):
+        if Y is None:
             return
-
         self.message_history = []
         # Update Process
         update = 0
-        for k in self.Y:
+
+        # TODO only loop through new messages
+        for k in Y:
             for j in self.tasks:
                 # Recieve info
-                y_kj = self.Y[k][0].get(j, 0)  # Winning bids
-                z_kj = self.Y[k][1].get(j, -1)  # Winning agent
-                t_kj = self.Y[k][2].get(j, 0)  # Timestamps
-                sender_info = {"y": self.Y[k][0], "z": self.Y[k][1], "t": self.Y[k][2]}
+                y_kj = Y[k][0].get(j, 0)  # Winning bids
+                z_kj = Y[k][1].get(j, -1)  # Winning agent
+                t_kj = Y[k][2].get(j, 0)  # Timestamps
+                sender_info = BidInformation(y=Y[k][0], z=Y[k][1], t=Y[k][2], k=self.id)
 
                 # Own info
                 y_ij = self.y.get(j, 0)
@@ -428,7 +441,7 @@ class agent:
                     k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij, sender_info=sender_info
                 )
                 if rebroadcast:
-                    self.__rebroadcast(rebroadcast)
+                    # self.__rebroadcast(rebroadcast)
                     update += 1
                     # print({"a": k, "y": y_kj, "z": z_kj, "t": t_kj, "task": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij})
                     self.message_history.append(
@@ -469,4 +482,4 @@ class agent:
         """
         Do nothing
         """
-        return {"y": self.y, "z": self.z, "t": self.t}
+        return BidInformation(y=self.y, z=self.z, t=self.t, k=self.id)
