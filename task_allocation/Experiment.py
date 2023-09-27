@@ -16,7 +16,7 @@ class Runner:
                 ACBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
-                    environment=self.coverage_problem.environment,
+                    # environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
                 )
@@ -24,7 +24,6 @@ class Runner:
 
         self.communication_graph = np.ones((len(agents), len(agents)))
         self.plot = enable_plotting
-        self.progressed_time = 0
 
     def evaluateSolution(self):
         travel_length = 0
@@ -69,15 +68,6 @@ class Runner:
         )
 
     def solve(self, profiling_enabled=False, debug=False):
-        """_summary_
-
-        Parameters
-        ----------
-        profiling_enabled : bool, optional
-            _description_, by default False
-        debug : bool, optional
-            _description_, by default False
-        """
         if profiling_enabled:
             print("Profiling enabled!")
             import cProfile
@@ -130,7 +120,7 @@ class Runner:
             messages = 0
             for robot in self.robot_list:
                 # Update local information and decision
-                messages += robot.update_task(robot.Y)
+                messages += len(robot.update_task(robot.Y))
 
             # #CBBA
             # converged_list = []
@@ -174,10 +164,10 @@ class Runner:
 
         print("Robot Routes")
         result = {}
-        for robot in self.robot_list:
-            print(robot.getPath())
-            # TODO this should not be calculated here, but rather while solving...
-            result[robot.id] = robot.getTravelPath()
+        # for robot in self.robot_list:
+        #     print(robot.getPath())
+        #     # TODO this should not be calculated here, but rather while solving...
+        #     result[robot.id] = robot.getTravelPath()
 
         if self.plot:
             plotter.plotAgents(self.robot_list)
@@ -185,11 +175,3 @@ class Runner:
             plotter.show()
 
         return result
-
-    def add_time(self, time_in_seconds):
-        self.progressed_time = time_in_seconds
-
-
-class Evaluator:
-    def __init__(self):
-        pass

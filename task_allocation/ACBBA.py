@@ -23,15 +23,17 @@ class agent:
     def __init__(
         self,
         state,
-        environment,
         id,
-        capacity=None,
+        capacity=0,
+        environment=None,
         tasks=None,
         color=None,
         point_estimation=False,
     ):
         self.environment = environment
-        self.tasks = {x.id: x for x in copy.deepcopy(tasks)}
+        self.tasks = None
+        if tasks is not None:
+            self.tasks = {x.id: x for x in copy.deepcopy(tasks)}
 
         self.use_single_point_estimation = point_estimation
         if color is None:
@@ -238,6 +240,9 @@ class agent:
         return best_task, best_pos, c
 
     def build_bundle(self):
+        if self.tasks is None:
+            return
+
         bundle_time = time.monotonic()
         while self.getTotalTravelCost(self.getPathTasks()) <= self.capacity:
             J_i, n_J, c = self.getCij()
@@ -422,8 +427,8 @@ class agent:
         self.message_history = []
         # Update Process
         update = 0
+        rebroadcasts = []
 
-        # TODO only loop through new messages
         for k in Y:
             for j in self.tasks:
                 # Recieve info
@@ -441,13 +446,9 @@ class agent:
                     k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij, sender_info=sender_info
                 )
                 if rebroadcast:
-                    # self.__rebroadcast(rebroadcast)
-                    update += 1
-                    # print({"a": k, "y": y_kj, "z": z_kj, "t": t_kj, "task": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij})
-                    self.message_history.append(
-                        {"a": k, "y": y_kj, "z": z_kj, "t": t_kj, "task": j, "i": self.id, "y_i": y_ij, "z_i": z_ij, "t_i": t_ij}
-                    )
-        return update
+                    # TODO save the rebroadcasts
+                    rebroadcasts.append(rebroadcast)
+        return rebroadcasts
 
     def __update(self, y_kj, z_kj, t_kj, j):
         """

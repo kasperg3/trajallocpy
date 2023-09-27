@@ -27,7 +27,7 @@ class CoverageProblem:
         self.environment.store(list(shapely.geometry.polygon.orient(search_area, 1.0).exterior.coords[1:]), holes, validate=True)
         task_list = []
         for id, trajectory in enumerate(tasks.geoms):
-            task_list.append(Task.TrajectoryTask(id, trajectory, trajectory.coords[0], trajectory.coords[-1]))
+            task_list.append(Task.TrajectoryTask(id, trajectory))
 
         self.__tasks = task_list
 

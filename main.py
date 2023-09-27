@@ -58,7 +58,7 @@ def main(
             "tasks": shapely.MultiLineString(),
             "boundary": shapely.Polygon(),
         }
-        
+
         for feature in features:
             if feature["geometry"]:
                 geometries[feature["id"]] = geometry.shape(feature["geometry"])
@@ -138,8 +138,8 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 3
-        capacity = 700
+        n_agents = 5
+        capacity = 300
 
         main(
             dataset_name=ds,
