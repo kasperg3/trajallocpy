@@ -6,5 +6,5 @@ with open("README.md") as f:
 with open("LICENCE") as f:
     license = f.read()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     setup()

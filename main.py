@@ -79,7 +79,7 @@ def main(
 
         cp = CoverageProblem.CoverageProblem(restricted_areas=scaled_multi_polygon, search_area=geometries["boundary"], tasks=geometries["tasks"])
         initial = cp.generate_random_point_in_problem().coords.xy
-        agent_list = [Agent.agent(id, initial, capacity) for id in range(n_agents)]
+        agent_list = [Agent.agent(id, cp.generate_random_point_in_problem().coords.xy, capacity) for id in range(n_agents)]
         exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
         allocations = exp.solve(profiling_enabled=False, debug=debug)
@@ -138,14 +138,14 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 3
-        capacity = 300
+        n_agents = 2
+        capacity = 1000
 
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
-            show_plots=False,
-            debug=True,
+            show_plots=True,
+            debug=False,
         )

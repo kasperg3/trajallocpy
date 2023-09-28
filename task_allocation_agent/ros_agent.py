@@ -1,5 +1,6 @@
 import sys
 import threading
+from typing import List
 
 import geojson
 import numpy as np
@@ -8,18 +9,32 @@ import shapely
 import shapely.affinity
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
-from std_msgs.msg import String
 
-from task_allocation_interfaces.msg import BidInfo, TaskInfo
+from task_allocation_interfaces.msg import BidInfo, BidInfoList, TaskInfo
 
 sys.path.append("../trajectory-task-allocation")
 from task_allocation import ACBBA, Agent, CoverageProblem, Utility
+
+
+def toBidInfoMessage(bid: ACBBA.BidInformation):
+    return BidInfo(winning_agent=bid.z, task_id=bid.j, timestamp=bid.t, sender_id=bid.k)
+
+
+def toBidInfoListMessage(bids: List[ACBBA.BidInformation]) -> BidInfoList:
+    bid_list = []
+    for bid in bids:
+        bid_list.append(toBidInfoMessage(bid))
+    return BidInfoList(bids=bid_list)
 
 
 class MessageBuffer:
     def __init__(self):
         self.buffer = {}
         self.lock = threading.Lock()
+
+    def add_bids(self, bids: List[BidInfo]):
+        for bid in bids:
+            self.add_bid(bid)
 
     def add_bid(self, bid_info: BidInfo):
         with self.lock:
@@ -28,6 +43,10 @@ class MessageBuffer:
                     self.buffer[bid_info.task_id] = bid_info
             else:
                 self.buffer[bid_info.task_id] = bid_info
+
+    def is_empty(self):
+        with self.lock:
+            return len(self.buffer)
 
     def get(self, task_id):
         with self.lock:
@@ -39,13 +58,13 @@ class MessageBuffer:
 
 
 class RosAgent(Node):
-    def __init__(self, agent: Agent, tasks: list = []):
+    def __init__(self, agent: Agent.agent, tasks: list = []):
         self.name = "Agent" + str(agent.id)
         super().__init__(self.name)
 
         # Agent communication
-        self.bid_info_publisher = self.create_publisher(BidInfo, "bid_info", 10)
-        self.bid_info_listener = self.create_subscription(BidInfo, "bid_info", callback=self.listener, qos_profile=10)
+        self.bid_info_publisher = self.create_publisher(BidInfoList, "bid_info", 10)
+        self.bid_info_listener = self.create_subscription(BidInfoList, "bid_info", callback=self.listener, qos_profile=10)
 
         # Publish the tasklist, which initiates the consensus
         self.task_info_listener = self.create_subscription(TaskInfo, "task_info", callback=self.task_listener, qos_profile=10)
@@ -65,25 +84,22 @@ class RosAgent(Node):
             # Create a timer with a 0-second delay to start the callback immediately
             self.one_shot_timer = self.create_timer(0.0, self.bundle_builder)
 
-    def listener(self, message):
+    def listener(self, messages: BidInfoList):
         """
         Deconflict the messages recieved by other agents ()
         TaskBidInfo: Sender ID, Task ID, Winnning Agent ID, Winning agent score, timestamp for last update
         The listener fills one of two buffers, the bundle builder then switches between these two, to avoid overwriting
         """
-
         self.get_logger().info("test")
         # TODO do not listen to messages from the node itself
-        # Update the recieved message: robot.receive_message(Y)
-        # Perform consensus: robot.update_task()
-
+        rebroadcasts = self.agent.update_task_async()
         # TODO if the bundle is already building save the message to a buffer
         # The buffer should only save the most recent message from each agent
-        self.message_buffer.add_bid(message)
+        self.message_buffer.add_bids(messages.bids)
         # if self.message_buffer.get(message.sender_id).build_time < message.build_time:
         #     self.message_buffer[message.sender_id] = message.bid_info
-        if not bundle_is_building:
-            self.bundle_builder()
+        # TODO Trigger the bundle_builder callback
+        self.bundle_builder()
 
     def task_listener(self, message):
         """Listens for tasks to generate a bundle
@@ -106,15 +122,17 @@ class RosAgent(Node):
             self.one_shot_timer = None
 
         # Build the bundle using the newest state from the listener: robot.build_bundle()
-        self.agent.build_bundle()
+        bids = self.agent.build_bundle()
         self.get_logger().info(str(self.agent.getBundle()))
 
+        # self.get_logger().info(str(bids))
         # After building, send the bid info: winning bids, winning agents, timestamps of when the bids were placed
-        msg = String()
+        # TODO publish the newly created bundle
+        msg = toBidInfoListMessage(bids)
         self.bid_info_publisher.publish(msg)
 
 
-def load_coverage_problem():
+def load_coverage_problem() -> CoverageProblem.CoverageProblem:
     files = Utility.getAllCoverageFiles("AC300")
     for file_name in files:
         with open(file_name) as json_file:

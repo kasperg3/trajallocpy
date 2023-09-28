@@ -14,6 +14,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/BidInfo.msg"
   "msg/TaskInfo.msg"
+  "msg/BidInfoList.msg"
   DEPENDENCIES builtin_interfaces std_msgs
  )
 

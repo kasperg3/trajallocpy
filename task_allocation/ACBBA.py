@@ -16,6 +16,7 @@ class BidInformation:
     y: float
     z: int
     t: float
+    j: int
     k: int
 
 
@@ -242,7 +243,7 @@ class agent:
     def build_bundle(self):
         if self.tasks is None:
             return
-
+        bid_list = []
         bundle_time = time.monotonic()
         while self.getTotalTravelCost(self.getPathTasks()) <= self.capacity:
             J_i, n_J, c = self.getCij()
@@ -254,15 +255,17 @@ class agent:
             self.y[J_i] = c
             self.z[J_i] = self.id
             self.t[J_i] = bundle_time  # Update the time of the winning bet
+            bid_list.append(BidInformation(y=c, z=self.id, t=bundle_time, j=J_i, k=self.id))
+        return bid_list
 
     def __update_time(self, task):
         self.t[task] = time.monotonic()
 
-    def __action_rule(self, k, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij) -> BidInformation:
+    def __action_rule(self, k, j, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij) -> BidInformation:
         eps = 5
         i = self.id
-        sender_info = BidInformation(y=y_kj, z=z_kj, t=t_kj, k=self.id)
-        own_info = BidInformation(y_ij, z_ij, t_ij, self.id)
+        sender_info = BidInformation(y=y_kj, z=z_kj, t=t_kj, j=j, k=self.id)
+        own_info = BidInformation(y_ij, z_ij, t_ij, j, self.id)
         if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
             if z_ij == i:  # Rule 1.1
                 if y_kj > y_ij:
@@ -424,12 +427,30 @@ class agent:
         # msg = {self.agent: {"y": y, "z": z, "t": t}}
         # self.my_socket.send(self.agent, msg, k)
 
-    def update_task(self, Y):
-        if Y is None:
-            return
-        self.message_history = []
+    def update_task_async(self, bids: List[BidInformation]):
         # Update Process
-        update = 0
+        rebroadcasts = []
+        for bid_info in bids:
+            j = bid_info.j
+            k = bid_info.k
+
+            # Own info
+            y_ij = self.y.get(j, 0)
+            z_ij = self.z.get(j, -1)
+            t_ij = self.t.get(j, 0)
+
+            # Recieve info
+            y_kj = bid_info.y  # Winning bids
+            z_kj = bid_info.z  # Winning agent
+            t_kj = bid_info.t  # Timestamps
+
+            rebroadcast = self.__action_rule(k=k, j=j, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij)
+            if rebroadcast:
+                rebroadcasts.append(rebroadcast)
+        return rebroadcasts
+
+    def update_task(self, Y: List[BidInformation]):
+        # Update Process
         rebroadcasts = []
 
         for k in Y:
@@ -443,9 +464,8 @@ class agent:
                 y_ij = self.y.get(j, 0)
                 z_ij = self.z.get(j, -1)
                 t_ij = self.t.get(j, 0)
-                own_info = BidInformation(y_ij, z_ij, t_ij, self.id)
                 # TODO parse the information in a better way
-                rebroadcast = self.__action_rule(k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij)
+                rebroadcast = self.__action_rule(k=k, j=j, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij)
                 if rebroadcast:
                     # TODO save the rebroadcasts
                     rebroadcasts.append(rebroadcast)

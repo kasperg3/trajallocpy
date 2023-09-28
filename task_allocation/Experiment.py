@@ -102,7 +102,6 @@ class Runner:
                     print(robot.getPath())
 
             # Communication stage
-            # TODO This should be handled internally in the agents
             # Send winning bid list to neighbors (depend on env)
             message_pool = [robot.send_message() for robot in self.robot_list]
             for robot_id, robot in enumerate(self.robot_list):
