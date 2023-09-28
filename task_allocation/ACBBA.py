@@ -13,9 +13,9 @@ from task_allocation.Task import TrajectoryTask
 
 @dataclass
 class BidInformation:
-    y: dict
-    z: dict
-    t: dict
+    y: float
+    z: int
+    t: float
     k: int
 
 
@@ -258,10 +258,11 @@ class agent:
     def __update_time(self, task):
         self.t[task] = time.monotonic()
 
-    def __action_rule(self, k, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij, sender_info) -> BidInformation:
+    def __action_rule(self, k, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij) -> BidInformation:
         eps = 5
         i = self.id
-        own_info = BidInformation(y=self.y, z=self.z, t=self.t, k=self.id)
+        sender_info = BidInformation(y=y_kj, z=z_kj, t=t_kj, k=self.id)
+        own_info = BidInformation(y_ij, z_ij, t_ij, self.id)
         if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
             if z_ij == i:  # Rule 1.1
                 if y_kj > y_ij:
@@ -383,7 +384,8 @@ class agent:
 
         elif z_kj == -1:  # Rule 4 Agent k thinks None is z_kj
             if z_ij == i:
-                return self.__leave()
+                self.__leave()
+                return own_info
             elif z_ij == k:
                 self.__update(y_kj, z_kj, t_kj, task)
                 return sender_info
@@ -395,7 +397,8 @@ class agent:
                 self.__leave()
                 return None
         # Default leave and rebroadcast own info
-        return self.__leave()
+        self.__leave()
+        return own_info
 
     def __rebroadcast(self, information):
         y = information["y"]
@@ -435,16 +438,14 @@ class agent:
                 y_kj = Y[k][0].get(j, 0)  # Winning bids
                 z_kj = Y[k][1].get(j, -1)  # Winning agent
                 t_kj = Y[k][2].get(j, 0)  # Timestamps
-                sender_info = BidInformation(y=Y[k][0], z=Y[k][1], t=Y[k][2], k=self.id)
 
                 # Own info
                 y_ij = self.y.get(j, 0)
                 z_ij = self.z.get(j, -1)
                 t_ij = self.t.get(j, 0)
+                own_info = BidInformation(y_ij, z_ij, t_ij, self.id)
                 # TODO parse the information in a better way
-                rebroadcast = self.__action_rule(
-                    k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij, sender_info=sender_info
-                )
+                rebroadcast = self.__action_rule(k=k, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij)
                 if rebroadcast:
                     # TODO save the rebroadcasts
                     rebroadcasts.append(rebroadcast)
@@ -483,4 +484,4 @@ class agent:
         """
         Do nothing
         """
-        return BidInformation(y=self.y, z=self.z, t=self.t, k=self.id)
+        return

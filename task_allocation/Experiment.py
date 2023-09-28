@@ -16,7 +16,7 @@ class Runner:
                 ACBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
-                    # environment=self.coverage_problem.environment,
+                    environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
                 )

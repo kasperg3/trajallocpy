@@ -10,8 +10,32 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from std_msgs.msg import String
 
+from task_allocation_interfaces.msg import BidInfo, TaskInfo
+
 sys.path.append("../trajectory-task-allocation")
 from task_allocation import ACBBA, Agent, CoverageProblem, Utility
+
+
+class MessageBuffer:
+    def __init__(self):
+        self.buffer = {}
+        self.lock = threading.Lock()
+
+    def add_bid(self, bid_info: BidInfo):
+        with self.lock:
+            if bid_info.task_id in self.buffer:
+                if bid_info.timestamp > self.buffer[bid_info.task_id].timestamp:
+                    self.buffer[bid_info.task_id] = bid_info
+            else:
+                self.buffer[bid_info.task_id] = bid_info
+
+    def get(self, task_id):
+        with self.lock:
+            return self.buffer.get(task_id, None)
+
+    def get_all(self):
+        with self.lock:
+            return list(self.buffer.values())
 
 
 class RosAgent(Node):
@@ -20,14 +44,15 @@ class RosAgent(Node):
         super().__init__(self.name)
 
         # Agent communication
-        self.bid_info_publisher = self.create_publisher(String, "bid_info", 10)
-        self.bid_info_listener = self.create_subscription(String, "bid_info", callback=self.listener, qos_profile=10)
+        self.bid_info_publisher = self.create_publisher(BidInfo, "bid_info", 10)
+        self.bid_info_listener = self.create_subscription(BidInfo, "bid_info", callback=self.listener, qos_profile=10)
 
         # Publish the tasklist, which initiates the consensus
-        self.task_info_listener = self.create_subscription(String, "task_info", callback=self.task_listener, qos_profile=10)
+        self.task_info_listener = self.create_subscription(TaskInfo, "task_info", callback=self.task_listener, qos_profile=10)
 
         # Internal message buffer
-        self.message_buffer = {}
+        # the message buffer is a hash table where only the most recent information is stored for each task
+        self.message_buffer = MessageBuffer()
 
         self.agent = ACBBA.agent(
             id=agent.id,
@@ -54,8 +79,9 @@ class RosAgent(Node):
 
         # TODO if the bundle is already building save the message to a buffer
         # The buffer should only save the most recent message from each agent
-        if self.message_buffer.get(message.sender_id).build_time < message.build_time:
-            self.message_buffer[message.sender_id] = message.bid_info
+        self.message_buffer.add_bid(message)
+        # if self.message_buffer.get(message.sender_id).build_time < message.build_time:
+        #     self.message_buffer[message.sender_id] = message.bid_info
         if not bundle_is_building:
             self.bundle_builder()
 
@@ -68,6 +94,7 @@ class RosAgent(Node):
             A complete tasklist containing both patial features, priority, time restrictions,
             simply all information needed to build a bundle
         """
+        # TODO Update the tasklist and rebuild the bundle
         pass
 
     def bundle_builder(self):
