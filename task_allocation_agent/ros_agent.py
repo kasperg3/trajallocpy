@@ -16,15 +16,26 @@ sys.path.append("../trajectory-task-allocation")
 from task_allocation import ACBBA, Agent, CoverageProblem, Utility
 
 
+def fromBidInfoMessage(bid: BidInfo):
+    return ACBBA.BidInformation(y=bid.winning_score, z=bid.winning_agent, t=bid.timestamp, j=bid.task_id, k=bid.sender_id)
+
+
+def fromBidInfoListMessage(msg: BidInfoList):
+    bid_list = []
+    for bid in msg.bids:
+        bid_list.append(fromBidInfoMessage(bid))
+    return bid_list
+
+
 def toBidInfoMessage(bid: ACBBA.BidInformation):
     return BidInfo(winning_agent=bid.z, task_id=bid.j, timestamp=bid.t, sender_id=bid.k)
 
 
-def toBidInfoListMessage(bids: List[ACBBA.BidInformation]) -> BidInfoList:
+def toBidInfoListMessage(bids: List[ACBBA.BidInformation], agent_id) -> BidInfoList:
     bid_list = []
     for bid in bids:
         bid_list.append(toBidInfoMessage(bid))
-    return BidInfoList(bids=bid_list)
+    return BidInfoList(bids=bid_list, agent_id=agent_id)
 
 
 class MessageBuffer:
@@ -61,6 +72,7 @@ class RosAgent(Node):
     def __init__(self, agent: Agent.agent, tasks: list = []):
         self.name = "Agent" + str(agent.id)
         super().__init__(self.name)
+        self.get_logger().set_level(rclpy.logging.LoggingSeverity.DEBUG)
 
         # Agent communication
         self.bid_info_publisher = self.create_publisher(BidInfoList, "bid_info", 10)
@@ -90,16 +102,19 @@ class RosAgent(Node):
         TaskBidInfo: Sender ID, Task ID, Winnning Agent ID, Winning agent score, timestamp for last update
         The listener fills one of two buffers, the bundle builder then switches between these two, to avoid overwriting
         """
-        self.get_logger().info("test")
+
+        if messages.agent_id == self.get_name():
+            return
+
+        self.get_logger().debug("recieved message from agent: " + messages.agent_id)
         # TODO do not listen to messages from the node itself
-        rebroadcasts = self.agent.update_task_async()
+        rebroadcasts = self.agent.update_task_async(fromBidInfoListMessage(messages))
         # TODO if the bundle is already building save the message to a buffer
         # The buffer should only save the most recent message from each agent
-        self.message_buffer.add_bids(messages.bids)
-        # if self.message_buffer.get(message.sender_id).build_time < message.build_time:
-        #     self.message_buffer[message.sender_id] = message.bid_info
+        self.get_logger().debug("len " + str(len(rebroadcasts)))
+        # self.message_buffer.add_bids(rebroadcasts)
         # TODO Trigger the bundle_builder callback
-        self.bundle_builder()
+        # self.bundle_builder()
 
     def task_listener(self, message):
         """Listens for tasks to generate a bundle
@@ -123,12 +138,12 @@ class RosAgent(Node):
 
         # Build the bundle using the newest state from the listener: robot.build_bundle()
         bids = self.agent.build_bundle()
-        self.get_logger().info(str(self.agent.getBundle()))
+        self.get_logger().debug(str(self.agent.getBundle()))
 
         # self.get_logger().info(str(bids))
         # After building, send the bid info: winning bids, winning agents, timestamps of when the bids were placed
         # TODO publish the newly created bundle
-        msg = toBidInfoListMessage(bids)
+        msg = toBidInfoListMessage(bids, self.get_name())
         self.bid_info_publisher.publish(msg)
 
 

@@ -18,6 +18,11 @@ class BidInformation:
     t: float
     j: int
     k: int
+    # winning_score: float
+    # winning_agent: int
+    # timestamp: float
+    # task_id: int
+    # sender_id: int
 
 
 class agent:
