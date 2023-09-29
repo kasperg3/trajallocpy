@@ -121,10 +121,12 @@ class agent:
         if len(task_list) != 0:
             # Add the cost of travelling to the first task
             total_cost = self.getTravelCost(self.state, task_list[0].start)
+            # The cost of travelling between tasks
             for t_index in range(len(task_list) - 1):
                 total_cost += self.getTravelCost(task_list[t_index].end, task_list[t_index + 1].start)
+            # The cost of executing the task
             for t_index in range(len(task_list)):
-                total_cost += self.getTravelCost(task_list[t_index].start, task_list[t_index].end)
+                total_cost += self.getTravelCost(task_list[t_index].start, task_list[t_index].end)  # task_list[t_index].duration
             # Add the cost of returning home
             total_cost += self.getTravelCost(self.state, task_list[-1].end)
         return total_cost

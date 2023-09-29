@@ -28,7 +28,7 @@ def fromBidInfoListMessage(msg: BidInfoList):
 
 
 def toBidInfoMessage(bid: ACBBA.BidInformation):
-    return BidInfo(winning_agent=bid.z, task_id=bid.j, timestamp=bid.t, sender_id=bid.k)
+    return BidInfo(winning_agent=bid.z, task_id=bid.j, timestamp=float(bid.t), sender_id=bid.k)
 
 
 def toBidInfoListMessage(bids: List[ACBBA.BidInformation], agent_id) -> BidInfoList:
@@ -43,17 +43,17 @@ class MessageBuffer:
         self.buffer = {}
         self.lock = threading.Lock()
 
-    def add_bids(self, bids: List[BidInfo]):
-        for bid in bids:
-            self.add_bid(bid)
+    def add_messages(self, messages: BidInfoList):
+        for message in messages.bids:
+            self.add_message(message)
 
-    def add_bid(self, bid_info: BidInfo):
+    def add_message(self, message: BidInfo):
         with self.lock:
-            if bid_info.task_id in self.buffer:
-                if bid_info.timestamp > self.buffer[bid_info.task_id].timestamp:
-                    self.buffer[bid_info.task_id] = bid_info
+            if message.task_id in self.buffer:
+                if message.timestamp > self.buffer[message.task_id].timestamp:
+                    self.buffer[message.task_id] = message
             else:
-                self.buffer[bid_info.task_id] = bid_info
+                self.buffer[message.task_id] = message
 
     def is_empty(self):
         with self.lock:
@@ -66,6 +66,10 @@ class MessageBuffer:
     def get_all(self):
         with self.lock:
             return list(self.buffer.values())
+
+    def __str__(self):
+        with self.lock:
+            return str(self.buffer)
 
 
 class RosAgent(Node):
@@ -96,6 +100,13 @@ class RosAgent(Node):
             # Create a timer with a 0-second delay to start the callback immediately
             self.one_shot_timer = self.create_timer(0.0, self.bundle_builder)
 
+    def task_consensus(self, messages: BidInfoList):
+        rebroadcasts = self.agent.update_task_async(fromBidInfoListMessage(messages))
+        # TODO if the bundle is already building save the message to a buffer
+        # The buffer should only save the most recent message from each agent
+        self.get_logger().debug("len " + str(len(rebroadcasts)))
+        self.message_buffer.add_messages(toBidInfoListMessage(rebroadcasts, messages.agent_id))
+
     def listener(self, messages: BidInfoList):
         """
         Deconflict the messages recieved by other agents ()
@@ -105,14 +116,11 @@ class RosAgent(Node):
 
         if messages.agent_id == self.get_name():
             return
-
         self.get_logger().debug("recieved message from agent: " + messages.agent_id)
+
+        self.task_consensus(messages)
+
         # TODO do not listen to messages from the node itself
-        rebroadcasts = self.agent.update_task_async(fromBidInfoListMessage(messages))
-        # TODO if the bundle is already building save the message to a buffer
-        # The buffer should only save the most recent message from each agent
-        self.get_logger().debug("len " + str(len(rebroadcasts)))
-        # self.message_buffer.add_bids(rebroadcasts)
         # TODO Trigger the bundle_builder callback
         # self.bundle_builder()
 
@@ -138,13 +146,10 @@ class RosAgent(Node):
 
         # Build the bundle using the newest state from the listener: robot.build_bundle()
         bids = self.agent.build_bundle()
-        self.get_logger().debug(str(self.agent.getBundle()))
+        self.get_logger().info(str(self.agent.getBundle()))
 
-        # self.get_logger().info(str(bids))
         # After building, send the bid info: winning bids, winning agents, timestamps of when the bids were placed
-        # TODO publish the newly created bundle
-        msg = toBidInfoListMessage(bids, self.get_name())
-        self.bid_info_publisher.publish(msg)
+        self.bid_info_publisher.publish(toBidInfoListMessage(bids, self.get_name()))
 
 
 def load_coverage_problem() -> CoverageProblem.CoverageProblem:
@@ -196,7 +201,6 @@ def main(
     for id in range(n_agents):
         node = RosAgent(Agent.agent(id, cp.generate_random_point_in_problem(), 1000), tasks)
         executor.add_node(node)
-
     executor.spin()
     rclpy.shutdown()
 

@@ -36,6 +36,7 @@ class TrajectoryTask:
     def __post_init__(self):
         self.start = self.trajectory.coords[0]
         self.end = self.trajectory.coords[-1]
+        # TODO init the task cost/length/time
 
     def reverse(self):
         self.trajectory = shapely.LineString(self.trajectory.coords[::-1])
