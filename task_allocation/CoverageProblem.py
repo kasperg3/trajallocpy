@@ -10,7 +10,7 @@ class CoverageProblem:
     def __init__(
         self,
         tasks,
-        search_area: shapely.geometry,
+        search_area: shapely.Polygon,
         restricted_areas: shapely.geometry.MultiPolygon,
     ):
         self.__restricted_areas = restricted_areas
@@ -21,10 +21,11 @@ class CoverageProblem:
         holes = []
         for polygon in restricted_areas.geoms:
             # Properly orient the obstacle polygons
-            holes.append(list(shapely.geometry.polygon.orient(polygon, -1).exterior.coords[1:]))
+            holes.append(list(shapely.geometry.polygon.orient(polygon, -1).exterior.coords[:-1]))
         shapely.geometry.polygon.orient(search_area, 1.0)
 
-        self.environment.store(list(shapely.geometry.polygon.orient(search_area, 1.0).exterior.coords[1:]), holes, validate=True)
+        self.environment.store(list(shapely.geometry.polygon.orient(search_area, 1.0).exterior.coords[:-1]), holes, validate=True)
+
         task_list = []
         for id, trajectory in enumerate(tasks.geoms):
             task_list.append(Task.TrajectoryTask(id, trajectory))

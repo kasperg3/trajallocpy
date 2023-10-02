@@ -8,7 +8,7 @@ import geojson
 import numpy as np
 import shapely
 from shapely import geometry
-from shapely.affinity import scale
+from shapely.affinity import scale, translate
 from shapely.ops import transform
 
 from task_allocation import Agent, CoverageProblem, Experiment, Utility
@@ -48,76 +48,92 @@ def main(
     np.random.seed(seed)
 
     results = []
-    files = Utility.getAllCoverageFiles(dataset_name)
-    for file_name in files:
-        with open(file_name) as json_file:
-            features = geojson.load(json_file)["features"]
+    run_experiment("amagervaerket", n_agents, capacity, show_plots, debug, results, "amagervaerket.json")
 
-        geometries = {
-            "obstacles": shapely.MultiPolygon(),
-            "tasks": shapely.MultiLineString(),
-            "boundary": shapely.Polygon(),
-        }
+    # files = Utility.getAllCoverageFiles(dataset_name)
+    # for file_name in files:
+    #     run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name)
 
-        for feature in features:
-            if feature["geometry"]:
-                geometries[feature["id"]] = geometry.shape(feature["geometry"])
-        number_of_tasks = len(list(geometries["tasks"].geoms))
 
-        print(file_name, " Tasks: ", number_of_tasks)
-        # Initialize coverage problem and the agents
-        geometries["boundary"] = scale(geometries["boundary"], xfact=1.01, yfact=1.01)
+def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name):
+    with open(file_name) as json_file:
+        geojson_file = geojson.load(json_file)
+        try:
+            crs = geojson_file["crs"]
+        except:
+            print("Warning! No CRS is given and can cause odd behaviours!")
+        features = geojson_file["features"]
 
-        # Scale each polygon in the MultiPolygon
-        scaled_polygons = []
-        for polygon in geometries["obstacles"].geoms:
-            scaled_polygon = scale(polygon, xfact=0.95, yfact=0.95, origin="centroid")
-            scaled_polygons.append(scaled_polygon)
+    geometries = {
+        "obstacles": shapely.MultiPolygon(),
+        "tasks": shapely.MultiLineString(),
+        "boundary": shapely.Polygon(),
+    }
+
+    for feature in features:
+        if feature["geometry"]:
+            geometries[feature["id"]] = geometry.shape(feature["geometry"])
+    number_of_tasks = len(list(geometries["tasks"].geoms))
+
+    # Normalize the geoms
+    min_x, min_y, _, _ = geometries["boundary"].bounds
+    for key in geometries:
+        geometries[key] = translate(geometries[key], -min_x, -min_y)
+
+    print(file_name, " Tasks: ", number_of_tasks)
+    # Initialize coverage problem and the agents
+    geometries["boundary"] = scale(geometries["boundary"], xfact=1.01, yfact=1.01)
+
+    # Scale each polygon in the MultiPolygon
+    scaled_polygons = []
+    for polygon in geometries["obstacles"].geoms:
+        scaled_polygon = scale(polygon, xfact=0.95, yfact=0.95, origin="centroid")
+        scaled_polygons.append(scaled_polygon)
 
         # Create a new MultiPolygon with scaled polygons
-        scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
+    scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
 
-        cp = CoverageProblem.CoverageProblem(restricted_areas=scaled_multi_polygon, search_area=geometries["boundary"], tasks=geometries["tasks"])
-        initial = cp.generate_random_point_in_problem().coords.xy
-        agent_list = [Agent.agent(id, cp.generate_random_point_in_problem().coords.xy, capacity) for id in range(n_agents)]
-        exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
+    cp = CoverageProblem.CoverageProblem(restricted_areas=scaled_multi_polygon, search_area=geometries["boundary"], tasks=geometries["tasks"])
+    initial = cp.generate_random_point_in_problem().coords.xy
+    agent_list = [Agent.agent(id, cp.generate_random_point_in_problem().coords.xy, capacity) for id in range(n_agents)]
+    exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
-        allocations = exp.solve(profiling_enabled=False, debug=debug)
+    allocations = exp.solve(profiling_enabled=False, debug=debug)
 
-        # TODO find a way of adding an agent based on id instead of index in a list
-        # This has some more work to it as this requires the index querying in cbba to be done based on hash indexing
-        # exp.add_agent(Agent.agent(id=))
+    # TODO find a way of adding an agent based on id instead of index in a list
+    # This has some more work to it as this requires the index querying in cbba to be done based on hash indexing
+    # exp.add_agent(Agent.agent(id=))
 
-        # Save the results in a csv file
-        (
+    # Save the results in a csv file
+    (
+        totalRouteLength,
+        sumOfTaskLengths,
+        totalRouteCosts,
+        iterations,
+        computeTime,
+        route_list,
+        maxRouteCost,
+    ) = exp.evaluateSolution()
+    results.append(
+        [
+            file_name,
             totalRouteLength,
             sumOfTaskLengths,
             totalRouteCosts,
+            maxRouteCost,
             iterations,
             computeTime,
-            route_list,
-            maxRouteCost,
-        ) = exp.evaluateSolution()
-        results.append(
-            [
-                file_name,
-                totalRouteLength,
-                sumOfTaskLengths,
-                totalRouteCosts,
-                maxRouteCost,
-                iterations,
-                computeTime,
-                cp.getNumberOfTasks(),
-                len(agent_list),
-            ]
-        )
+            cp.getNumberOfTasks(),
+            len(agent_list),
+        ]
+    )
 
-        # Save the results to the csv
-        saveResults(experiment_title, results)
+    # Save the results to the csv
+    saveResults(experiment_title, results)
 
 
 if __name__ == "__main__":
-    seed = 1352323
+    seed = 1
     np.random.seed(seed)
     random.seed(seed)
     parser = argparse.ArgumentParser(description="Calculates a conflict free task allocation")
@@ -138,8 +154,8 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 2
-        capacity = 1000
+        n_agents = 3
+        capacity = 100000
 
         main(
             dataset_name=ds,
@@ -147,5 +163,5 @@ if __name__ == "__main__":
             n_agents=n_agents,
             capacity=capacity,
             show_plots=True,
-            debug=False,
+            debug=True,
         )

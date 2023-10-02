@@ -31,11 +31,13 @@ class TrajectoryTask:
     start_time: float = 0  # task start time (sec)
     end_time: float = 0  # task expiry time (sec)
     duration: float = 0  # task default duration (sec)
+    length: float = 0
     task_type: int = 1
 
     def __post_init__(self):
         self.start = self.trajectory.coords[0]
         self.end = self.trajectory.coords[-1]
+        self.length = self.trajectory.length  # unitless length
         # TODO init the task cost/length/time
 
     def reverse(self):

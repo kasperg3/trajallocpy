@@ -78,10 +78,11 @@ class agent:
         assigned_tasks = self.tasks[self.path]
         full_path = []
         if len(assigned_tasks) > 0:
-            path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, verify=False)
+            path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, verify=True)
             full_path.extend(path)
             for i in range(len(assigned_tasks) - 1):
-                path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, verify=False)
+                full_path.extend(assigned_tasks[i].trajectory.coords)
+                path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, verify=True)
                 full_path.extend(path)
             full_path.append(assigned_tasks[-1].end)
         return full_path
@@ -91,9 +92,6 @@ class agent:
 
     def getBundle(self):
         return self.bundle
-
-    # def tau(self, j):
-    #     pass
 
     def set_state(self, state):
         self.state = state
@@ -109,16 +107,18 @@ class agent:
         if len(task_list) != 0:
             # Add the cost of travelling to the first task
             total_cost = self.getTravelCost(self.state, task_list[0].start)
+            # The cost of travelling between tasks
             for t_index in range(len(task_list) - 1):
                 total_cost += self.getTravelCost(task_list[t_index].end, task_list[t_index + 1].start)
+            # The cost of executing the task
             for t_index in range(len(task_list)):
-                total_cost += self.getTravelCost(task_list[t_index].start, task_list[t_index].end)
+                total_cost += self.distanceToCost(task_list[t_index].length)
             # Add the cost of returning home
             total_cost += self.getTravelCost(self.state, task_list[-1].end)
         return total_cost
 
     # This is only used for evaluations!
-    def getTotalPathCost(self):
+    def getTotalPathLength(self):
         finalTaskList = self.getPathTasks()
         total_dist = 0
         total_task_length = 0
@@ -128,17 +128,23 @@ class agent:
             for t_index in range(len(finalTaskList) - 1):
                 total_dist += np.linalg.norm(np.array(finalTaskList[t_index].end) - np.array(finalTaskList[t_index + 1].start))
             for t_index in range(len(finalTaskList)):
-                total_task_length += np.linalg.norm(np.array(finalTaskList[t_index].start) - np.array(finalTaskList[t_index].end))
+                total_task_length += finalTaskList[t_index].length
             # Add the cost of returning home
             total_dist += np.linalg.norm(np.array(self.state) - np.array(finalTaskList[-1].end))
             # Add the total task length
             total_dist += total_task_length
         return total_dist, total_task_length
 
+    def distanceToCost(self, dist):
+        # Velocity ramp
+        d_a = (self.max_velocity**2) / self.max_acceleration
+        result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
+        return result
+
     @cache
     def getTravelCost(self, start, end):
         # TODO move the cost calculations to the graph creation, then this function can be simplified to sum the costs of the path
-        path, dist = self.environment.find_shortest_path(start, end, verify=False)
+        path, dist = self.environment.find_shortest_path(start, end, verify=True)
 
         # Travelcost in seconds
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
@@ -146,11 +152,7 @@ class agent:
         # dist = math.sqrt(sum(dist))
         # result = dist / self.max_velocity
 
-        # Velocity ramp
-        d_a = (self.max_velocity**2) / self.max_acceleration
-        result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
-
-        return result  # the cost of travelling in seconds!
+        return self.distanceToCost(dist)  # the cost of travelling in seconds!
 
     def getTimeDiscountedReward(self, cost, task: TrajectoryTask):
         return self.Lambda ** (cost) * task.reward
