@@ -19,15 +19,15 @@ class Plotter:
 
         # Plot agent information
         for i in range(len(robot_list)):
-            # Plot communication graph path
-            for j in range(i + 1, len(robot_list)):
-                if communication_graph[i][j] == 1:
-                    self.environmentAx.plot(
-                        [robot_pos[i][0], robot_pos[j][0]],
-                        [robot_pos[i][1], robot_pos[j][1]],
-                        "g--",
-                        linewidth=1,
-                    )
+            # # Plot communication graph path
+            # for j in range(i + 1, len(robot_list)):
+            #     if communication_graph[i][j] == 1:
+            #         self.environmentAx.plot(
+            #             [robot_pos[i][0], robot_pos[j][0]],
+            #             [robot_pos[i][1], robot_pos[j][1]],
+            #             "g--",
+            #             linewidth=1,
+            #         )
             # Plot agent position
             self.environmentAx.scatter(robot_pos[:, 0], robot_pos[:, 1], color="black")
 

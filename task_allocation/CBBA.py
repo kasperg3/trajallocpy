@@ -84,7 +84,7 @@ class agent:
                 full_path.extend(assigned_tasks[i].trajectory.coords)
                 path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, verify=True)
                 full_path.extend(path)
-            full_path.append(assigned_tasks[-1].end)
+            full_path.extend(assigned_tasks[-1].trajectory.coords)
         return full_path
 
     def getPath(self):
@@ -169,20 +169,20 @@ class agent:
         return S_p
 
     def getMinTravelCost(self, point, task: TrajectoryTask):
-        distArray = [
-            self.getTravelCost(point, task.start),
-            self.getTravelCost(point, task.end),
-        ]
-        minIndex = np.argmin(distArray)
+        distance_to_start = self.getTravelCost(point, task.start)
+        distance_to_end = self.getTravelCost(point, task.end)
+        result = distance_to_start
         shouldBeReversed = False
-        if distArray[0] > distArray[1]:
+        if distance_to_start > distance_to_end:
+            result = distance_to_end
             shouldBeReversed = True
-        return distArray[minIndex], shouldBeReversed
+        return result, shouldBeReversed
 
     # Calculate the path reward with task j at index n
     def calculatePathRewardWithNewTask(self, j, n):
         temp_path = list(self.path)
         temp_path.insert(n, j)
+        # print(j)
         is_reversed = False
         # travel cost to first task
         travel_cost = self.getTravelCost(self.state, self.tasks[temp_path[0]].start)
@@ -198,7 +198,8 @@ class agent:
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
         else:
             for p_idx in range(len(temp_path) - 1):
-                if p_idx == n - 1:
+                if p_idx == n:
+                    # print(temp_path[p_idx])
                     # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
                     temp_cost, is_reversed = self.getMinTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]])
                     travel_cost += temp_cost

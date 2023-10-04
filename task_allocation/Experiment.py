@@ -35,7 +35,7 @@ class Runner:
         route_list = []
         max_path_cost = 0
         for r in self.robot_list:
-            travel_length, task_length = r.getTotalPathCost()
+            travel_length, task_length = r.getTotalPathLength()
             total_path_length += travel_length
             total_task_length += task_length
             agent_path_cost = r.getTotalTravelCost(r.getPathTasks())
@@ -122,15 +122,15 @@ class Runner:
             #     # Update local information and decision
             #     messages += len(robot.update_task(robot.Y))
 
-            # #CBBA
+            # if messages == 0:
+            #     break
+
+            # # #CBBA
             converged_list = []
             for robot in self.robot_list:
                 if Y is not None:
                     converged = robot.update_task()
                     converged_list.append(converged)
-
-            # if messages == 0:
-            #     break
 
             if debug:
                 # Plot
