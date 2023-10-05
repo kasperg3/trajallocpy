@@ -48,11 +48,11 @@ def main(
     np.random.seed(seed)
 
     results = []
-    run_experiment("amagervaerket", n_agents, capacity, show_plots, debug, results, "amagervaerket.json")
+    # run_experiment("amagervaerket", n_agents, capacity, show_plots, debug, results, "amagervaerket.json")
 
-    # files = Utility.getAllCoverageFiles(dataset_name)
-    # for file_name in files:
-    #     run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name)
+    files = Utility.getAllCoverageFiles(dataset_name)
+    for file_name in files:
+        run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name)
 
 
 def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name):
@@ -95,7 +95,7 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
 
     cp = CoverageProblem.CoverageProblem(restricted_areas=scaled_multi_polygon, search_area=geometries["boundary"], tasks=geometries["tasks"])
     initial = cp.generate_random_point_in_problem().coords.xy
-    agent_list = [Agent.agent(id, cp.generate_random_point_in_problem().coords.xy, capacity) for id in range(n_agents)]
+    agent_list = [Agent.agent(id, initial, capacity) for id in range(n_agents)]
     exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
     allocations = exp.solve(profiling_enabled=False, debug=debug)
@@ -133,7 +133,7 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
 
 
 if __name__ == "__main__":
-    seed = 1
+    seed = 123
     np.random.seed(seed)
     random.seed(seed)
     parser = argparse.ArgumentParser(description="Calculates a conflict free task allocation")
@@ -154,8 +154,8 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 3
-        capacity = 100000
+        n_agents = 5
+        capacity = 600
 
         main(
             dataset_name=ds,
@@ -163,5 +163,5 @@ if __name__ == "__main__":
             n_agents=n_agents,
             capacity=capacity,
             show_plots=True,
-            debug=True,
+            debug=False,
         )

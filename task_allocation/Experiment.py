@@ -13,13 +13,13 @@ class Runner:
         self.robot_list = []
         for agent in agents:
             self.robot_list.append(
-                CBBA.agent(
+                ACBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
-                    number_of_agents=len(agents),
+                    # number_of_agents=len(agents),
                 )
             )
 
@@ -116,21 +116,24 @@ class Runner:
                 Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected} if len(connected) > 0 else None
                 robot.Y = Y
 
-            # # Phase 2: Consensus Process
-            # messages = 0
-            # for robot in self.robot_list:
-            #     # Update local information and decision
-            #     messages += len(robot.update_task(robot.Y))
-
-            # if messages == 0:
-            #     break
-
-            # # #CBBA
-            converged_list = []
+            # Phase 2: Consensus Process
+            messages = 0
             for robot in self.robot_list:
-                if Y is not None:
-                    converged = robot.update_task()
-                    converged_list.append(converged)
+                # Update local information and decision
+                messages += len(robot.update_task(robot.Y))
+
+            if messages == 0:
+                break
+
+            # # CBBA
+            # converged_list = []
+            # for robot in self.robot_list:
+            #     if Y is not None:
+            #         converged = robot.update_task()
+            #         converged_list.append(converged)
+
+            # if sum(converged_list) == len(self.robot_list):
+            #     break
 
             if debug:
                 # Plot
@@ -146,8 +149,6 @@ class Runner:
                 for robot in self.robot_list:
                     print(robot.getPath())
 
-            if sum(converged_list) == len(self.robot_list):
-                break
             t += 1
 
         self.iterations = t

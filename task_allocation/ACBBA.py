@@ -99,9 +99,10 @@ class agent:
             path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, verify=False)
             full_path.extend(path)
             for i in range(len(assigned_tasks) - 1):
+                full_path.extend(assigned_tasks[i].trajectory.coords)
                 path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, verify=False)
                 full_path.extend(path)
-            full_path.append(assigned_tasks[-1].end)
+            full_path.extend(assigned_tasks[-1].trajectory.coords)
         return full_path
 
     def getPath(self):
@@ -126,13 +127,13 @@ class agent:
                 total_cost += self.getTravelCost(task_list[t_index].end, task_list[t_index + 1].start)
             # The cost of executing the task
             for t_index in range(len(task_list)):
-                total_cost += self.getTravelCost(task_list[t_index].start, task_list[t_index].end)  # task_list[t_index].duration
+                total_cost += self.distanceToCost(task_list[t_index].length)
             # Add the cost of returning home
             total_cost += self.getTravelCost(self.state, task_list[-1].end)
         return total_cost
 
     # This is only used for evaluations!
-    def getTotalPathCost(self):
+    def getTotalPathLength(self):
         finalTaskList = self.getPathTasks()
         total_dist = 0
         total_task_length = 0
@@ -142,12 +143,30 @@ class agent:
             for t_index in range(len(finalTaskList) - 1):
                 total_dist += np.linalg.norm(np.array(finalTaskList[t_index].end) - np.array(finalTaskList[t_index + 1].start))
             for t_index in range(len(finalTaskList)):
-                total_task_length += np.linalg.norm(np.array(finalTaskList[t_index].start) - np.array(finalTaskList[t_index].end))
+                total_task_length += finalTaskList[t_index].length
             # Add the cost of returning home
             total_dist += np.linalg.norm(np.array(self.state) - np.array(finalTaskList[-1].end))
             # Add the total task length
             total_dist += total_task_length
         return total_dist, total_task_length
+
+    def distanceToCost(self, dist):
+        # Velocity ramp
+        d_a = (self.max_velocity**2) / self.max_acceleration
+        result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
+        return result
+
+    def getDistance(self, start, end):
+        # If there is no environment defined, use euclidean
+        if self.environment is None:
+            # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
+            dist = [(a - b) ** 2 for a, b in zip(start, end)]
+            dist = math.sqrt(sum(dist))
+            dist = dist / self.max_velocity
+        else:
+            path, dist = self.environment.find_shortest_path(start, end, verify=False)
+
+        return dist
 
     @cache
     def getTravelCost(self, start, end):
@@ -156,15 +175,12 @@ class agent:
             # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
             dist = [(a - b) ** 2 for a, b in zip(start, end)]
             dist = math.sqrt(sum(dist))
-            result = dist / self.max_velocity
+            dist = dist / self.max_velocity
         else:
             path, dist = self.environment.find_shortest_path(start, end, verify=False)
-
-        # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
         result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
-
-        return result  # the cost of travelling in seconds!
+        return result
 
     def getTimeDiscountedReward(self, cost, task: TrajectoryTask):
         return self.Lambda ** (cost) * task.reward
@@ -181,33 +197,43 @@ class agent:
         return S_p
 
     def getMinTravelCost(self, point, task: TrajectoryTask):
-        distArray = [
-            self.getTravelCost(point, task.start),
-            self.getTravelCost(point, task.end),
-        ]
-        minIndex = np.argmin(distArray)
+        distance_to_start = self.getTravelCost(point, task.start)
+        distance_to_end = self.getTravelCost(point, task.end)
+        result = distance_to_start
         shouldBeReversed = False
-        if distArray[0] > distArray[1]:
+        if distance_to_start > distance_to_end:
+            result = distance_to_end
             shouldBeReversed = True
-        return distArray[minIndex], shouldBeReversed
+        return result, shouldBeReversed
 
     # Calculate the path reward with task j at index n
     def calculatePathRewardWithNewTask(self, j, n):
         temp_path = list(self.path)
         temp_path.insert(n, j)
+        # print(j)
         is_reversed = False
         # travel cost to first task
         travel_cost = self.getTravelCost(self.state, self.tasks[temp_path[0]].start)
-        S_p = self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[0]])
+        S_p = self.getTimeDiscountedReward(
+            travel_cost,
+            self.tasks[temp_path[0]],
+        )
 
-        for p_idx in range(len(temp_path) - 1):
-            if p_idx == n - 1:
-                # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
-                temp_cost, is_reversed = self.getMinTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]])
-                travel_cost += temp_cost
-            else:
+        # Use a single point instead of greedily optimising the direction
+        if self.use_single_point_estimation:
+            for p_idx in range(len(temp_path) - 1):
                 travel_cost += self.getTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start)
-            S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
+                S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
+        else:
+            for p_idx in range(len(temp_path) - 1):
+                if p_idx == n - 1:
+                    # print(temp_path[p_idx + 1])
+                    # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
+                    temp_cost, is_reversed = self.getMinTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]])
+                    travel_cost += temp_cost
+                else:
+                    travel_cost += self.getTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start)
+                S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx + 1]])
 
         # Add the cost for returning home
         travel_cost += self.getTravelCost(self.tasks[temp_path[-1]].end, self.state)
