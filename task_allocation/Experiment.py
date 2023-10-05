@@ -165,10 +165,6 @@ class Runner:
 
         print("Robot Routes")
         result = {}
-        # for robot in self.robot_list:
-        #     print(robot.getPath())
-        #     # TODO this should not be calculated here, but rather while solving...
-        #     result[robot.id] = robot.getTravelPath()
 
         if self.plot:
             plotter.plotAgents(self.robot_list)

@@ -96,11 +96,11 @@ class agent:
         assigned_tasks = self.getPathTasks()
         full_path = []
         if len(assigned_tasks) > 0:
-            path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, verify=False)
+            path, dist = self.environment.find_shortest_path(self.state, assigned_tasks[0].start, free_space_after=False, verify=False)
             full_path.extend(path)
             for i in range(len(assigned_tasks) - 1):
                 full_path.extend(assigned_tasks[i].trajectory.coords)
-                path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, verify=False)
+                path, dist = self.environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, free_space_after=False, verify=False)
                 full_path.extend(path)
             full_path.extend(assigned_tasks[-1].trajectory.coords)
         return full_path
@@ -150,6 +150,7 @@ class agent:
             total_dist += total_task_length
         return total_dist, total_task_length
 
+    
     def distanceToCost(self, dist):
         # Velocity ramp
         d_a = (self.max_velocity**2) / self.max_acceleration
@@ -164,23 +165,14 @@ class agent:
             dist = math.sqrt(sum(dist))
             dist = dist / self.max_velocity
         else:
-            path, dist = self.environment.find_shortest_path(start, end, verify=False)
+            path, dist = self.environment.find_shortest_path(start, end, verify=True)
 
         return dist
 
     @cache
     def getTravelCost(self, start, end):
         # If there is no environment defined, use euclidean
-        if self.environment is None:
-            # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
-            dist = [(a - b) ** 2 for a, b in zip(start, end)]
-            dist = math.sqrt(sum(dist))
-            dist = dist / self.max_velocity
-        else:
-            path, dist = self.environment.find_shortest_path(start, end, verify=False)
-        d_a = (self.max_velocity**2) / self.max_acceleration
-        result = math.sqrt(4 * dist / self.max_acceleration) if dist < d_a else self.max_velocity / self.max_acceleration + dist / self.max_velocity
-        return result
+        return self.distanceToCost(self.getDistance(start,end))
 
     def getTimeDiscountedReward(self, cost, task: TrajectoryTask):
         return self.Lambda ** (cost) * task.reward
@@ -226,7 +218,7 @@ class agent:
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
         else:
             for p_idx in range(len(temp_path) - 1):
-                if p_idx == n - 1:
+                if p_idx == n :
                     # print(temp_path[p_idx + 1])
                     # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
                     temp_cost, is_reversed = self.getMinTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]])
@@ -261,6 +253,7 @@ class agent:
                 for n in range(len(self.path) + 1):
                     S_pj, should_be_reversed = self.calculatePathRewardWithNewTask(j, n)
                     c_ijn = S_pj - S_p
+                    
                     if c_ijn > c and c_ijn > self.y.get(j, -1):
                         c = c_ijn  # Store the cost
                         best_pos = n
