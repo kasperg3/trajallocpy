@@ -57,7 +57,7 @@ class MessageBuffer:
 
     def is_empty(self):
         with self.lock:
-            return len(self.buffer)
+            return len(self.buffer) == 0
 
     def get(self, task_id):
         with self.lock:
@@ -65,7 +65,9 @@ class MessageBuffer:
 
     def get_all(self):
         with self.lock:
-            return list(self.buffer.values())
+            result = list(self.buffer.values())
+            self.buffer.clear()
+            return result
 
     def __str__(self):
         with self.lock:
@@ -87,7 +89,8 @@ class RosAgent(Node):
 
         # Internal message buffer
         # the message buffer is a hash table where only the most recent information is stored for each task
-        self.message_buffer = MessageBuffer()
+        self.incomming_buffer = MessageBuffer()
+        self.outgoing_buffer = MessageBuffer()
 
         self.agent = ACBBA.agent(
             id=agent.id,
@@ -96,16 +99,7 @@ class RosAgent(Node):
             capacity=agent.capacity,
         )
         # If tasks are predefined calculate bundle and communicate
-        if tasks is not None:
-            # Create a timer with a 0-second delay to start the callback immediately
-            self.one_shot_timer = self.create_timer(0.0, self.bundle_builder)
-
-    def task_consensus(self, messages: BidInfoList):
-        rebroadcasts = self.agent.update_task_async(fromBidInfoListMessage(messages))
-        # TODO if the bundle is already building save the message to a buffer
-        # The buffer should only save the most recent message from each agent
-        self.get_logger().debug("len " + str(len(rebroadcasts)))
-        self.message_buffer.add_messages(toBidInfoListMessage(rebroadcasts, messages.agent_id))
+        self.bundle_timer = self.create_timer(1, self.bundle_builder)
 
     def listener(self, messages: BidInfoList):
         """
@@ -113,16 +107,12 @@ class RosAgent(Node):
         TaskBidInfo: Sender ID, Task ID, Winnning Agent ID, Winning agent score, timestamp for last update
         The listener fills one of two buffers, the bundle builder then switches between these two, to avoid overwriting
         """
-
+        # Do not listen to messages from self
         if messages.agent_id == self.get_name():
             return
+
         self.get_logger().debug("recieved message from agent: " + messages.agent_id)
-
-        self.task_consensus(messages)
-
-        # TODO do not listen to messages from the node itself
-        # TODO Trigger the bundle_builder callback
-        # self.bundle_builder()
+        self.incomming_buffer.add_messages(messages)
 
     def task_listener(self, message):
         """Listens for tasks to generate a bundle
@@ -134,22 +124,30 @@ class RosAgent(Node):
             simply all information needed to build a bundle
         """
         # TODO Update the tasklist and rebuild the bundle
+
         pass
 
     def bundle_builder(self):
         """Builds a bundle based on the buffer received by the listener and send a message with the tasks and bid list"""
-        # TODO only build a bundle if there is new information in the buffer
+        # Only build a bundle if there is new information in the buffer
+        if self.incomming_buffer.is_empty() and len(self.agent.bundle) != 0:
+            return
+        # perform consensus to determine which messages has to be rebroadcasted
+        incomming_messages = BidInfoList(bids=self.incomming_buffer.get_all(), agent_id=self.get_name())
+        rebroadcasts = self.agent.update_task_async(fromBidInfoListMessage(incomming_messages))
+        self.get_logger().debug("Number of rebroadcasts: " + str(len(rebroadcasts)))
+        self.outgoing_buffer.add_messages(toBidInfoListMessage(rebroadcasts, self.get_name()))
 
-        if self.one_shot_timer is not None:
-            self.one_shot_timer.destroy()
-            self.one_shot_timer = None
-
-        # Build the bundle using the newest state from the listener: robot.build_bundle()
+        # Build the bundle using the newest state from the listener
         bids = self.agent.build_bundle()
         self.get_logger().info(str(self.agent.getBundle()))
+        self.outgoing_buffer.add_messages(toBidInfoListMessage(bids, self.get_name()))
 
-        # After building, send the bid info: winning bids, winning agents, timestamps of when the bids were placed
-        self.bid_info_publisher.publish(toBidInfoListMessage(bids, self.get_name()))
+        # publish the new bids from the buffer, overwriting any potential rebroadcasts with new information
+        if not self.outgoing_buffer.is_empty():
+            outgoing_messages = self.outgoing_buffer.get_all()
+            self.get_logger().debug("Number of outgoing messages: " + str(len(outgoing_messages)))
+            self.bid_info_publisher.publish(BidInfoList(bids=outgoing_messages, agent_id=self.get_name()))
 
 
 def load_coverage_problem() -> CoverageProblem.CoverageProblem:
@@ -196,7 +194,7 @@ def main(
     cp = load_coverage_problem()
 
     tasks = cp.getTasks()
-    n_agents = 3
+    n_agents = 2
     executor = MultiThreadedExecutor()
     for id in range(n_agents):
         node = RosAgent(Agent.agent(id, cp.generate_random_point_in_problem(), 1000), tasks)
