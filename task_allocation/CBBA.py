@@ -85,7 +85,7 @@ class agent:
             full_path.extend(assigned_tasks[-1].trajectory.coords)
         return full_path
 
-    def getPath(self):
+    def getPathList(self):
         return self.path
 
     def getBundle(self):
@@ -221,6 +221,12 @@ class agent:
                     # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
                     temp_cost, is_reversed = self.getMinTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]])
                     travel_cost += temp_cost
+                if p_idx == n:
+                    # the task after has to use the is_reversed bool to determine where to travel from
+                    if is_reversed:
+                        travel_cost += self.getTravelCost(self.tasks[temp_path[p_idx]].start, self.tasks[temp_path[p_idx + 1]].start)
+                    else:
+                        travel_cost += self.getTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start)
                 else:
                     travel_cost += self.getTravelCost(self.tasks[temp_path[p_idx]].end, self.tasks[temp_path[p_idx + 1]].start)
                 S_p += self.getTimeDiscountedReward(travel_cost, self.tasks[temp_path[p_idx]])
