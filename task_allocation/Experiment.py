@@ -11,15 +11,16 @@ class Runner:
         # Task definition
         self.coverage_problem = coverage_problem
         self.robot_list = []
+
         for agent in agents:
             self.robot_list.append(
-                ACBBA.agent(
+                CBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
-                    # number_of_agents=len(agents),
+                    number_of_agents=len(agents),
                 )
             )
 
@@ -117,23 +118,23 @@ class Runner:
                 robot.Y = Y
 
             # Phase 2: Consensus Process
-            messages = 0
-            for robot in self.robot_list:
-                # Update local information and decision
-                messages += len(robot.update_task(robot.Y))
+            if isinstance(self.robot_list[0], ACBBA.agent):  # ACBBA
+                messages = 0
+                for robot in self.robot_list:
+                    # Update local information and decision
+                    messages += len(robot.update_task(robot.Y))
 
-            if messages == 0:
-                break
+                if messages == 0:
+                    break
+            else:  # CBBA
+                converged_list = []
+                for robot in self.robot_list:
+                    if Y is not None:
+                        converged = robot.update_task()
+                        converged_list.append(converged)
 
-            # # CBBA
-            # converged_list = []
-            # for robot in self.robot_list:
-            #     if Y is not None:
-            #         converged = robot.update_task()
-            #         converged_list.append(converged)
-
-            # if sum(converged_list) == len(self.robot_list):
-            #     break
+                if sum(converged_list) == len(self.robot_list):
+                    break
 
             if debug:
                 # Plot
