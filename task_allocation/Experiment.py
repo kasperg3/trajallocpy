@@ -21,6 +21,7 @@ class Runner:
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
                     number_of_agents=len(agents),
+                    # point_estimation=False,
                 )
             )
 
@@ -43,9 +44,7 @@ class Runner:
             total_path_cost += agent_path_cost
             route = [r.state]
             for task in r.getPathTasks():
-                route.append(task.start)
-                route.append(task.end)
-                # TODO add all points in the line, it is not necesarily single line tasks
+                route.extend(list(task.trajectory.coords))
             route.append(r.state)
             route_list.append(route)
 
@@ -101,7 +100,7 @@ class Runner:
                     print(robot.getBundle())
                 print("Path")
                 for robot in self.robot_list:
-                    print(robot.getPath())
+                    print(robot.getPathList())
 
             # Communication stage
             # Send winning bid list to neighbors (depend on env)
@@ -148,7 +147,7 @@ class Runner:
                     print(robot.getBundle())
                 print("Path")
                 for robot in self.robot_list:
-                    print(robot.getPath())
+                    print(robot.getPathList())
 
             t += 1
 

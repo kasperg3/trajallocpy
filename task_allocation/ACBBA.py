@@ -223,6 +223,13 @@ class agent:
                     # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
                     temp_cost, is_reversed = self.getMinTravelCost(previous_task.end, next_task)
                     travel_cost += temp_cost
+
+                if p_idx == n:
+                    # the task after has to use the is_reversed bool to determine where to travel from
+                    if is_reversed:
+                        travel_cost += self.getTravelCost(previous_task.end, next_task.start)
+                    else:
+                        travel_cost += self.getTravelCost(previous_task.end, next_task.start)
                 else:
                     travel_cost += self.getTravelCost(previous_task.end, next_task.start)
                 # Scale the travelcost with the reward/priority
@@ -466,7 +473,7 @@ class agent:
             z_ij = self.z.get(j, -1)
             t_ij = self.t.get(j, 0)
 
-            # Recieve info
+            # Recieved info
             y_kj = bid_info.y  # Winning bids
             z_kj = bid_info.z  # Winning agent
             t_kj = bid_info.t  # Timestamps
