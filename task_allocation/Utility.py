@@ -7,7 +7,18 @@ import numpy as np
 from matplotlib.lines import Line2D
 from matplotlib.patches import Polygon as PolygonPatch
 
-from task_allocation import CBBA
+from task_allocation import CBBA, Agent
+
+
+def timing(f):
+    def wrap(*args, **kwargs):
+        start = time.time()
+        result = f(*args, **kwargs)
+        end = time.time()
+        print(f"Elapsed time: {end - start} seconds")
+        return result
+
+    return wrap
 
 
 class Plotter:
@@ -44,7 +55,7 @@ class Plotter:
     def plotAgent(self, robot: CBBA.agent, total_number_of_robots):
         task_x = []
         task_y = []
-        p = robot.getTravelPath()
+        p = Agent.getTravelPath(robot.state, robot.getPathTasks(), robot.environment)
 
         for s in p:
             task_x.append(s[0])

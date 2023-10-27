@@ -75,7 +75,7 @@ class MessageBuffer:
 
 
 class RosAgent(Node):
-    def __init__(self, agent: Agent.agent, tasks: list = []):
+    def __init__(self, agent: Agent.config, tasks: list = []):
         self.name = "Agent" + str(agent.id)
         super().__init__(self.name)
         self.get_logger().set_level(rclpy.logging.LoggingSeverity.DEBUG)
@@ -140,7 +140,7 @@ class RosAgent(Node):
 
         # Build the bundle using the newest state from the listener
         bids = self.agent.build_bundle()
-        self.get_logger().info(str(self.agent.getBundle()))
+        self.get_logger().info(str(self.agent.bundle))
         self.outgoing_buffer.add_messages(toBidInfoListMessage(bids, self.get_name()))
 
         # publish the new bids from the buffer, overwriting any potential rebroadcasts with new information
@@ -197,7 +197,7 @@ def main(
     n_agents = 2
     executor = MultiThreadedExecutor()
     for id in range(n_agents):
-        node = RosAgent(Agent.agent(id, cp.generate_random_point_in_problem(), 1000), tasks)
+        node = RosAgent(Agent.config(id, cp.generate_random_point_in_problem(), 1000), tasks)
         executor.add_node(node)
     executor.spin()
     rclpy.shutdown()

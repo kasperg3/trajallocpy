@@ -7,20 +7,20 @@ from task_allocation import ACBBA, CBBA, Agent, CoverageProblem, Utility
 
 
 class Runner:
-    def __init__(self, coverage_problem: CoverageProblem.CoverageProblem, agents: list[Agent.agent], enable_plotting=False):
+    def __init__(self, coverage_problem: CoverageProblem.CoverageProblem, agents: list[Agent.config], enable_plotting=False):
         # Task definition
         self.coverage_problem = coverage_problem
         self.robot_list = []
 
         for agent in agents:
             self.robot_list.append(
-                CBBA.agent(
+                ACBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
-                    number_of_agents=len(agents),
+                    # number_of_agents=len(agents),
                     # point_estimation=False,
                 )
             )
@@ -29,18 +29,15 @@ class Runner:
         self.plot = enable_plotting
 
     def evaluateSolution(self):
-        travel_length = 0
-
         total_path_length = 0
         total_task_length = 0
         total_path_cost = 0
         route_list = []
         max_path_cost = 0
         for r in self.robot_list:
-            travel_length, task_length = r.getTotalPathLength()
-            total_path_length += travel_length
-            total_task_length += task_length
-            agent_path_cost = r.getTotalTravelCost(r.getPathTasks())
+            total_path_length += ACBBA.getTotalPathLength(r.state, r.getPathTasks(), r.environment)
+            total_task_length += ACBBA.getTotalTaskLength(r.getPathTasks())
+            agent_path_cost = ACBBA.getTotalTravelCost(r.state, r.getPathTasks(), r.environment)
             total_path_cost += agent_path_cost
             route = [r.state]
             for task in r.getPathTasks():
@@ -97,10 +94,10 @@ class Runner:
             if debug:
                 print("Bundle")
                 for robot in self.robot_list:
-                    print(robot.getBundle())
+                    print(robot.bundle)
                 print("Path")
                 for robot in self.robot_list:
-                    print(robot.getPathList())
+                    print(robot.path)
 
             # Communication stage
             # Send winning bid list to neighbors (depend on env)
@@ -144,10 +141,10 @@ class Runner:
 
                 print("Bundle")
                 for robot in self.robot_list:
-                    print(robot.getBundle())
+                    print(robot.bundle)
                 print("Path")
                 for robot in self.robot_list:
-                    print(robot.getPathList())
+                    print(robot.path)
 
             t += 1
 
