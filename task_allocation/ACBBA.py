@@ -24,6 +24,8 @@ class agent:
         tasks=None,
         color=None,
         point_estimation=False,
+        max_velocity=3,
+        max_acceleration=1,
     ):
         self.environment = environment
         self.tasks = None
@@ -41,8 +43,8 @@ class agent:
             self.color = color
 
         # TODO this should be configurable
-        self.max_velocity = 3
-        self.max_acceleration = 1
+        self.max_velocity = max_velocity
+        self.max_acceleration = max_acceleration
 
         # Agent ID
         self.id = id
@@ -77,6 +79,9 @@ class agent:
 
         # Experimental
         self.execution_pool = Pool(processes=4)
+
+    def __str__(self) -> str:
+        return f"Agent {self.id} \n path {self.path} \n  bundle {self.bundle} \n y(winning bids) {self.y} \n z(winning agents) {self.z} \n t(timestamps) {self.t} \n"
 
     def getPathTasks(self) -> List[TrajectoryTask]:
         result = []
@@ -144,7 +149,7 @@ class agent:
         self.t[task] = time.monotonic()
 
     def __action_rule(self, k, j, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij) -> BidInformation:
-        eps = 5
+        eps = 20
         i = self.id
         sender_info = BidInformation(y=y_kj, z=z_kj, t=t_kj, j=j, k=self.id)
         own_info = BidInformation(y_ij, z_ij, t_ij, j, self.id)
@@ -327,7 +332,7 @@ class agent:
             t_kj = bid_info.t  # Timestamps
 
             rebroadcast = self.__action_rule(k=k, j=j, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij)
-            if rebroadcast:
+            if rebroadcast is not None:
                 rebroadcasts.append(rebroadcast)
         return rebroadcasts
 

@@ -28,7 +28,7 @@ def fromBidInfoListMessage(msg: BidInfoList):
 
 
 def toBidInfoMessage(bid: ACBBA.BidInformation):
-    return BidInfo(winning_agent=bid.z, task_id=bid.j, timestamp=float(bid.t), sender_id=bid.k)
+    return BidInfo(winning_score=float(bid.y), winning_agent=bid.z, task_id=bid.j, timestamp=float(bid.t), sender_id=bid.k)
 
 
 def toBidInfoListMessage(bids: List[ACBBA.BidInformation], agent_id) -> BidInfoList:
@@ -72,6 +72,10 @@ class MessageBuffer:
     def __str__(self):
         with self.lock:
             return str(self.buffer)
+
+    def __len__(self):
+        with self.lock:
+            return len(self.buffer)
 
 
 class RosAgent(Node):
@@ -124,7 +128,6 @@ class RosAgent(Node):
             simply all information needed to build a bundle
         """
         # TODO Update the tasklist and rebuild the bundle
-
         pass
 
     def bundle_builder(self):
@@ -132,17 +135,16 @@ class RosAgent(Node):
         # Only build a bundle if there is new information in the buffer
         if self.incomming_buffer.is_empty() and len(self.agent.bundle) != 0:
             return
+
         # perform consensus to determine which messages has to be rebroadcasted
         incomming_messages = BidInfoList(bids=self.incomming_buffer.get_all(), agent_id=self.get_name())
         rebroadcasts = self.agent.update_task_async(fromBidInfoListMessage(incomming_messages))
-        self.get_logger().debug("Number of rebroadcasts: " + str(len(rebroadcasts)))
         self.outgoing_buffer.add_messages(toBidInfoListMessage(rebroadcasts, self.get_name()))
 
         # Build the bundle using the newest state from the listener
         bids = self.agent.build_bundle()
         self.get_logger().info(str(self.agent.bundle))
         self.outgoing_buffer.add_messages(toBidInfoListMessage(bids, self.get_name()))
-
         # publish the new bids from the buffer, overwriting any potential rebroadcasts with new information
         if not self.outgoing_buffer.is_empty():
             outgoing_messages = self.outgoing_buffer.get_all()
@@ -194,7 +196,7 @@ def main(
     cp = load_coverage_problem()
 
     tasks = cp.getTasks()
-    n_agents = 2
+    n_agents = 3
     executor = MultiThreadedExecutor()
     for id in range(n_agents):
         node = RosAgent(Agent.config(id, cp.generate_random_point_in_problem(), 1000), tasks)
