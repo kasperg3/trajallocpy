@@ -9,6 +9,7 @@ import shapely
 import shapely.affinity
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
+from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 
 from task_allocation_interfaces.msg import BidInfo, BidInfoList, TaskInfo
 
@@ -82,14 +83,19 @@ class RosAgent(Node):
     def __init__(self, agent: Agent.config, tasks: list = []):
         self.name = "Agent" + str(agent.id)
         super().__init__(self.name)
-        self.get_logger().set_level(rclpy.logging.LoggingSeverity.DEBUG)
+        self.get_logger().set_level(rclpy.logging.LoggingSeverity.INFO)
 
         # Agent communication
         self.bid_info_publisher = self.create_publisher(BidInfoList, "bid_info", 10)
-        self.bid_info_listener = self.create_subscription(BidInfoList, "bid_info", callback=self.listener, qos_profile=10)
+        self.bid_info_listener = self.create_subscription(
+            BidInfoList,
+            "bid_info",
+            callback=self.listener,
+            qos_profile=QoSProfile(depth=500, durability=DurabilityPolicy.VOLATILE, reliability=ReliabilityPolicy.BEST_EFFORT),
+        )
 
         # Publish the tasklist, which initiates the consensus
-        self.task_info_listener = self.create_subscription(TaskInfo, "task_info", callback=self.task_listener, qos_profile=10)
+        self.task_info_listener = self.create_subscription(TaskInfo, "task_info", callback=self.task_listener, qos_profile=100)
 
         # Internal message buffer
         # the message buffer is a hash table where only the most recent information is stored for each task
@@ -103,7 +109,7 @@ class RosAgent(Node):
             capacity=agent.capacity,
         )
         # If tasks are predefined calculate bundle and communicate
-        self.bundle_timer = self.create_timer(1, self.bundle_builder)
+        self.bundle_timer = self.create_timer(0.01, self.bundle_builder)
 
     def listener(self, messages: BidInfoList):
         """
@@ -139,11 +145,12 @@ class RosAgent(Node):
         # perform consensus to determine which messages has to be rebroadcasted
         incomming_messages = BidInfoList(bids=self.incomming_buffer.get_all(), agent_id=self.get_name())
         rebroadcasts = self.agent.update_task_async(fromBidInfoListMessage(incomming_messages))
+        self.get_logger().info(str(self.agent.bundle))
         self.outgoing_buffer.add_messages(toBidInfoListMessage(rebroadcasts, self.get_name()))
 
         # Build the bundle using the newest state from the listener
         bids = self.agent.build_bundle()
-        self.get_logger().info(str(self.agent.bundle))
+        # self.get_logger().info(str(self.agent.bundle))
         self.outgoing_buffer.add_messages(toBidInfoListMessage(bids, self.get_name()))
         # publish the new bids from the buffer, overwriting any potential rebroadcasts with new information
         if not self.outgoing_buffer.is_empty():
@@ -168,7 +175,8 @@ def load_coverage_problem() -> CoverageProblem.CoverageProblem:
             if feature["geometry"]:
                 geometries[feature["id"]] = shapely.geometry.shape(feature["geometry"])
         number_of_tasks = len(list(geometries["tasks"].geoms))
-
+        if number_of_tasks > 50:
+            continue
         print(file_name, " Tasks: ", number_of_tasks)
         # Initialize coverage problem and the agents
         geometries["boundary"] = shapely.affinity.scale(geometries["boundary"], xfact=1.01, yfact=1.01)
@@ -196,12 +204,17 @@ def main(
     cp = load_coverage_problem()
 
     tasks = cp.getTasks()
-    n_agents = 3
+    n_agents = 5
     executor = MultiThreadedExecutor()
+    initial = cp.generate_random_point_in_problem()
     for id in range(n_agents):
         node = RosAgent(Agent.config(id, cp.generate_random_point_in_problem(), 1000), tasks)
         executor.add_node(node)
-    executor.spin()
+
+    try:
+        executor.spin()
+    except KeyboardInterrupt:
+        executor.shutdown()
     rclpy.shutdown()
 
 

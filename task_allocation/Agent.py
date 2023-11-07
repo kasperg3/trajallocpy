@@ -124,7 +124,7 @@ def calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, use_si
 
 def calculate_and_return(j, n, state, tasks, path, environment, use_single_point_estimation):
     S_pj, should_be_reversed = calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, use_single_point_estimation)
-    return (j, n), (S_pj, should_be_reversed)
+    return j, n, S_pj, should_be_reversed
 
 
 # This is only used for evaluations!

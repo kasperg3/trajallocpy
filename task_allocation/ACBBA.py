@@ -2,7 +2,7 @@ import copy
 import math
 import random
 import time
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from dataclasses import dataclass
 from functools import cache
 from multiprocessing import Pool
@@ -77,9 +77,6 @@ class agent:
         self.removal_threshold = 5  # TODO find a good value for this when ros is implemented
         self.message_history = []
 
-        # Experimental
-        self.execution_pool = Pool(processes=4)
-
     def __str__(self) -> str:
         return f"Agent {self.id} \n path {self.path} \n  bundle {self.bundle} \n y(winning bids) {self.y} \n z(winning agents) {self.z} \n t(timestamps) {self.t} \n"
 
@@ -93,9 +90,6 @@ class agent:
         return self.y, self.z, self.t
 
     def getCij(self):
-        """
-        Returns the cost list c_ij for agent i where the position n results in the greatest reward
-        """
         # Calculate Sp_i
         S_p = calculatePathReward(self.state, self.getPathTasks(), self.environment, self.Lambda)
         # init
@@ -127,6 +121,61 @@ class agent:
 
         return best_task, best_pos, c
 
+    # TODO this might be worth looking more into.
+    # def getCij(self):
+    #     # Calculate Sp_i
+    #     S_p = calculatePathReward(self.state, self.getPathTasks(), self.environment, self.Lambda)
+    #     # init
+    #     best_pos = None
+    #     c = 0
+    #     reverse = None
+    #     best_task = None
+    #     executor_tasks = []
+
+    #     for j, task in self.tasks.items():
+    #         if j in self.bundle or self.removal_list.get(j, 0) > self.removal_threshold:
+    #             continue  # Do not include if already in the bundle or if the removal threshold is exceeded
+    #         else:
+    #             for n in range(len(self.path) + 1):
+    #                 executor_tasks.append((j, n))
+
+    #     for test in executor_tasks:
+    #         j, n = test
+    #         S_pj, should_be_reversed = calculatePathRewardWithNewTask(j, n, self.state, self.tasks, self.path, self.environment)
+    #         c_ijn = S_pj - S_p
+    #         if c_ijn > c and c_ijn > self.y.get(j, -1):
+    #             c = c_ijn
+    #             best_pos = n
+    #             reverse = should_be_reversed
+    #             best_task = j
+
+    #     # reverse the task with max reward if necesarry
+    #     if reverse:
+    #         self.tasks[j].reverse()
+
+    #     return best_task, best_pos, c
+
+    ###
+    # with ThreadPoolExecutor() as executor:
+    #     executor_tasks = []
+    #     for j, task in self.tasks.items():
+    #         if j in self.bundle or self.removal_list.get(j, 0) > self.removal_threshold:
+    #             continue  # Do not include if already in the bundle or if the removal threshold is exceeded
+    #         else:
+    #             for n in range(len(self.path) + 1):
+    #                 executor_tasks.append((j, n, self.state, self.tasks, self.path, None, self.use_single_point_estimation))
+    #     for j, n, S_pj, should_be_reversed in executor.map(calculate_and_return, *zip(*executor_tasks)):
+    #         c_ijn = S_pj - S_p
+    #         if c_ijn > c and c_ijn > self.y.get(j, -1):
+    #             c = c_ijn
+    #             best_pos = n
+    #             reverse = should_be_reversed
+    #             best_task = j
+    #         # reverse the task with max reward if necessary
+    # if reverse:
+    #     self.tasks[best_task].reverse()
+    # return best_task, best_pos, c
+
     def build_bundle(self):
         if self.tasks is None:
             return
@@ -152,7 +201,7 @@ class agent:
         eps = 20
         i = self.id
         sender_info = BidInformation(y=y_kj, z=z_kj, t=t_kj, j=j, k=self.id)
-        own_info = BidInformation(y_ij, z_ij, t_ij, j, self.id)
+        own_info = BidInformation(y=y_ij, z=z_ij, t=t_ij, j=j, k=self.id)
         if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
             if z_ij == i:  # Rule 1.1
                 if y_kj > y_ij:
