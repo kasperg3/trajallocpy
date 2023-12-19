@@ -4,6 +4,7 @@ import time
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from matplotlib.animation import FuncAnimation
 from matplotlib.lines import Line2D
 from matplotlib.patches import Polygon as PolygonPatch
 
@@ -24,7 +25,6 @@ def timing(f):
 class Plotter:
     def __init__(self, robot_list, communication_graph):
         self.fig, self.environmentAx = plt.subplots()
-
         # Plot agents
         robot_pos = np.array([r.state for r in robot_list])
 
@@ -84,6 +84,37 @@ class Plotter:
 
     def pause(self, wait_time):
         plt.pause(wait_time)
+
+    def save(self, filename):
+        plt.savefig(filename)
+
+    # def save_gif(self, filename):
+    #     # Define the update function
+    #     def update(frame):
+    #         plt.cla()
+    #         plt.plot(self.plot_history[frame])
+
+    #     # Create the animation
+    #     anim = FuncAnimation(plt.gcf(), update, frames=len(self.plot_history), repeat=True)
+
+    #     # Save the animation as a GIF
+    #     anim.save("animation.gif", writer="imagemagick")
+
+    # import glob
+
+    # from PIL import Image
+
+    # def make_gif(frame_folder):
+    #     frames = [Image.open(image) for image in sorted(glob.glob(f"*.png"), key=lambda x: int("".join(filter(str.isdigit, x))))]
+    #     frames.append(frames[-1])
+    #     frames.append(frames[-1])
+    #     frames.append(frames[-1])
+    #     frames.append(frames[-1])
+    #     frame_one = frames[0]
+    #     frame_one.save("my_awesome.gif", format="GIF", append_images=frames, save_all=True, duration=500, loop=0)
+
+    # if __name__ == "__main__":
+    #     make_gif("/path/to/images")
 
     def plotMultiPolygon(self, areas, color, fill=False):
         for a in areas.geoms:
@@ -158,4 +189,5 @@ def plotGraph(G, boundary, obstacles, tasks=None):
                 "b--",
                 linewidth=1,
             )
+    plt.pause(0.01)
     plt.pause(0.01)

@@ -13,7 +13,7 @@
   </a> -->
 </p>
 
-![AC300 task example](https://github.com/kasperg3/CoverageTasks/blob/498c7cf2e65521f9a4e9524781397434f7d96bd5/.assets/AC300AC70008tasks.png)
+![AC300 task example](https://github.com/kasperg3/trajectory-task-allocation/.assets/trajectory_allocation.gif)
 
 
 # Running 

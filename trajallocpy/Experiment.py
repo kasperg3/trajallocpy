@@ -14,14 +14,14 @@ class Runner:
 
         for agent in agents:
             self.robot_list.append(
-                CBBA.agent(
+                ACBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
-                    number_of_agents=len(agents),
-                    point_estimation=False,
+                    # number_of_agents=len(agents),
+                    # point_estimation=False,
                 )
             )
 
@@ -138,6 +138,7 @@ class Runner:
                     plotter.setTitle("Time Step:{}".format(t))
                     plotter.plotAgents(self.robot_list)
                     plotter.pause(0.1)
+                    # plotter.save("iteration{}.png".format(t))
 
                 print("Bundle")
                 for robot in self.robot_list:
@@ -166,7 +167,6 @@ class Runner:
             routes.append(Agent.getTrajectory(robot.getPathTasks()))
 
         print(routes)
-
         if self.plot:
             plotter.plotAgents(self.robot_list)
         if self.plot:
