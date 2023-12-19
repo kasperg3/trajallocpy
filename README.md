@@ -12,7 +12,7 @@
   <img src="https://github.com/kasperg3/trajallocpy/blob/e635b71b0950f02abd04f8221ceec85ef949c46d/.assets/trajectory_allocation.gif" />
 </p>
 
-**TrajAllocPy** is a Python library that provides functionality for trajectory task allocation.
+**TrajAllocPy** is a Python library that provides functionality for trajectory task allocation based on CBBA (**C**onsensus **B**ased **B**undle **A**lgorithm).
 
 
 ## Coverage task dataset
