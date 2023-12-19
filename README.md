@@ -8,8 +8,9 @@
 [![Build Status](https://github.com/kasperg3/TrajAllocPy/actions/workflows/test.yml/badge.svg)](https://github.com/kasperg3/TrajAllocPy/actions/workflows/test.yml)
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 
-![Example](https://github.com/kasperg3/trajallocpy/blob/e635b71b0950f02abd04f8221ceec85ef949c46d/.assets/trajectory_allocation.gif)
-
+<p align="center">
+  <img src="https://github.com/kasperg3/trajallocpy/blob/e635b71b0950f02abd04f8221ceec85ef949c46d/.assets/trajectory_allocation.gif" />
+</p>
 
 **TrajAllocPy** is a Python library that provides functionality for trajectory task allocation.
 
