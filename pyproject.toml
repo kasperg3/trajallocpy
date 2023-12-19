@@ -3,13 +3,14 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
-
 [project]
 name = "trajallocpy"
 version = "0.0.1"
 description = "TrajAllocPy is a Python library that provides functionality for trajectory task Allocaition using Consensus based bundle algorithm"
 readme = "README.md"
-authors = [{ name = "Kasper Rømer Grøntved", email = "kaspergrontved@gmail.com" }]
+authors = [
+    { name = "Kasper Rømer Grøntved", email = "kaspergrontved@gmail.com" },
+]
 requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -23,7 +24,6 @@ extend-select = ["C4", "SIM", "TCH", "SLF", "S", "W"]
 show-fixes = true
 line-length = 150
 
-
 [project.optional-dependencies]
 test = ["pytest"]
 
@@ -33,7 +33,6 @@ addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
 xfail_strict = true
 filterwarnings = ["error"]
 testpaths = ["tests"]
-# pythonpath = [".", "src"]
 
 [tool.cibuildwheel]
 test-command = "pytest {project}/tests"
