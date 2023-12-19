@@ -3,7 +3,7 @@ import timeit
 import numpy as np
 import shapely
 
-from task_allocation import ACBBA, CBBA, Agent, CoverageProblem, Utility
+from trajallocpy import ACBBA, CBBA, Agent, CoverageProblem, Utility
 
 
 class Runner:
@@ -14,14 +14,14 @@ class Runner:
 
         for agent in agents:
             self.robot_list.append(
-                ACBBA.agent(
+                CBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
-                    # number_of_agents=len(agents),
-                    # point_estimation=False,
+                    number_of_agents=len(agents),
+                    point_estimation=False,
                 )
             )
 
@@ -161,11 +161,15 @@ class Runner:
         self.end_time = timeit.default_timer()
 
         print("Robot Routes")
-        result = {}
+        routes = []
+        for robot in self.robot_list:
+            routes.append(Agent.getTrajectory(robot.getPathTasks()))
+
+        print(routes)
 
         if self.plot:
             plotter.plotAgents(self.robot_list)
         if self.plot:
             plotter.show()
 
-        return result
+        return routes

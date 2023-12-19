@@ -7,7 +7,7 @@ import numpy as np
 from matplotlib.lines import Line2D
 from matplotlib.patches import Polygon as PolygonPatch
 
-from task_allocation import CBBA, Agent
+from trajallocpy import CBBA, Agent
 
 
 def timing(f):

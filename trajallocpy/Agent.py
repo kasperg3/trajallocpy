@@ -5,7 +5,7 @@ from functools import cache
 from multiprocessing import Pool
 from typing import List
 
-from task_allocation.Task import TrajectoryTask
+from trajallocpy.Task import TrajectoryTask
 
 
 @dataclass
@@ -178,3 +178,15 @@ def calculatePathReward(position, task_list: List[TrajectoryTask], environment, 
             travel_cost += getTravelCost(task_list[t_index].end, task_list[t_index + 1].start, environment)
             S_p += getTimeDiscountedReward(travel_cost, Lambda, task_list[t_index + 1])
     return S_p
+
+
+def getTrajectory(task_list: List[TrajectoryTask]):
+    trajectory = []
+    if len(task_list) > 0:
+        trajectory.append(task_list[0].start)
+        for t_index in range(len(task_list) - 1):
+            trajectory.extend(task_list[t_index].trajectory.coords)
+            trajectory.append(task_list[t_index].end)
+        trajectory.extend(task_list[-1].trajectory.coords)
+        trajectory.append(task_list[-1].end)
+    return trajectory

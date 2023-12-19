@@ -4,10 +4,12 @@
         "gitlens.codeLens.symbolScopes": [
             "!Module"
         ],
-        "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.wordBasedSuggestions": false,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.wordBasedSuggestions": "off",
         "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {"source.organizeImports": true}
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
     },
     "python.analysis.typeCheckingMode": "off",
     "python.formatting.blackArgs": [

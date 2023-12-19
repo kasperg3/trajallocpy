@@ -45,3 +45,5 @@ class TrajectoryTask:
         # re initialize the start and end
         self.end = self.trajectory.coords[0]
         self.start = self.trajectory.coords[-1]
+        
+    

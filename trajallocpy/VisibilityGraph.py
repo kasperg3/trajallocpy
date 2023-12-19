@@ -7,7 +7,7 @@ from scipy.spatial import KDTree
 from shapely import prepare
 from shapely.geometry import LineString, MultiPolygon, Polygon
 
-from task_allocation import Utility
+from trajallocpy import Utility
 
 
 @Utility.timing()

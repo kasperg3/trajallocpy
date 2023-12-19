@@ -3,7 +3,7 @@ import random
 import shapely.geometry
 from extremitypathfinder import PolygonEnvironment
 
-from task_allocation import Task
+from trajallocpy import Task
 
 
 class CoverageProblem:

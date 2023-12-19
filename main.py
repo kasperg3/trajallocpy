@@ -11,7 +11,7 @@ from shapely import geometry
 from shapely.affinity import scale, translate
 from shapely.ops import transform
 
-from task_allocation import Agent, CoverageProblem, Experiment, Utility
+from trajallocpy import Agent, CoverageProblem, Experiment, Utility
 
 
 def saveResults(experiment_title, results, directory="experiments/"):
@@ -48,14 +48,24 @@ def main(
     np.random.seed(seed)
 
     results = []
-    run_experiment("amagervaerket", n_agents, capacity, show_plots, debug, results, "amagervaerket.json")
+    run_experiment(
+        "amagervaerket",
+        n_agents,
+        capacity,
+        show_plots,
+        debug,
+        results,
+        "amagervaerket.json",
+    )
 
     # files = Utility.getAllCoverageFiles(dataset_name)
     # for file_name in files:
-    #     run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name)
+    #     run_experiment(
+    #         experiment_title, n_agents, capacity, show_plots, debug, results, file_name
+    #     )
 
 
-def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name):
+def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name, export=True):
     with open(file_name) as json_file:
         geojson_file = geojson.load(json_file)
         try:
@@ -93,13 +103,25 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
         # Create a new MultiPolygon with scaled polygons
     scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
 
-    cp = CoverageProblem.CoverageProblem(restricted_areas=scaled_multi_polygon, search_area=geometries["boundary"], tasks=geometries["tasks"])
+    cp = CoverageProblem.CoverageProblem(
+        restricted_areas=scaled_multi_polygon,
+        search_area=geometries["boundary"],
+        tasks=geometries["tasks"],
+    )
+
     initial = cp.generate_random_point_in_problem().coords.xy
     agent_list = [Agent.config(id, initial, capacity, max_velocity=10) for id in range(n_agents)]
     exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
     allocations = exp.solve(profiling_enabled=False, debug=debug)
-
+    if export:
+        temp = []
+        for route in allocations:
+            new_route = []
+            for coordinate in route:
+                new_route.append((coordinate[0] + min_x, coordinate[1] + min_y))
+            temp.append(new_route)
+        open("allocations.json", "w").write(geojson.dumps({"routes": temp}))
     # TODO find a way of adding an agent based on id instead of index in a list
     # This has some more work to it as this requires the index querying in cbba to be done based on hash indexing
     # exp.add_agent(Agent.agent(id=))
@@ -154,14 +176,13 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 4
-        capacity = 10000
-
+        n_agents = 2
+        capacity = 15000
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
             show_plots=True,
-            debug=True,
+            debug=False,
         )

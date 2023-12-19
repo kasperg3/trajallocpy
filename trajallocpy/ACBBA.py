@@ -10,8 +10,8 @@ from typing import List
 
 import numpy as np
 
-from task_allocation.Agent import *
-from task_allocation.Task import TrajectoryTask
+from trajallocpy.Agent import *
+from trajallocpy.Task import TrajectoryTask
 
 
 class agent:
