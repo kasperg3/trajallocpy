@@ -176,7 +176,7 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 2
+        n_agents = 3
         capacity = 15000
         main(
             dataset_name=ds,
@@ -184,5 +184,5 @@ if __name__ == "__main__":
             n_agents=n_agents,
             capacity=capacity,
             show_plots=True,
-            debug=False,
+            debug=True,
         )
