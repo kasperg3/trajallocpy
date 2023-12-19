@@ -2,7 +2,7 @@
 
 
 
-# TrajAllocPy: Decentralized multi-robot/agent task allocation for area coverage problems 👋
+# TrajAllocPy: Decentralized multi-robot/agent task allocation for area coverage problems
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 [![Build Status](https://github.com/kasperg3/TrajAllocPy/actions/workflows/test.yml/badge.svg)](https://github.com/kasperg3/TrajAllocPy/actions/workflows/test.yml)
