@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="trajallocpy",
-    version="0.0.2",
+    version="0.0.3",
     description="TrajAllocPy is a Python library that provides functionality for trajectory task Allocation using Consensus based bundle algorithm",
     long_description="",
     long_description_content_type="text/markdown",
