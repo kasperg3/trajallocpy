@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 setup(
     name="trajallocpy",
@@ -15,7 +15,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
-    packages=[],
+    packages=find_packages(),
     python_requires=">=3.10",
     install_requires=[],
     extras_require={"test": ["pytest"]},
