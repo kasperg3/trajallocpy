@@ -72,6 +72,9 @@ class agent:
         self.removal_list = np.zeros(self.task_num, dtype=np.int8)
         self.removal_threshold = 15
 
+    def add_tasks(self, tasks):
+        self.tasks.extend(tasks)
+
     def getPathTasks(self) -> List[TrajectoryTask]:
         return self.tasks[self.path]
 

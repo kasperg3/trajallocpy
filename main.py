@@ -122,9 +122,6 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
                 new_route.append((coordinate[0] + min_x, coordinate[1] + min_y))
             temp.append(new_route)
         open("allocations.json", "w").write(geojson.dumps({"routes": temp}))
-    # TODO find a way of adding an agent based on id instead of index in a list
-    # This has some more work to it as this requires the index querying in cbba to be done based on hash indexing
-    # exp.add_agent(Agent.agent(id=))
 
     # Save the results in a csv file
     (
@@ -176,13 +173,13 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 3
-        capacity = 15000
+        n_agents = 5
+        capacity = 1500
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
-            show_plots=True,
-            debug=True,
+            show_plots=False,
+            debug=False,
         )

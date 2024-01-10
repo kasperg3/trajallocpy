@@ -1,3 +1,3 @@
 import trajallocpy.Agent
 import trajallocpy.Task
-from trajallocpy import ACBBA, CBBA, Agent, CoverageProblem, Task
+from trajallocpy import ACBBA, CBBA, Agent, CoverageProblem, Experiment, Task

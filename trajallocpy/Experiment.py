@@ -65,6 +65,13 @@ class Runner:
             max_path_cost,
         )
 
+    def add_tasks(self, tasks):
+        # TODO make sure that the tasks are within the search area
+
+        # TODO make sure that the tasks not already in the list
+        for robot in self.robot_list:
+            robot.add_tasks(tasks)
+
     def solve(self, profiling_enabled=False, debug=False):
         if profiling_enabled:
             print("Profiling enabled!")

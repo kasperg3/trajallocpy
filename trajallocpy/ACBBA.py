@@ -77,6 +77,14 @@ class agent:
         self.removal_threshold = 5  # TODO find a good value for this when ros is implemented
         self.message_history = []
 
+    def __repr__(self) -> str:
+        return f"Agent {self.id} \n path {self.path} \n  bundle {self.bundle} \n y(winning bids) {self.y} \n z(winning agents) {self.z} \n t(timestamps) {self.t} \n"
+
+    def add_tasks(self, tasks):
+        # add the tasks to self.tasks dictionary
+        for task in tasks:
+            self.tasks[task.id] = task
+
     def __str__(self) -> str:
         return f"Agent {self.id} \n path {self.path} \n  bundle {self.bundle} \n y(winning bids) {self.y} \n z(winning agents) {self.z} \n t(timestamps) {self.t} \n"
 
