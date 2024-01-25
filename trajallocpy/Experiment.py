@@ -169,9 +169,9 @@ class Runner:
         self.end_time = timeit.default_timer()
 
         print("Robot Routes")
-        routes = []
+        routes = {}
         for robot in self.robot_list:
-            routes.append(Agent.getTrajectory(robot.getPathTasks()))
+            routes[robot.id] = Agent.getTrajectory(robot.getPathTasks())
 
         print(routes)
         if self.plot:

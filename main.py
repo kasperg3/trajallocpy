@@ -116,7 +116,7 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
     allocations = exp.solve(profiling_enabled=False, debug=debug)
     if export:
         temp = []
-        for route in allocations:
+        for agent_id, route in allocations.items():
             new_route = []
             for coordinate in route:
                 new_route.append((coordinate[0] + min_x, coordinate[1] + min_y))
