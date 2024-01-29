@@ -106,6 +106,9 @@ class Runner:
                 for robot in self.robot_list:
                     print(robot.path)
 
+            # Do not communicate if there is only one robot
+            if len(self.robot_list) > 1:
+                break
             # Communication stage
             # Send winning bid list to neighbors (depend on env)
             message_pool = [robot.send_message() for robot in self.robot_list]
