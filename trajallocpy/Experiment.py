@@ -171,7 +171,7 @@ class Runner:
         print("Robot Routes")
         routes = {}
         for robot in self.robot_list:
-            routes[robot.id] = Agent.getTrajectory(robot.getPathTasks())
+            routes[robot.id] = robot.getPathTasks()
 
         print(routes)
         if self.plot:
