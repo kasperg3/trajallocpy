@@ -5,6 +5,8 @@ from functools import cache
 from multiprocessing import Pool
 from typing import List
 
+import numpy as np
+
 from trajallocpy.Task import TrajectoryTask
 
 
@@ -66,11 +68,13 @@ def getTravelPath(position, assigned_tasks, environment):
     return full_path
 
 
+@cache
 def getTravelCost(start, end, environment):
     return distanceToCost(getDistance(start, end, environment))
 
 
 def getTimeDiscountedReward(cost, Lambda, task: TrajectoryTask):
+    # return np.exp((Lambda - 1) * cost) * task.reward
     return Lambda ** (cost) * task.reward
 
 

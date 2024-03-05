@@ -1,4 +1,5 @@
 import copy
+import itertools
 import math
 import random
 import time
@@ -105,84 +106,27 @@ class agent:
         c = 0
         reverse = None
         best_task = None
-        # try all tasks
-        for j, task in self.tasks.items():
-            # If already in the bundle list
-            if j in self.bundle or self.removal_list.get(j, 0) > self.removal_threshold:
-                continue  # Do not include if already in the bundle or if the removal threshold is exceeded
-            else:
-                for n in range(len(self.path) + 1):
-                    S_pj, should_be_reversed = calculatePathRewardWithNewTask(
-                        j, n, self.state, self.tasks, self.path, self.environment, self.use_single_point_estimation
-                    )
-                    c_ijn = S_pj - S_p
+        # Collect the tasks which should be considered for planning
+        keys_above_threshold = [key for key, value in self.removal_list.items() if value > self.removal_threshold]
+        tasks_to_check = set(self.tasks.keys()).difference(self.bundle).difference(keys_above_threshold)
+        # Combine the tasks and positions to check
 
-                    if c_ijn > c and c_ijn > self.y.get(j, -1):  # TODO: Figure out if this is bad for the general solution
-                        c = c_ijn  # Store the cost
-                        best_pos = n
-                        reverse = should_be_reversed
-                        best_task = j
+        for n, j in itertools.product(range(len(self.path) + 1), tasks_to_check):
+            S_pj, should_be_reversed = calculatePathRewardWithNewTask(
+                j, n, self.state, self.tasks, self.path, self.environment, self.use_single_point_estimation
+            )
+            c_ijn = S_pj - S_p
 
+            if c_ijn > c:  # and c_ijn > self.y.get(j, -1):  # TODO: Figure out if this is bad for the general solution
+                c = c_ijn  # Store the cost
+                best_pos = n
+                reverse = should_be_reversed
+                best_task = j
         # reverse the task with max reward if necesarry
         if reverse:
             self.tasks[j].reverse()
 
         return best_task, best_pos, c
-
-    # TODO this might be worth looking more into.
-    # def getCij(self):
-    #     # Calculate Sp_i
-    #     S_p = calculatePathReward(self.state, self.getPathTasks(), self.environment, self.Lambda)
-    #     # init
-    #     best_pos = None
-    #     c = 0
-    #     reverse = None
-    #     best_task = None
-    #     executor_tasks = []
-
-    #     for j, task in self.tasks.items():
-    #         if j in self.bundle or self.removal_list.get(j, 0) > self.removal_threshold:
-    #             continue  # Do not include if already in the bundle or if the removal threshold is exceeded
-    #         else:
-    #             for n in range(len(self.path) + 1):
-    #                 executor_tasks.append((j, n))
-
-    #     for test in executor_tasks:
-    #         j, n = test
-    #         S_pj, should_be_reversed = calculatePathRewardWithNewTask(j, n, self.state, self.tasks, self.path, self.environment)
-    #         c_ijn = S_pj - S_p
-    #         if c_ijn > c and c_ijn > self.y.get(j, -1):
-    #             c = c_ijn
-    #             best_pos = n
-    #             reverse = should_be_reversed
-    #             best_task = j
-
-    #     # reverse the task with max reward if necesarry
-    #     if reverse:
-    #         self.tasks[j].reverse()
-
-    #     return best_task, best_pos, c
-
-    ###
-    # with ThreadPoolExecutor() as executor:
-    #     executor_tasks = []
-    #     for j, task in self.tasks.items():
-    #         if j in self.bundle or self.removal_list.get(j, 0) > self.removal_threshold:
-    #             continue  # Do not include if already in the bundle or if the removal threshold is exceeded
-    #         else:
-    #             for n in range(len(self.path) + 1):
-    #                 executor_tasks.append((j, n, self.state, self.tasks, self.path, None, self.use_single_point_estimation))
-    #     for j, n, S_pj, should_be_reversed in executor.map(calculate_and_return, *zip(*executor_tasks)):
-    #         c_ijn = S_pj - S_p
-    #         if c_ijn > c and c_ijn > self.y.get(j, -1):
-    #             c = c_ijn
-    #             best_pos = n
-    #             reverse = should_be_reversed
-    #             best_task = j
-    #         # reverse the task with max reward if necessary
-    # if reverse:
-    #     self.tasks[best_task].reverse()
-    # return best_task, best_pos, c
 
     def build_bundle(self):
         if self.tasks is None:
@@ -206,7 +150,7 @@ class agent:
         self.t[task] = time.monotonic()
 
     def __action_rule(self, k, j, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij) -> BidInformation:
-        eps = 20
+        eps = np.finfo(float).eps
         i = self.id
         sender_info = BidInformation(y=y_kj, z=z_kj, t=t_kj, j=j, k=self.id)
         own_info = BidInformation(y=y_ij, z=z_ij, t=t_ij, j=j, k=self.id)

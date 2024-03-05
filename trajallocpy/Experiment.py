@@ -14,14 +14,14 @@ class Runner:
 
         for agent in agents:
             self.robot_list.append(
-                ACBBA.agent(
+                CBBA.agent(
                     id=agent.id,
                     state=shapely.Point(agent.position),
                     environment=self.coverage_problem.environment,
                     tasks=np.array(self.coverage_problem.getTasks()),
                     capacity=agent.capacity,
-                    # number_of_agents=len(agents),
-                    # point_estimation=False,
+                    number_of_agents=len(agents),
+                    point_estimation=False,
                 )
             )
 
@@ -106,11 +106,11 @@ class Runner:
                 for robot in self.robot_list:
                     print(robot.path)
 
-            # Do not communicate if there
+            # Do not communicate if there are no agents to communicate with
             if len(self.robot_list) <= 1:
                 break
+
             # Communication stage
-            # Send winning bid list to neighbors (depend on env)
             message_pool = [robot.send_message() for robot in self.robot_list]
             for robot_id, robot in enumerate(self.robot_list):
                 # Recieve winning bidlist from neighbors

@@ -27,7 +27,7 @@ class TrajectoryTask:
     trajectory: shapely.LineString  # List of points
     start: shapely.Point = None  # Accessing the start/end directly is 4x more efficient
     end: shapely.Point = None
-    reward: float = 1  # task reward
+    reward: float = 100  # task reward
     start_time: float = 0  # task start time (sec)
     end_time: float = 0  # task expiry time (sec)
     duration: float = 0  # task default duration (sec)
@@ -45,5 +45,3 @@ class TrajectoryTask:
         # re initialize the start and end
         self.end = self.trajectory.coords[0]
         self.start = self.trajectory.coords[-1]
-        
-    
