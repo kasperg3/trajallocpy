@@ -1,14 +1,27 @@
 import copy
 import itertools
 import math
+import multiprocessing
 import random
 from functools import cache
+from queue import Queue
 from typing import List
 
 import numpy as np
 
 from trajallocpy import Agent
 from trajallocpy.Task import TrajectoryTask
+
+EPSILON = 1e-6
+
+
+class BundleResult:
+    def __init__(self, agent: Agent):
+        self.bundle = agent.bundle
+        self.path = agent.path
+        self.winning_agents = agent.winning_agents
+        self.winning_bids = agent.winning_bids
+        self.id = agent.id
 
 
 class agent:
@@ -51,6 +64,8 @@ class agent:
         self.bundle = []
         # Path
         self.path = []
+        # times: List of time in seconds to each task in the path
+        self.times = []
         # Maximum task capacity
         if capacity is None:
             raise Exception("Error: agent capacity cannot be None")
@@ -70,8 +85,17 @@ class agent:
         # socre function parameters
         self.Lambda = 0.95
 
+        self.availability_time = 0
+
         self.removal_list = np.zeros(self.task_num, dtype=np.int8)
-        self.removal_threshold = 15
+        self.removal_threshold = 5
+
+    def update_bundle_result(self, state: BundleResult):
+        if self.id == state.id:
+            self.bundle = state.bundle
+            self.path = state.path
+            self.winning_agents = state.winning_agents
+            self.winning_bids = state.winning_bids
 
     def add_tasks(self, tasks):
         self.tasks.extend(tasks)
@@ -90,19 +114,19 @@ class agent:
         Returns the cost list c_ij for agent i where the position n results in the greatest reward
         """
         # Calculate Sp_i
-        S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), self.environment, self.Lambda)
+        S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), None, self.Lambda)
         # init
         best_pos = np.zeros(self.task_num, dtype=int)
         c = np.zeros(self.task_num)
         reverse = np.zeros(self.task_num)
-
+        best_time = 0
         # Collect the tasks which should be considered for planning
         ignore_tasks = [key for key, value in enumerate(self.removal_list) if value > self.removal_threshold]
         tasks_to_check = set(range(len(self.tasks))).difference(self.bundle).difference(ignore_tasks)
 
         for n, j in itertools.product(range(len(self.path) + 1), tasks_to_check):
-            S_pj, should_be_reversed = Agent.calculatePathRewardWithNewTask(
-                j, n, self.state, self.tasks, self.path, self.environment, self.use_single_point_estimation
+            S_pj, should_be_reversed, best_time = Agent.calculatePathRewardWithNewTask(
+                j, n, self.state, self.tasks, self.path, None, self.use_single_point_estimation
             )
             c_ijn = S_pj - S_p
             if c[j] <= c_ijn:
@@ -110,13 +134,20 @@ class agent:
                 best_pos[j] = n
                 reverse[j] = should_be_reversed
 
-        return (best_pos, c, reverse)
+        return (best_pos, c, reverse, best_time)
 
-    def build_bundle(self):
+    def update_time(self, index, time):
+        self.times.insert(index, time)
+        # Correct the times after the insertion
+        for i in range(index + 1, len(self.times)):
+            self.times[i] += time
+
+    def build_bundle(self, queue: multiprocessing.Queue):
         while Agent.getTotalTravelCost(self.state, self.getPathTasks(), self.environment) <= self.capacity:
-            best_pos, c, reverse = self.getCij()
-            h = c > self.winning_bids
-
+            best_pos, c, reverse, best_time = self.getCij()
+            D1 = c - self.winning_bids > EPSILON
+            D2 = abs(c - self.winning_bids) <= EPSILON
+            h = D1 | (D2 & (self.id < self.winning_agents))
             if sum(h) == 0:  # No valid task
                 break
 
@@ -130,9 +161,12 @@ class agent:
 
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
+            self.update_time(n_J, best_time)
 
             self.winning_bids[J_i] = c[J_i]
             self.winning_agents[J_i] = self.id
+
+        queue.put(BundleResult(self))
 
     def update_task(self):
         id_list = list(self.Y.keys())
@@ -168,7 +202,7 @@ class agent:
                     if z_ij == self.id:
                         if y_kj > y_ij:
                             self.__update(j, y_kj, z_kj)
-                        elif abs(y_kj - y_ij) < np.finfo(float).eps:  # Tie Breaker
+                        elif abs(y_kj - y_ij) < EPSILON:  # Tie Breaker
                             if k < self.id:
                                 self.__update(j, y_kj, z_kj)
                         else:
@@ -181,7 +215,7 @@ class agent:
                         m = z_ij
                         if (s_k[m] > self.timestamps[m]) or (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
-                        elif abs(y_kj - y_ij) < np.finfo(float).eps and k < self.id:  # Tie Breaker
+                        elif abs(y_kj - y_ij) < EPSILON and k < self.id:  # Tie Breaker
                             self.__update(j, y_kj, z_kj)
                     # Rule 4
                     elif z_ij == -1:
@@ -214,7 +248,7 @@ class agent:
                         if (s_k[m] >= self.timestamps[m]) and (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
                         # Tie Breaker
-                        elif (s_k[m] >= self.timestamps[m]) and (abs(y_kj - y_ij) < np.finfo(float).eps and m < self.id):
+                        elif (s_k[m] >= self.timestamps[m]) and (abs(y_kj - y_ij) < EPSILON and m < self.id):
                             self.__update(j, y_kj, z_kj)
                     # Rule 10
                     elif z_ij == k:
@@ -234,7 +268,7 @@ class agent:
                         elif (s_k[m] > self.timestamps[m]) and (y_kj > y_ij):
                             self.__update(j, y_kj, z_kj)
                         # Tie Breaker
-                        elif (s_k[m] > self.timestamps[m]) and (abs(y_kj - y_ij) < np.finfo(float).eps):
+                        elif (s_k[m] > self.timestamps[m]) and (abs(y_kj - y_ij) < EPSILON):
                             if m < n:
                                 self.__update(j, y_kj, z_kj)
                         elif (s_k[n] > self.timestamps[n]) and (self.timestamps[m] > s_k[m]):
@@ -266,38 +300,23 @@ class agent:
                 else:
                     raise Exception("Error while updating")
 
-        n_bar = len(self.bundle)
-        # Get n_bar
-        # TODO this can be done in each bundle start instead of here
-        for n in range(len(self.bundle)):
-            b_n = self.bundle[n]
-            if self.winning_agents[b_n] != self.id and n_bar > n:
-                n_bar = n  # Find the minimum n in the agents bundle
-
-        b_idx1 = copy.deepcopy(self.bundle[n_bar + 1 :])
-
-        if len(b_idx1) > 0:
-            self.winning_bids[b_idx1] = 0
-            self.winning_agents[b_idx1] = -1
-
-        tasks_to_delete = self.bundle[n_bar:]
-
-        # Keep track of how many times this particular task has been removed
-        if len(tasks_to_delete) != 0:
-            self.removal_list[self.bundle[n_bar]] = self.removal_list[self.bundle[n_bar]] + 1
-
-        del self.bundle[n_bar:]
-
-        self.path = [ele for ele in self.path if ele not in tasks_to_delete]
-
         self.time_step += 1
 
         converged = False
-        # The agent has converged to a solution of no conflicts has been detected
-        if len(tasks_to_delete) == 0:
-            converged = True
-
         return converged
+
+    def __update_path(self, task):
+        if task not in self.bundle:
+            return
+        index = self.bundle.index(task)
+        b_retry = self.bundle[index + 1 :]
+        for idx in b_retry:
+            self.winning_bids[idx] = 0
+            self.winning_agents[idx] = -1
+
+        self.removal_list[task] = self.removal_list[task] + 1
+        self.path = [num for num in self.path if num not in self.bundle[index:]]
+        self.bundle = self.bundle[:index]
 
     def __update(self, j, y_kj, z_kj):
         """
@@ -305,6 +324,7 @@ class agent:
         """
         self.winning_bids[j] = y_kj
         self.winning_agents[j] = z_kj
+        self.__update_path(j)
 
     def __reset(self, j):
         """
@@ -312,6 +332,7 @@ class agent:
         """
         self.winning_bids[j] = 0
         self.winning_agents[j] = -1  # -1 means "none"
+        self.__update_path(j)
 
     def __leave(self):
         """

@@ -45,3 +45,9 @@ class TrajectoryTask:
         # re initialize the start and end
         self.end = self.trajectory.coords[0]
         self.start = self.trajectory.coords[-1]
+
+    def getDuration(self, velocity, acceleration):
+        # Velocity ramp
+        d_a = (velocity**2) / acceleration
+        result = (self.length / velocity) if self.length < d_a else (velocity / acceleration) + (self.length / velocity)
+        return result
