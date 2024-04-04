@@ -114,7 +114,7 @@ class agent:
         Returns the cost list c_ij for agent i where the position n results in the greatest reward
         """
         # Calculate Sp_i
-        S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), None, self.Lambda)
+        S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), self.environment, self.Lambda)
         # init
         best_pos = np.zeros(self.task_num, dtype=int)
         c = np.zeros(self.task_num)
@@ -126,7 +126,7 @@ class agent:
 
         for n, j in itertools.product(range(len(self.path) + 1), tasks_to_check):
             S_pj, should_be_reversed, best_time = Agent.calculatePathRewardWithNewTask(
-                j, n, self.state, self.tasks, self.path, None, self.use_single_point_estimation
+                j, n, self.state, self.tasks, self.path, self.environment, self.use_single_point_estimation
             )
             c_ijn = S_pj - S_p
             if c[j] <= c_ijn:

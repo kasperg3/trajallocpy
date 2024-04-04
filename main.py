@@ -44,9 +44,6 @@ def main(
     show_plots=True,
     debug=False,
 ):
-    seed = 135239
-    np.random.seed(seed)
-
     results = []
     run_experiment(
         "amagervaerket",
@@ -55,22 +52,20 @@ def main(
         show_plots,
         debug,
         results,
-        "amagervaerket.json",
+        "environment.geojson",
     )
 
     # files = Utility.getAllCoverageFiles(dataset_name)
     # for file_name in files:
-    #     run_experiment(
-    #         experiment_title, n_agents, capacity, show_plots, debug, results, file_name
-    #     )
+    #     run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name)
 
 
 def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, results, file_name, export=True):
     with open(file_name) as json_file:
         geojson_file = geojson.load(json_file)
         try:
-            crs = geojson_file["crs"]
-        except:
+            geojson_file["crs"]
+        except KeyError:
             print("Warning! No CRS is given and can cause odd behaviours!")
         features = geojson_file["features"]
 
@@ -92,12 +87,13 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
 
     print(file_name, " Tasks: ", number_of_tasks)
     # Initialize coverage problem and the agents
-    geometries["boundary"] = scale(geometries["boundary"], xfact=1.01, yfact=1.01)
+
+    geometries["boundary"] = geometries["boundary"].buffer(0.1)
 
     # Scale each polygon in the MultiPolygon
     scaled_polygons = []
     for polygon in geometries["obstacles"].geoms:
-        scaled_polygon = scale(polygon, xfact=0.95, yfact=0.95, origin="centroid")
+        scaled_polygon = polygon.buffer(-0.1)  # scale(polygon, xfact=0.95, yfact=0.95, origin="centroid")
         scaled_polygons.append(scaled_polygon)
 
         # Create a new MultiPolygon with scaled polygons
@@ -110,7 +106,10 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
     )
 
     initial = cp.generate_random_point_in_problem().coords.xy
-    agent_list = [Agent.config(id, initial, capacity, max_velocity=10) for id in range(n_agents)]
+    agent_list = [
+        Agent.config(id, (initial[0][0] + random.uniform(-10, 10), initial[1][0] + random.uniform(-10, 10)), capacity, max_velocity=10)
+        for id in range(n_agents)
+    ]
     exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
     allocations = exp.solve(profiling_enabled=False, debug=debug)
@@ -174,13 +173,13 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 5
-        capacity = 1500
+        n_agents = 3
+        capacity = 5000
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
             n_agents=n_agents,
             capacity=capacity,
-            show_plots=False,
+            show_plots=True,
             debug=False,
         )

@@ -117,7 +117,6 @@ class Runner:
             # Extract results from the queue
             while not result_queue.empty():
                 result = result_queue.get()
-                print(result)
                 self.robot_list[result.id].update_bundle_result(result)
 
             if debug:
@@ -206,7 +205,6 @@ class Runner:
             plotter.plotAgents(self.robot_list.values())
         if self.plot:
             plotter.show()
-
         return routes
 
 
