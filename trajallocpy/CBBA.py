@@ -1,10 +1,7 @@
 import copy
 import itertools
-import math
 import multiprocessing
 import random
-from functools import cache
-from queue import Queue
 from typing import List
 
 import numpy as np
@@ -12,7 +9,7 @@ import numpy as np
 from trajallocpy import Agent
 from trajallocpy.Task import TrajectoryTask
 
-EPSILON = 1e-6
+EPSILON = 1e-10
 
 
 class BundleResult:
@@ -129,7 +126,7 @@ class agent:
                 j, n, self.state, self.tasks, self.path, self.environment, self.use_single_point_estimation
             )
             c_ijn = S_pj - S_p
-            if c[j] <= c_ijn:
+            if c[j] < c_ijn:
                 c[j] = c_ijn  # Store the cost
                 best_pos[j] = n
                 reverse[j] = should_be_reversed
@@ -213,9 +210,9 @@ class agent:
                     # Rule 3
                     elif z_ij != -1:
                         m = z_ij
-                        if (s_k[m] > self.timestamps[m]) or (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj)
-                        elif abs(y_kj - y_ij) < EPSILON and k < self.id:  # Tie Breaker
+                        if (
+                            (s_k[m] > self.timestamps[m]) or (y_kj > y_ij) or (abs(y_kj - y_ij) < EPSILON and k < self.id)
+                        ):  # Combine conditions using logical or
                             self.__update(j, y_kj, z_kj)
                     # Rule 4
                     elif z_ij == -1:
@@ -245,10 +242,7 @@ class agent:
                     m = z_kj
                     # Rule 9
                     if z_ij == i:
-                        if (s_k[m] >= self.timestamps[m]) and (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj)
-                        # Tie Breaker
-                        elif (s_k[m] >= self.timestamps[m]) and (abs(y_kj - y_ij) < EPSILON and m < self.id):
+                        if (s_k[m] >= self.timestamps[m]) and ((y_kj > y_ij) or (abs(y_kj - y_ij) < EPSILON and m < self.id)):
                             self.__update(j, y_kj, z_kj)
                     # Rule 10
                     elif z_ij == k:
@@ -263,15 +257,16 @@ class agent:
                     # Rule 12
                     elif z_ij != -1:
                         n = z_ij
-                        if (s_k[m] > self.timestamps[m]) and (s_k[n] > self.timestamps[n]):
-                            self.__update(j, y_kj, z_kj)
-                        elif (s_k[m] > self.timestamps[m]) and (y_kj > y_ij):
-                            self.__update(j, y_kj, z_kj)
-                        # Tie Breaker
-                        elif (s_k[m] > self.timestamps[m]) and (abs(y_kj - y_ij) < EPSILON):
-                            if m < n:
-                                self.__update(j, y_kj, z_kj)
-                        elif (s_k[n] > self.timestamps[n]) and (self.timestamps[m] > s_k[m]):
+                        if (
+                            (s_k[m] > self.timestamps[m])
+                            and (s_k[n] > self.timestamps[n])
+                            or (s_k[m] > self.timestamps[m])
+                            and (y_kj > y_ij)
+                            or (s_k[m] > self.timestamps[m])
+                            and (abs(y_kj - y_ij) < EPSILON and m < n)
+                            or (s_k[n] > self.timestamps[n])
+                            and (self.timestamps[m] > s_k[m])
+                        ):
                             self.__update(j, y_kj, z_kj)
                     # Rule 13
                     elif z_ij == -1:

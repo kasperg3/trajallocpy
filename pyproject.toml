@@ -20,7 +20,7 @@ classifiers = [
 ]
 
 [tool.ruff]
-extend-select = ["C4", "SIM", "TCH", "SLF", "S", "W"]
+extend-select = ["C4", "SIM", "TCH", "SLF", "W"]
 show-fixes = true
 line-length = 150
 

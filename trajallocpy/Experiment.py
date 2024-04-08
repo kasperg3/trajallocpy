@@ -37,9 +37,9 @@ class Runner:
         route_list = []
         max_path_cost = 0
         for r in self.robot_list.values():
-            total_path_length += ACBBA.getTotalPathLength(r.state, r.getPathTasks(), r.environment)
-            total_task_length += ACBBA.getTotalTaskLength(r.getPathTasks())
-            agent_path_cost = ACBBA.getTotalTravelCost(r.state, r.getPathTasks(), r.environment)
+            total_path_length += Agent.getTotalPathLength(r.state, r.getPathTasks(), r.environment)
+            total_task_length += Agent.getTotalTaskLength(r.getPathTasks())
+            agent_path_cost = Agent.getTotalTravelCost(r.state, r.getPathTasks(), r.environment)
             total_path_cost += agent_path_cost
             route = [r.state]
             for task in r.getPathTasks():
@@ -104,6 +104,7 @@ class Runner:
             # Create a list to store the threads
             processes: list[multiprocessing.Process] = []
             # Start multiple threads
+
             for robot in self.robot_list.values():
                 # robot.build_bundle(result_queue)
                 process = multiprocessing.Process(target=robot.build_bundle, args=(result_queue,))

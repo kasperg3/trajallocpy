@@ -46,7 +46,7 @@ def main(
 ):
     results = []
     run_experiment(
-        "amagervaerket",
+        "custom",
         n_agents,
         capacity,
         show_plots,
@@ -88,12 +88,12 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
     print(file_name, " Tasks: ", number_of_tasks)
     # Initialize coverage problem and the agents
 
-    geometries["boundary"] = geometries["boundary"].buffer(0.1)
+    geometries["boundary"] = geometries["boundary"].buffer(1)
 
     # Scale each polygon in the MultiPolygon
     scaled_polygons = []
     for polygon in geometries["obstacles"].geoms:
-        scaled_polygon = polygon.buffer(-0.1)  # scale(polygon, xfact=0.95, yfact=0.95, origin="centroid")
+        scaled_polygon = polygon.buffer(-1)  # scale(polygon, xfact=0.95, yfact=0.95, origin="centroid")
         scaled_polygons.append(scaled_polygon)
 
         # Create a new MultiPolygon with scaled polygons
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     else:
         ds = "AC300"
         n_agents = 3
-        capacity = 5000
+        capacity = 100000
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",
