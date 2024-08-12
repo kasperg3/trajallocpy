@@ -48,9 +48,9 @@ def export_to_geojson(tasks: GeoMultiTrajectory, polygon: GeoPolygon):
 import osmnx as ox
 
 if __name__ == "__main__":
-    # polygon_file = "examples/DemaScenarios/FlatTerrainNature.geojson"
-    # polygon_file = "examples/DemaScenarios/HillyTerrainNature.geojson"
-    # polygon_file = "examples/DemaScenarios/Urban.geojson"
+    # polygon_file = "DemaScenarios/FlatTerrainNature.geojson"
+    # polygon_file = "DemaScenarios/HillyTerrainNature.geojson"
+    # polygon_file = "DemaScenarios/Urban.geojson"
     polygon_file = "DemaScenarios/Water.geojson"
 
     # Load the GeoJSON data
@@ -61,24 +61,24 @@ if __name__ == "__main__":
     coordinates = data["features"][0]["geometry"]["coordinates"][0]
 
     # Create the shapely Polygon object
-    polygon = GeoPolygon(shapely.Polygon(coordinates)).set_crs("EPSG:2197")
+    polygon = GeoPolygon(shapely.Polygon(coordinates)).set_crs("EPSG:4093")
     polygon.plot(facecolor="none", edgecolor="black", linewidth=2)
 
     query_polygon = GeoPolygon(shapely.Polygon(coordinates)).set_crs("WGS84")
-    features = query_features(
-        query_polygon,
-        {
-            "natural": ["coastline"],
-        },
-    )
-    GeoMultiTrajectory(features["natural"]).set_crs("EPSG:2197").plot(color="blue", linewidth=2)
+    # features = query_features(
+    #     query_polygon,
+    #     {
+    #         "natural": ["coastline"],
+    #     },
+    # )
+    # GeoMultiTrajectory(features["natural"]).set_crs("EPSG:4093").plot(color="blue", linewidth=2)
 
     tasks = get_line_segments(polygon)
 
-    multi_traj = GeoMultiTrajectory(tasks, "EPSG:2197")
+    multi_traj = GeoMultiTrajectory(tasks, "EPSG:4093")
     multi_traj.plot(color="red")
 
-    Utils.plot_basemap(provider=cx.providers.OpenStreetMap.Mapnik, crs="EPSG:2197")
+    Utils.plot_basemap(provider=cx.providers.OpenStreetMap.Mapnik, crs="EPSG:4093")
     export_to_geojson(multi_traj, polygon)
 
     # No axis on the plot

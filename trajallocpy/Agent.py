@@ -37,7 +37,6 @@ class BidInformation:
 
 
 def distanceToCost(dist, max_velocity=3, max_acceleration=1):
-    # Velocity ramp
     d_a = (max_velocity**2) / max_acceleration
     result = math.sqrt(4 * dist / max_acceleration) if dist < d_a else max_velocity / max_acceleration + dist / max_velocity
     return result
@@ -45,6 +44,10 @@ def distanceToCost(dist, max_velocity=3, max_acceleration=1):
 
 @cache
 def getDistance(start, end, environment=None):
+    # TODO this is a temporary fix for improving the performance of the code
+    dist = [(a - b) ** 2 for a, b in zip(start, end)]
+    dist = math.sqrt(sum(dist))
+    return dist
     # If there is no environment defined, use euclidean
     if environment is None:
         # This is a optimised way of calculating euclidean distance: https://stackoverflow.com/questions/37794849/efficient-and-precise-calculation-of-the-euclidean-distance
