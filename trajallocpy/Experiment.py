@@ -196,12 +196,12 @@ class Runner:
 
         self.end_time = timeit.default_timer()
 
-        print("Robot Routes")
+        # print("Robot Routes")
         routes = {}
         for robot in self.robot_list.values():
             routes[robot.id] = robot.getPathTasks()
 
-        print(routes)
+        # print(routes)
         if self.plot:
             plotter.plotAgents(self.robot_list.values())
         if self.plot:

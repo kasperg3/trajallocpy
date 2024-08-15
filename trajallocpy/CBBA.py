@@ -9,7 +9,7 @@ import numpy as np
 from trajallocpy import Agent
 from trajallocpy.Task import TrajectoryTask
 
-EPSILON = 1e-10
+EPSILON = np.finfo(float).eps
 
 
 class BundleResult:
@@ -80,7 +80,7 @@ class agent:
         else:
             self.state = state.coords[0]
         # socre function parameters
-        self.Lambda = 0.95
+        self.Lambda = 0.99
 
         self.availability_time = 0
 
@@ -123,7 +123,7 @@ class agent:
 
         for n, j in itertools.product(range(len(self.path) + 1), tasks_to_check):
             S_pj, should_be_reversed, best_time = Agent.calculatePathRewardWithNewTask(
-                j, n, self.state, self.tasks, self.path, self.environment, self.use_single_point_estimation
+                j, n, self.state, self.tasks, self.path, self.environment, self.Lambda, self.use_single_point_estimation
             )
             c_ijn = S_pj - S_p
             if c[j] < c_ijn:

@@ -36,7 +36,7 @@ class BidInformation:
     # sender_id: int
 
 
-def distanceToCost(dist, max_velocity=3, max_acceleration=1):
+def distanceToCost(dist, max_velocity=5, max_acceleration=2):
     d_a = (max_velocity**2) / max_acceleration
     result = math.sqrt(4 * dist / max_acceleration) if dist < d_a else max_velocity / max_acceleration + dist / max_velocity
     return result
@@ -116,7 +116,7 @@ def test_calculatePathRewardWithNewTask(environment, agent, taskCurr, taskPrev, 
     return score, minStart, maxStart
 
 
-def calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, use_single_point_estimation=False, Lambda=0.95):
+def calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, Lambda, use_single_point_estimation=False):
     temp_path = list(path)
     temp_path.insert(n, j)
     # print(j)
