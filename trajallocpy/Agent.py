@@ -77,8 +77,9 @@ def getTravelCost(start, end, environment):
 
 
 def getTimeDiscountedReward(cost, Lambda, task: TrajectoryTask):
-    # return np.exp((Lambda - 1) * cost) * task.reward
-    return Lambda ** (cost) * task.reward
+    # return np.exp((Lambda - 1) * cost) * task.reward +1
+    # return Lambda ** (cost) + task.reward
+    return max(0, -math.log(cost) + 1000) * task.reward
 
 
 def getMinTravelCost(point, task: TrajectoryTask, environment):
