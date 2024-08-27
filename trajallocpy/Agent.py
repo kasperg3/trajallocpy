@@ -61,6 +61,7 @@ def getDistance(start, end, environment=None):
 def getTravelPath(position, assigned_tasks, environment):
     full_path = []
     travel_paths = []
+    task_paths = []
     if len(assigned_tasks) > 0:
         path, dist = environment.find_shortest_path(position, assigned_tasks[0].start, free_space_after=False, verify=False)
         full_path.extend(path)
@@ -68,9 +69,12 @@ def getTravelPath(position, assigned_tasks, environment):
             full_path.extend(assigned_tasks[i].trajectory.coords)
             path, dist = environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, free_space_after=False, verify=False)
             full_path.extend(path)
+            task_paths.append(assigned_tasks[i].trajectory.coords)
             travel_paths.append(path)
         full_path.extend(assigned_tasks[-1].trajectory.coords)
-    return full_path, travel_paths
+        task_paths.append(assigned_tasks[-1].trajectory.coords)
+
+    return full_path, travel_paths, task_paths
 
 
 @cache

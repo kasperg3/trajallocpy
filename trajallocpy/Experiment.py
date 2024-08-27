@@ -203,8 +203,9 @@ class Runner:
 
         # Save the results in the object
         for robot in self.robot_list.values():
-            self.routes[robot.id], self.transport[robot.id] = Agent.getTravelPath(robot.state, robot.getPathTasks(), robot.environment)
-            self.tasks[robot.id] = [[coord for coord in task.trajectory.coords] for task in robot.getPathTasks()]
+            self.routes[robot.id], self.transport[robot.id], self.tasks[robot.id] = Agent.getTravelPath(
+                robot.state, robot.getPathTasks(), robot.environment
+            )
 
         if self.plot:
             plotter.plotAgents(self.robot_list.values())
