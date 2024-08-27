@@ -30,6 +30,11 @@ class Runner:
         self.communication_graph = np.ones((len(agents), len(agents)))
         self.plot = enable_plotting
 
+        # Results
+        self.routes = {}
+        self.transport = {}
+        self.tasks = {}
+
     def evaluateSolution(self):
         total_path_length = 0
         total_task_length = 0
@@ -196,17 +201,15 @@ class Runner:
 
         self.end_time = timeit.default_timer()
 
-        # print("Robot Routes")
-        routes = {}
+        # Save the results in the object
         for robot in self.robot_list.values():
-            routes[robot.id] = robot.getPathTasks()
+            self.routes[robot.id], self.transport[robot.id] = Agent.getTravelPath(robot.state, robot.getPathTasks(), robot.environment)
+            self.tasks[robot.id] = [[coord for coord in task.trajectory.coords] for task in robot.getPathTasks()]
 
-        # print(routes)
         if self.plot:
             plotter.plotAgents(self.robot_list.values())
         if self.plot:
             plotter.show()
-        return routes
 
 
 # TODO refactor the experiment class, to provide utility to perform replanning.

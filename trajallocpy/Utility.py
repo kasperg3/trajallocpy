@@ -55,7 +55,7 @@ class Plotter:
     def plotAgent(self, robot: CBBA.agent, total_number_of_robots):
         task_x = []
         task_y = []
-        p = Agent.getTravelPath(robot.state, robot.getPathTasks(), robot.environment)
+        p, _ = Agent.getTravelPath(robot.state, robot.getPathTasks(), robot.environment)
 
         for s in p:
             task_x.append(s[0])
