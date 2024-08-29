@@ -11,7 +11,7 @@ from shapely import geometry
 from shapely.affinity import scale, translate
 from shapely.ops import transform
 
-from trajallocpy import Agent, CoverageProblem, Experiment, Utility
+from trajallocpy import Agent, CoverageProblem, Experiment, Task, Utility
 
 
 def saveResults(experiment_title, results, directory="experiments/"):
@@ -98,11 +98,14 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
 
         # Create a new MultiPolygon with scaled polygons
     scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
+    task_list = []
+    for id, task in enumerate(geometries["tasks"].geoms):
+        task_list.append(Task.TrajectoryTask(id, task))
 
     cp = CoverageProblem.CoverageProblem(
         restricted_areas=scaled_multi_polygon,
         search_area=geometries["boundary"],
-        tasks=geometries["tasks"],
+        tasks=task_list,
     )
 
     initial = cp.generate_random_point_in_problem().coords.xy
@@ -113,16 +116,6 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
     exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
     exp.solve(profiling_enabled=False, debug=debug)
-
-    # TODO rewrite this as a function
-    # if export:
-    #     temp = []
-    #     for agent_id, route in allocations.items():
-    #         new_route = []
-    #         for coordinate in route:
-    #             new_route.append((coordinate[0] + min_x, coordinate[1] + min_y))
-    #         temp.append(new_route)
-    # open("allocations.json", "w").write(geojson.dumps({"routes": temp}))
 
     # Save the results in a csv file
     (

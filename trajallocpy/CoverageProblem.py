@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 import shapely.geometry
 from extremitypathfinder import PolygonEnvironment
@@ -9,7 +10,7 @@ from trajallocpy import Task
 class CoverageProblem:
     def __init__(
         self,
-        tasks,
+        tasks: List[Task.TrajectoryTask],
         search_area: shapely.Polygon,
         restricted_areas: shapely.geometry.MultiPolygon,
     ):
@@ -26,11 +27,7 @@ class CoverageProblem:
 
         self.environment.store(list(shapely.geometry.polygon.orient(search_area, 1.0).exterior.coords[:-1]), holes, validate=False)
 
-        task_list = []
-        for id, trajectory in enumerate(tasks.geoms):
-            task_list.append(Task.TrajectoryTask(id, trajectory))
-
-        self.__tasks = task_list
+        self.__tasks = tasks
 
     def getRestrictedAreas(self):
         return self.__restricted_areas
