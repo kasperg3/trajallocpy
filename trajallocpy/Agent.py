@@ -82,10 +82,16 @@ def getTravelCost(start, end, environment):
     return distanceToCost(getDistance(start, end, environment))
 
 
-def getTimeDiscountedReward(cost, Lambda, task: TrajectoryTask):
+def getTimeDiscountedReward(cost, Lambda, task: TrajectoryTask, agent_capacity):
     # return np.exp((Lambda - 1) * cost) * task.reward +1
     # return Lambda ** (cost) + task.reward
-    return max(0, -math.log(cost) + 1000) * task.reward
+    norm_factor = 1 / agent_capacity
+    tau = cost * norm_factor
+    # result = 0.05 ** (tau) * task.reward
+    result = -math.log(tau) * task.reward
+    # This is not the fastest place to do the normalization, but in getTravelCost will break the time settings.
+    # Make sure that this is correct with respect to the capacity of the agent TODO
+    return result
 
 
 def getMinTravelCost(point, task: TrajectoryTask, environment):
@@ -104,33 +110,33 @@ def test_calculatePathRewardWithNewTask(environment, agent, taskCurr, taskPrev, 
     # * Iterate through the vector and calculate
 
     if taskPrev == None:  # First task in the path
-        dt = getMinTravelCost(agent.state, taskCurr, environment)
+        dt, is_reversed = getMinTravelCost(agent.state, taskCurr, environment)
         minStart = max(taskCurr.start_time, agent.availability_time + dt)
     else:  # Not the first in the task
-        dt = getMinTravelCost(taskPrev.end, taskCurr, environment)
+        dt, is_reversed = getMinTravelCost(taskPrev.end, taskCurr, environment)
         minStart = max(taskCurr.start_time, timePrev + distanceToCost(taskPrev.length) + dt)  # i have to have time to do task at j-1 and go to task m
 
     if taskNext == None:
         maxStart = taskCurr.end_time
     else:  # Not the last task in the path and we can still make the promised task
-        dt = getMinTravelCost(taskCurr.end, taskNext, environment)
+        dt, is_reversed = getMinTravelCost(taskCurr.end, taskNext, environment)
         maxStart = min(taskCurr.end_time, timeNext - distanceToCost(taskCurr.length) - dt)
 
-    reward = getTimeDiscountedReward(dt, Lambda, taskCurr)
+    reward = getTimeDiscountedReward(dt, Lambda, taskCurr, 2000)
     penalty = getTravelCost(agent.state, taskCurr.start, environment)
     score = reward - penalty
 
     return score, minStart, maxStart
 
 
-def calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, Lambda, use_single_point_estimation=False):
+def calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, Lambda, agent_capacity, use_single_point_estimation=False):
     temp_path = list(path)
     temp_path.insert(n, j)
     # print(j)
     is_reversed = False
     # travel cost to first task
     travel_cost = getTravelCost(state, tasks[temp_path[0]].start, environment)
-    S_p = getTimeDiscountedReward(travel_cost, Lambda, tasks[temp_path[0]])
+    S_p = getTimeDiscountedReward(travel_cost, Lambda, tasks[temp_path[0]], agent_capacity)
     best_time = 0
     # Use a single point instead of greedily optimising the direction
     for p_idx in range(len(temp_path) - 1):
@@ -144,7 +150,7 @@ def calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, Lambda
                 temp_cost, is_reversed = getMinTravelCost(previous_task.end, next_task, environment)
 
                 travel_cost += temp_cost
-
+                best_time = travel_cost
             elif p_idx == n:
                 # the task after has to use the is_reversed bool to determine where to travel from
                 if is_reversed:
@@ -154,11 +160,11 @@ def calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, Lambda
             else:
                 travel_cost += getTravelCost(previous_task.end, next_task.start, environment)
             # Scale the travelcost with the reward/priority
-        S_p += getTimeDiscountedReward(travel_cost, Lambda, next_task)
+        S_p += getTimeDiscountedReward(travel_cost, Lambda, next_task, agent_capacity)
 
     # Add the cost for returning home
     travel_cost += getTravelCost(tasks[temp_path[-1]].end, state, environment)
-    S_p += getTimeDiscountedReward(travel_cost, Lambda, tasks[temp_path[-1]])
+    S_p += getTimeDiscountedReward(travel_cost, Lambda, tasks[temp_path[-1]], agent_capacity)
     return (S_p, is_reversed, best_time)
 
 
@@ -203,15 +209,15 @@ def getTotalTravelCost(position, task_list: List[TrajectoryTask], environment):
 
 
 # S_i calculation of the agent
-def calculatePathReward(position, task_list: List[TrajectoryTask], environment, Lambda=0.95):
+def calculatePathReward(position, task_list: List[TrajectoryTask], environment, agent_capacity, Lambda=0.95):
     S_p = 0
 
     if len(task_list) > 0:
         travel_cost = getTravelCost(position, task_list[0].start, environment)
-        S_p += getTimeDiscountedReward(travel_cost, Lambda, task_list[0])
+        S_p += getTimeDiscountedReward(travel_cost, Lambda, task_list[0], agent_capacity)
         for t_index in range(len(task_list) - 1):
             travel_cost += getTravelCost(task_list[t_index].end, task_list[t_index + 1].start, environment)
-            S_p += getTimeDiscountedReward(travel_cost, Lambda, task_list[t_index + 1])
+            S_p += getTimeDiscountedReward(travel_cost, Lambda, task_list[t_index + 1], agent_capacity)
     return S_p
 
 

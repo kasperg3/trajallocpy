@@ -20,9 +20,10 @@ class CoverageProblem:
         # TODO Use extremity planner to save the graph
         self.environment = PolygonEnvironment()
         holes = []
-        for polygon in restricted_areas.geoms:
-            # Properly orient the obstacle polygons
-            holes.append(list(shapely.geometry.polygon.orient(polygon, -1).exterior.coords[:-1]))
+        if restricted_areas is not None:
+            for polygon in restricted_areas.geoms:
+                # Properly orient the obstacle polygons
+                holes.append(list(shapely.geometry.polygon.orient(polygon, -1).exterior.coords[:-1]))
         shapely.geometry.polygon.orient(search_area, 1.0)
 
         self.environment.store(list(shapely.geometry.polygon.orient(search_area, 1.0).exterior.coords[:-1]), holes, validate=False)
@@ -45,5 +46,9 @@ class CoverageProblem:
         minx, miny, maxx, maxy = self.__search_area.bounds
         while True:
             point = shapely.geometry.Point(random.uniform(minx, maxx), random.uniform(miny, maxy))  # noqa: S311
-            if not self.__restricted_areas.contains(point) and self.__search_area.contains(point):
-                return point
+            if self.__restricted_areas is None:
+                if self.__search_area.contains(point):
+                    return point
+            else:
+                if not self.__restricted_areas.contains(point) and self.__search_area.contains(point):
+                    return point

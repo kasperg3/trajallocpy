@@ -100,7 +100,7 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
     scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
     task_list = []
     for id, task in enumerate(geometries["tasks"].geoms):
-        task_list.append(Task.TrajectoryTask(id, task))
+        task_list.append(Task.TrajectoryTask(id, task, reward=1))  # , reward=random.randint(1, 100) / 100))
 
     cp = CoverageProblem.CoverageProblem(
         restricted_areas=scaled_multi_polygon,
@@ -119,11 +119,12 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
 
     # Save the results in a csv file
     (
+        computeTime,
+        iterations,
         totalRouteLength,
         sumOfTaskLengths,
         totalRouteCosts,
-        iterations,
-        computeTime,
+        rewards,
         route_list,
         maxRouteCost,
     ) = exp.evaluateSolution()
@@ -167,8 +168,8 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 3
-        capacity = 5000
+        n_agents = 5
+        capacity = 3000
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",

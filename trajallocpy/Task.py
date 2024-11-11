@@ -27,7 +27,7 @@ class TrajectoryTask:
     trajectory: shapely.LineString  # List of points
     start: shapely.Point = None  # Accessing the start/end directly is 4x more efficient
     end: shapely.Point = None
-    reward: float = 100  # task reward
+    reward: float = 1  # task reward
     start_time: float = 0  # task start time (sec)
     end_time: float = 0  # task expiry time (sec)
     duration: float = 0  # task default duration (sec)
@@ -38,7 +38,6 @@ class TrajectoryTask:
         self.start = self.trajectory.coords[0]
         self.end = self.trajectory.coords[-1]
         self.length = self.trajectory.length  # unitless length
-        # TODO init the task cost/length/time
 
     def reverse(self):
         self.trajectory = shapely.LineString(self.trajectory.coords[::-1])

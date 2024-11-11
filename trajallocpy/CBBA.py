@@ -111,7 +111,7 @@ class agent:
         Returns the cost list c_ij for agent i where the position n results in the greatest reward
         """
         # Calculate Sp_i
-        S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), self.environment, self.Lambda)
+        S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), self.environment, self.capacity, self.Lambda)
         # init
         best_pos = np.zeros(self.task_num, dtype=int)
         c = np.zeros(self.task_num)
@@ -122,14 +122,15 @@ class agent:
         tasks_to_check = set(range(len(self.tasks))).difference(self.bundle).difference(ignore_tasks)
 
         for n, j in itertools.product(range(len(self.path) + 1), tasks_to_check):
-            S_pj, should_be_reversed, best_time = Agent.calculatePathRewardWithNewTask(
-                j, n, self.state, self.tasks, self.path, self.environment, self.Lambda, self.use_single_point_estimation
+            S_pj, should_be_reversed, time = Agent.calculatePathRewardWithNewTask(
+                j, n, self.state, self.tasks, self.path, self.environment, self.Lambda, self.capacity, self.use_single_point_estimation
             )
             c_ijn = S_pj - S_p
             if c[j] < c_ijn:
                 c[j] = c_ijn  # Store the cost
                 best_pos[j] = n
                 reverse[j] = should_be_reversed
+                best_time = time
 
         return (best_pos, c, reverse, best_time)
 
@@ -139,8 +140,16 @@ class agent:
         for i in range(index + 1, len(self.times)):
             self.times[i] += time
 
+    # TODO make this work
+    def can_aquire_more_tasks(self):
+        # print(self.capacity)
+        if len(self.times) == 0 or self.times[-1] < self.capacity:
+            return True
+        return False
+
     def build_bundle(self, queue: multiprocessing.Queue):
-        while Agent.getTotalTravelCost(self.state, self.getPathTasks(), self.environment) <= self.capacity:
+        current_capacity = Agent.getTotalTravelCost(self.state, self.getPathTasks(), self.environment)
+        while current_capacity <= self.capacity:  # self.can_aquire_more_tasks():
             best_pos, c, reverse, best_time = self.getCij()
             D1 = c - self.winning_bids > EPSILON
             D2 = abs(c - self.winning_bids) <= EPSILON
@@ -156,12 +165,21 @@ class agent:
             if reverse[J_i]:
                 self.tasks[J_i].reverse()
 
+            # Check for capacity before adding the task
+            potential_path = self.path[:]
+            potential_path.insert(n_J, J_i)
+            potential_capacity = Agent.getTotalTravelCost(self.state, [self.tasks[i] for i in potential_path], self.environment)
+            if potential_capacity > self.capacity:
+                break
+
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
             self.update_time(n_J, best_time)
 
             self.winning_bids[J_i] = c[J_i]
             self.winning_agents[J_i] = self.id
+            # update the capacity
+            current_capacity = potential_capacity
 
         queue.put(BundleResult(self))
 

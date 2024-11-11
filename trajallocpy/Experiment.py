@@ -35,39 +35,45 @@ class Runner:
         self.transport = {}
         self.tasks = {}
 
-    def evaluateSolution(self):
-        total_path_length = 0
-        total_task_length = 0
-        total_path_cost = 0
-        route_list = []
-        max_path_cost = 0
+    def evaluateSolution(self, show=True):
+        path_lengths = {}
+        task_length = {}
+        path_costs = {}
+        route_list = {}
+        rewards = {}
         for r in self.robot_list.values():
-            total_path_length += Agent.getTotalPathLength(r.state, r.getPathTasks(), r.environment)
-            total_task_length += Agent.getTotalTaskLength(r.getPathTasks())
-            agent_path_cost = Agent.getTotalTravelCost(r.state, r.getPathTasks(), r.environment)
-            total_path_cost += agent_path_cost
+            r: CBBA.agent
+            path_lengths[r.id] = Agent.getTotalPathLength(r.state, r.getPathTasks(), r.environment)
+            task_length[r.id] = Agent.getTotalTaskLength(r.getPathTasks())
+            path_costs[r.id] = Agent.getTotalTravelCost(r.state, r.getPathTasks(), r.environment)
+            rewards[r.id] = Agent.calculatePathReward(r.state, r.getPathTasks(), r.environment, r.capacity, r.Lambda)
+
             route = [r.state]
             for task in r.getPathTasks():
                 route.extend(list(task.trajectory.coords))
             route.append(r.state)
-            route_list.append(route)
-
-            # Save the highest route cost
-            if agent_path_cost > max_path_cost:
-                max_path_cost = agent_path_cost
-
+            route_list[r.id] = route
+        print("Results")
         print("Execution time: ", self.end_time - self.start_time)
-        print("Total Path Length:", total_path_length)
-        print("Total path cost:", total_path_cost)
-        print("Total task Length:", total_task_length)
-        print("Highest path cost:", max_path_cost)
         print("Iterations: ", self.iterations)
+        print("Path lengths: ", path_lengths)
+        print("Task lengths: ", task_length)
+        print("Path costs: ", path_costs)
+        print("Rewards: ", rewards)
+        # print("Routes: ", route_list)
+        max_path_cost = max(path_costs.values())
+        print("Max path cost: ", max_path_cost)
+        print("Sum of path lengths: ", sum(path_lengths.values()))
+        print("Sum of task lengths: ", sum(task_length.values()))
+        print("Sum of path costs: ", sum(path_costs))
+        print("Sum of rewards: ", sum(rewards.values()))
         return (
-            total_path_length,
-            total_task_length,
-            total_path_cost,
-            self.iterations,
             self.end_time - self.start_time,
+            self.iterations,
+            path_lengths,
+            task_length,
+            path_costs,
+            rewards,
             route_list,
             max_path_cost,
         )
@@ -95,7 +101,8 @@ class Runner:
             plotter = Utility.Plotter(self.robot_list.values(), self.communication_graph)
             # Plot the search area and restricted area
             plotter.plotPolygon(self.coverage_problem.getSearchArea(), color=(0, 0, 0, 0.5))
-            plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(0, 0, 0, 0.2), fill=True)
+            if self.coverage_problem.getRestrictedAreas() is not None:
+                plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(0, 0, 0, 0.2), fill=True)
         self.start_time = timeit.default_timer()
 
         result_queue = multiprocessing.Queue()
@@ -169,7 +176,8 @@ class Runner:
                 if sum(converged_list) == len(self.robot_list):
                     break
             bundle_diff = {robot_id: set(previous_bundle[robot_id]) - set(robot.bundle) for robot_id, robot in self.robot_list.items()}
-            print("Bundle Difference:", bundle_diff)
+            if debug:
+                print("Bundle Difference:", bundle_diff)
             if all(len(s) == 0 for s in bundle_diff.values()):
                 break
             if debug:
@@ -211,13 +219,3 @@ class Runner:
             plotter.plotAgents(self.robot_list.values())
         if self.plot:
             plotter.show()
-
-
-# TODO refactor the experiment class, to provide utility to perform replanning.
-# New tasks should be able to be by an agent and simple strategies, should be able to be employed to either reauction own tasks or the new ad-hoc task
-# Also improve the way speed/acceleration is calculated, and make it more general
-# use the communication graph to determine the neighbors, base the communication graph based on the agents position and connect them if they are within a certain distance
-
-# Function to for an agent to add a task to the bundle and replan
-
-# Refactor CBBA to use Maps instead of lists
