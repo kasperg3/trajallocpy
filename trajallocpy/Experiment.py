@@ -107,6 +107,7 @@ class Runner:
 
         result_queue = multiprocessing.Queue()
         # result_queue.cancel_join_thread()
+        use_threads = True
         while True:
             converged_list = []
 
@@ -116,22 +117,24 @@ class Runner:
             # Create a list to store the threads
             processes: list[multiprocessing.Process] = []
             # Start multiple threads
+            if use_threads:
+                for robot in self.robot_list.values():
+                    # robot.build_bundle(result_queue)
+                    process = multiprocessing.Process(target=robot.build_bundle, args=(result_queue,))
+                    process.start()
+                    processes.append(process)
 
-            for robot in self.robot_list.values():
-                # robot.build_bundle(result_queue)
-                process = multiprocessing.Process(target=robot.build_bundle, args=(result_queue,))
-                process.start()
-                processes.append(process)
+                # Wait for all processes to finish
+                for process in processes:
+                    process.join()
 
-            # Wait for all processes to finish
-            for process in processes:
-                process.join()
-
-            # Extract results from the queue
-            while not result_queue.empty():
-                result = result_queue.get()
-                self.robot_list[result.id].update_bundle_result(result)
-
+                # Extract results from the queue
+                while not result_queue.empty():
+                    result = result_queue.get()
+                    self.robot_list[result.id].update_bundle_result(result)
+            else:  # Single thread
+                for robot in self.robot_list.values():
+                    robot.build_bundle()
             if debug:
                 print("Bundle")
                 for robot in self.robot_list.values():
@@ -157,29 +160,30 @@ class Runner:
 
                 Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected} if len(connected) > 0 else None
                 robot.Y = Y
-
             # Phase 2: Consensus Process
             if isinstance(self.robot_list[0], ACBBA.agent):  # ACBBA
+                message_pool = [robot.send_message() for robot in self.robot_list.values()]
                 messages = 0
                 for robot in self.robot_list.values():
+                    robot: ACBBA.Agent
                     # Update local information and decision
                     messages += len(robot.update_task(robot.Y))
 
                 if messages == 0:
                     break
             else:  # CBBA
-                converged_list = []
                 if Y is not None:
                     for robot in self.robot_list.values():
-                        converged = robot.update_task()
-                        converged_list.append(converged)
-                if sum(converged_list) == len(self.robot_list):
-                    break
+                        robot: CBBA.agent
+                        robot.update_task()
+
+            # Check for convergence
             bundle_diff = {robot_id: set(previous_bundle[robot_id]) - set(robot.bundle) for robot_id, robot in self.robot_list.items()}
             if debug:
                 print("Bundle Difference:", bundle_diff)
             if all(len(s) == 0 for s in bundle_diff.values()):
                 break
+
             if debug:
                 # Plot
                 if self.plot:

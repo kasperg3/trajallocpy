@@ -10,6 +10,7 @@ from trajallocpy import Agent
 from trajallocpy.Task import TrajectoryTask
 
 EPSILON = np.finfo(float).eps
+import time
 
 
 class BundleResult:
@@ -70,7 +71,7 @@ class agent:
             self.capacity = capacity
 
         # Local Clock
-        self.time_step = 0
+        self.time_step = time.monotonic()
         # Time Stamp List
         self.timestamps = {a: self.time_step for a in range(number_of_agents)}
 
@@ -140,16 +141,13 @@ class agent:
         for i in range(index + 1, len(self.times)):
             self.times[i] += time
 
-    # TODO make this work
     def can_aquire_more_tasks(self):
-        # print(self.capacity)
-        if len(self.times) == 0 or self.times[-1] < self.capacity:
-            return True
-        return False
+        return bool(len(self.times) == 0 or self.times[-1] < self.capacity)
 
     def build_bundle(self, queue: multiprocessing.Queue):
         current_capacity = Agent.getTotalTravelCost(self.state, self.getPathTasks(), self.environment)
-        while current_capacity <= self.capacity:  # self.can_aquire_more_tasks():
+        while self.can_aquire_more_tasks():
+            # while current_capacity <= self.capacity:
             best_pos, c, reverse, best_time = self.getCij()
             D1 = c - self.winning_bids > EPSILON
             D2 = abs(c - self.winning_bids) <= EPSILON
@@ -180,17 +178,20 @@ class agent:
             self.winning_agents[J_i] = self.id
             # update the capacity
             current_capacity = potential_capacity
-
-        queue.put(BundleResult(self))
+        if queue is not None:
+            queue.put(BundleResult(self))
+        else:
+            return BundleResult(self)
 
     def update_task(self):
         id_list = list(self.Y.keys())
         id_list.insert(0, self.id)
 
-        # Update time list
+        # Update timestamp list for the agent which has sent a message
+        time_now = time.monotonic()
         for id in list(self.timestamps.keys()):
             if id in id_list:
-                self.timestamps[id] = self.time_step
+                self.timestamps[id] = time_now
             else:
                 s_list = []
                 for neighbor_id in id_list[1:]:
@@ -315,9 +316,6 @@ class agent:
 
         self.time_step += 1
 
-        converged = False
-        return converged
-
     def __update_path(self, task):
         if task not in self.bundle:
             return
@@ -330,6 +328,7 @@ class agent:
         self.removal_list[task] = self.removal_list[task] + 1
         self.path = [num for num in self.path if num not in self.bundle[index:]]
         self.bundle = self.bundle[:index]
+        self.times = self.times[:index]
 
     def __update(self, j, y_kj, z_kj):
         """
@@ -351,4 +350,5 @@ class agent:
         """
         Do nothing
         """
+        pass
         pass
