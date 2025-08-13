@@ -38,7 +38,7 @@ def export_to_geojson(tasks: GeoMultiTrajectory, polygon: GeoPolygon):
     geojson_collection = geojson.FeatureCollection(
         [
             polygon.to_geojson(id="boundary"),
-            multi_traj.to_geojson(id="tasks"),
+            tasks.to_geojson(id="tasks"),
         ]
     )
     with open("environment.geojson", "w") as f:

@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="trajallocpy",
-    version="0.0.12",
+    version="0.0.14",
     description="TrajAllocPy is a Python library that provides functionality for trajectory task Allocation using Consensus based bundle algorithm",
     long_description="",
     long_description_content_type="text/markdown",
@@ -17,6 +17,14 @@ setup(
     ],
     packages=find_packages(),
     python_requires=">=3.10",
-    install_requires=[],
+    install_requires=[
+        "numpy",
+        "shapely",
+        "geojson",
+        "scipy",
+        "networkx",
+        "matplotlib",
+        "extremitypathfinder[numba]",
+    ],
     extras_require={"test": ["pytest"]},
 )

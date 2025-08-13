@@ -52,7 +52,8 @@ def main(
         show_plots,
         debug,
         results,
-        "environment.geojson",
+        # "environment.geojson",
+        "environment_heatmap_coverage.geojson",
     )
 
     # files = Utility.getAllCoverageFiles(dataset_name)
@@ -80,27 +81,28 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
             geometries[feature["id"]] = geometry.shape(feature["geometry"])
     number_of_tasks = len(list(geometries["tasks"].geoms))
 
-    # Normalize the geoms
-    min_x, min_y, _, _ = geometries["boundary"].bounds
-    for key in geometries:
-        geometries[key] = translate(geometries[key], -min_x, -min_y)
+    # No need to normalize anymore, as the capacity is scaling the reward
+    # # Normalize the geoms
+    # min_x, min_y, _, _ = geometries["boundary"].bounds
+    # for key in geometries:
+    #     geometries[key] = translate(geometries[key], -min_x, -min_y)
 
     print(file_name, " Tasks: ", number_of_tasks)
     # Initialize coverage problem and the agents
-
     geometries["boundary"] = geometries["boundary"].buffer(1)
 
     # Scale each polygon in the MultiPolygon
     scaled_polygons = []
     for polygon in geometries["obstacles"].geoms:
+        polygon: shapely.geometry.Polygon
         scaled_polygon = polygon.buffer(-1)  # scale(polygon, xfact=0.95, yfact=0.95, origin="centroid")
         scaled_polygons.append(scaled_polygon)
 
-        # Create a new MultiPolygon with scaled polygons
+    # Create a new MultiPolygon with scaled polygons
     scaled_multi_polygon = shapely.geometry.MultiPolygon(scaled_polygons)
     task_list = []
     for id, task in enumerate(geometries["tasks"].geoms):
-        task_list.append(Task.TrajectoryTask(id, task, reward=1))  # , reward=random.randint(1, 100) / 100))
+        task_list.append(Task.TrajectoryTask(id, task, reward=100))  # , reward=random.randint(1, 100) / 100))
 
     cp = CoverageProblem.CoverageProblem(
         restricted_areas=scaled_multi_polygon,
@@ -109,10 +111,7 @@ def run_experiment(experiment_title, n_agents, capacity, show_plots, debug, resu
     )
 
     initial = cp.generate_random_point_in_problem().coords.xy
-    agent_list = [
-        Agent.config(id, (initial[0][0] + random.uniform(-10, 10), initial[1][0] + random.uniform(-10, 10)), capacity, max_velocity=10)
-        for id in range(n_agents)
-    ]
+    agent_list = [Agent.config(id, cp.generate_random_point_in_problem().coords.xy, capacity, max_velocity=10) for id in range(n_agents)]
     exp = Experiment.Runner(coverage_problem=cp, enable_plotting=show_plots, agents=agent_list)
 
     exp.solve(profiling_enabled=False, debug=debug)
@@ -168,8 +167,8 @@ if __name__ == "__main__":
         )
     else:
         ds = "AC300"
-        n_agents = 5
-        capacity = 3000
+        n_agents = 3
+        capacity = 2000
         main(
             dataset_name=ds,
             experiment_title=ds + "_" + str(n_agents) + "agents_" + str(capacity) + "capacity",

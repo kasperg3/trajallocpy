@@ -1,6 +1,7 @@
 import copy
 import itertools
 import math
+import multiprocessing
 import random
 import time
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
@@ -11,8 +12,19 @@ from typing import List
 
 import numpy as np
 
-from trajallocpy.Agent import *
+import trajallocpy.Agent as Agent
 from trajallocpy.Task import TrajectoryTask
+
+EPSILON = 1e-6
+
+
+class BundleResult:
+    def __init__(self, agent: Agent):
+        self.bundle = agent.bundle
+        self.path = agent.path
+        self.winning_agents = agent.winning_agents
+        self.winning_bids = agent.winning_bids
+        self.id = agent.id
 
 
 class agent:
@@ -51,11 +63,12 @@ class agent:
         self.id = id
 
         # Local Winning Agent List
-        self.z = {}
+        self.winning_agents = {}
         # Local Winning Bid List
-        self.y = {}
+        self.winning_bids = {}
         # Time Stamp List
         self.t = {}
+        self.times = []
         # Bundle
         self.bundle = []
         # Path
@@ -79,7 +92,7 @@ class agent:
         self.message_history = []
 
     def __repr__(self) -> str:
-        return f"Agent {self.id} \n path {self.path} \n  bundle {self.bundle} \n y(winning bids) {self.y} \n z(winning agents) {self.z} \n t(timestamps) {self.t} \n"
+        return f"Agent {self.id} \n path {self.path} \n  bundle {self.bundle} \n y(winning bids) {self.winning_bids} \n z(winning agents) {self.winning_agents} \n t(timestamps) {self.t} \n"
 
     def add_tasks(self, tasks):
         # add the tasks to self.tasks dictionary
@@ -87,7 +100,7 @@ class agent:
             self.tasks[task.id] = task
 
     def __str__(self) -> str:
-        return f"Agent {self.id} \n path {self.path} \n  bundle {self.bundle} \n y(winning bids) {self.y} \n z(winning agents) {self.z} \n t(timestamps) {self.t} \n"
+        return f"Agent {self.id} \n path {self.path} \n  bundle {self.bundle} \n y(winning bids) {self.winning_bids} \n z(winning agents) {self.winning_agents} \n t(timestamps) {self.t} \n"
 
     def getPathTasks(self) -> List[TrajectoryTask]:
         result = []
@@ -95,65 +108,94 @@ class agent:
             result.append(self.tasks.get(task))
         return result
 
-    def send_message(self):  # TODO rename and make it return bidinformation
-        return self.y, self.z, self.t
+    def send_message(self):
+        return [
+            Agent.BidInformation(
+                y=self.winning_bids.get(task_id, 0),
+                z=self.winning_agents.get(task_id, -1),
+                t=self.t.get(task_id, 0),
+                j=task_id,
+                k=self.id,
+            )
+            for task_id in self.tasks
+        ]
 
     def getCij(self):
+        """
+        Returns the cost list c_ij for agent i where the position n results in the greatest reward
+        """
         # Calculate Sp_i
-        S_p = calculatePathReward(self.state, self.getPathTasks(), self.environment, self.Lambda)
+        S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), self.environment, self.capacity, self.Lambda)
         # init
-        best_pos = None
-        c = 0
-        reverse = None
-        best_task = None
+        best_pos = {task_id: 0 for task_id in self.tasks}
+        c = {task_id: 0 for task_id in self.tasks}
+        reverse = {task_id: 0 for task_id in self.tasks}
+
+        best_time = 0
         # Collect the tasks which should be considered for planning
-        keys_above_threshold = [key for key, value in self.removal_list.items() if value > self.removal_threshold]
-        tasks_to_check = set(self.tasks.keys()).difference(self.bundle).difference(keys_above_threshold)
-        # Combine the tasks and positions to check
+        ignore_tasks = [key for key, value in enumerate(self.removal_list) if value > self.removal_threshold]
+        tasks_to_check = set(range(len(self.tasks))).difference(self.bundle).difference(ignore_tasks)
 
         for n, j in itertools.product(range(len(self.path) + 1), tasks_to_check):
-            S_pj, should_be_reversed = calculatePathRewardWithNewTask(
-                j, n, self.state, self.tasks, self.path, self.environment, self.use_single_point_estimation
+            S_pj, should_be_reversed, best_time = Agent.calculatePathRewardWithNewTask(
+                j, n, self.state, self.tasks, self.path, self.environment, self.Lambda, self.capacity, self.use_single_point_estimation
             )
             c_ijn = S_pj - S_p
+            if c[j] < c_ijn:
+                c[j] = c_ijn  # Store the cost
+                best_pos[j] = n
+                reverse[j] = should_be_reversed
 
-            if c_ijn > c:  # and c_ijn > self.y.get(j, -1):  # TODO: Figure out if this is bad for the general solution
-                c = c_ijn  # Store the cost
-                best_pos = n
-                reverse = should_be_reversed
-                best_task = j
-        # reverse the task with max reward if necesarry
-        if reverse:
-            self.tasks[j].reverse()
+        return (best_pos, c, reverse, best_time)
 
-        return best_task, best_pos, c
+    def build_bundle(self, queue: multiprocessing.Queue = None):
+        while Agent.getTotalTravelCost(self.state, self.getPathTasks(), self.environment) <= self.capacity:
+            best_pos, c, reverse, best_time = self.getCij()
+            # Compare the values of the same ids
 
-    def build_bundle(self):
-        if self.tasks is None:
-            return
-        bid_list = []
-        bundle_time = time.monotonic()
-        while getTotalTravelCost(self.state, self.getPathTasks(), self.environment) <= self.capacity:
-            J_i, n_J, c = self.getCij()
-            if J_i is None:
+            D1 = {task_id: (c[task_id] - self.winning_bids.get(task_id, 0)) > EPSILON for task_id in c}
+            D2 = {task_id: abs(c[task_id] - self.winning_bids.get(task_id, 0)) <= EPSILON for task_id in c}
+            h = {task_id: D1[task_id] or (D2[task_id] and self.id < self.winning_agents.get(task_id, 0)) for task_id in c}
+            if sum(h) == 0:  # No valid task
                 break
+
+            for key in list(c.keys()):
+                if not h[key]:
+                    c[key] = 0
+            J_i = np.argmax(c)
+            J_i = max(c, key=c.get)
+            n_J = best_pos[J_i]
+
+            # reverse the task with max reward if necesarry
+            if reverse[J_i]:
+                self.tasks[J_i].reverse()
+
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
+            self.update_time(n_J, best_time)
 
-            self.y[J_i] = c
-            self.z[J_i] = self.id
-            self.t[J_i] = bundle_time  # Update the time of the winning bet
-            bid_list.append(BidInformation(y=c, z=self.id, t=bundle_time, j=J_i, k=self.id))
-        return bid_list
+            self.winning_bids[J_i] = c[J_i]
+            self.winning_agents[J_i] = self.id
+
+        if queue is not None:
+            queue.put(BundleResult(self))
+        else:
+            return BundleResult(self)
+
+    def update_time(self, index, time):
+        self.times.insert(index, time)
+        # Correct the times after the insertion
+        for i in range(index + 1, len(self.times)):
+            self.times[i] += time
 
     def __update_time(self, task):
         self.t[task] = time.monotonic()
 
-    def __action_rule(self, k, j, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij) -> BidInformation:
+    def __action_rule(self, k, j, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij) -> Agent.BidInformation:
         eps = np.finfo(float).eps
         i = self.id
-        sender_info = BidInformation(y=y_kj, z=z_kj, t=t_kj, j=j, k=self.id)
-        own_info = BidInformation(y=y_ij, z=z_ij, t=t_ij, j=j, k=self.id)
+        sender_info = Agent.BidInformation(y=y_kj, z=z_kj, t=t_kj, j=j, k=self.id)
+        own_info = Agent.BidInformation(y=y_ij, z=z_ij, t=t_ij, j=j, k=self.id)
         if z_kj == k:  # Rule 1 Agent k thinks k is z_kj
             if z_ij == i:  # Rule 1.1
                 if y_kj > y_ij:
@@ -315,7 +357,7 @@ class agent:
         # msg = {self.agent: {"y": y, "z": z, "t": t}}
         # self.my_socket.send(self.agent, msg, k)
 
-    def update_task_async(self, bids: List[BidInformation]):
+    def update_task_async(self, bids: List[Agent.BidInformation]):
         # Update Process
         rebroadcasts = []
         for bid_info in bids:
@@ -323,8 +365,8 @@ class agent:
             k = bid_info.k
 
             # Own info
-            y_ij = self.y.get(j, 0)
-            z_ij = self.z.get(j, -1)
+            y_ij = self.winning_bids.get(j, 0)
+            z_ij = self.winning_agents.get(j, -1)
             t_ij = self.t.get(j, 0)
 
             # Recieved info
@@ -337,7 +379,7 @@ class agent:
                 rebroadcasts.append(rebroadcast)
         return rebroadcasts
 
-    def update_task(self, Y: List[BidInformation]):
+    def update_task(self, Y: List[Agent.BidInformation]):
         # Update Process
         rebroadcasts = []
 
@@ -349,8 +391,8 @@ class agent:
                 t_kj = Y[k][2].get(j, 0)  # Timestamps
 
                 # Own info
-                y_ij = self.y.get(j, 0)
-                z_ij = self.z.get(j, -1)
+                y_ij = self.winning_bids.get(j, 0)
+                z_ij = self.winning_agents.get(j, -1)
                 t_ij = self.t.get(j, 0)
                 # TODO parse the information in a better way
                 rebroadcast = self.__action_rule(k=k, j=j, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij)
@@ -363,8 +405,8 @@ class agent:
         """
         Update values
         """
-        self.y[j] = y_kj
-        self.z[j] = z_kj
+        self.winning_bids[j] = y_kj
+        self.winning_agents[j] = z_kj
         self.t[j] = t_kj
         self.__update_path(j)
 
@@ -374,8 +416,8 @@ class agent:
         index = self.bundle.index(task)
         b_retry = self.bundle[index + 1 :]
         for idx in b_retry:
-            self.y[idx] = 0
-            self.z[idx] = -1
+            self.winning_bids[idx] = 0
+            self.winning_agents[idx] = -1
             self.t[idx] = time.monotonic()
 
         self.removal_list[task] = self.removal_list.get(task, 0) + 1
@@ -383,8 +425,8 @@ class agent:
         self.bundle = self.bundle[:index]
 
     def __reset(self, task):
-        self.y[task] = 0
-        self.z[task] = -1
+        self.winning_bids[task] = 0
+        self.winning_agents[task] = -1
         self.t[task] = time.monotonic()
         self.__update_path(task)
 

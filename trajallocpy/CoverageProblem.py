@@ -16,18 +16,19 @@ class CoverageProblem:
     ):
         self.__restricted_areas = restricted_areas
         self.__search_area = search_area
+        search_area = None
+        if search_area is None:
+            self.environment = None
+        else:
+            self.environment = PolygonEnvironment()
+            holes = []
+            if restricted_areas is not None:
+                for polygon in restricted_areas.geoms:
+                    # Properly orient the obstacle polygons
+                    holes.append(list(shapely.geometry.polygon.orient(polygon, -1).exterior.coords[:-1]))
+            shapely.geometry.polygon.orient(search_area, 1.0)
 
-        # TODO Use extremity planner to save the graph
-        self.environment = PolygonEnvironment()
-        holes = []
-        if restricted_areas is not None:
-            for polygon in restricted_areas.geoms:
-                # Properly orient the obstacle polygons
-                holes.append(list(shapely.geometry.polygon.orient(polygon, -1).exterior.coords[:-1]))
-        shapely.geometry.polygon.orient(search_area, 1.0)
-
-        self.environment.store(list(shapely.geometry.polygon.orient(search_area, 1.0).exterior.coords[:-1]), holes, validate=False)
-
+            self.environment.store(list(shapely.geometry.polygon.orient(search_area, 1.0).exterior.coords[:-1]), holes, validate=False)
         self.__tasks = tasks
 
     def getRestrictedAreas(self):

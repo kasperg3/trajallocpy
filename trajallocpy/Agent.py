@@ -63,11 +63,18 @@ def getTravelPath(position, assigned_tasks, environment):
     travel_paths = []
     task_paths = []
     if len(assigned_tasks) > 0:
-        path, dist = environment.find_shortest_path(position, assigned_tasks[0].start, free_space_after=False, verify=False)
+        if environment is None:
+            path = [position, assigned_tasks[0].start]
+        else:
+            path, dist = environment.find_shortest_path(position, assigned_tasks[0].start, free_space_after=False, verify=False)
         full_path.extend(path)
         for i in range(len(assigned_tasks) - 1):
             full_path.extend(assigned_tasks[i].trajectory.coords)
-            path, dist = environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, free_space_after=False, verify=False)
+
+            if environment is None:
+                path = [assigned_tasks[i].end, assigned_tasks[i + 1].start]
+            else:
+                path, dist = environment.find_shortest_path(assigned_tasks[i].end, assigned_tasks[i + 1].start, free_space_after=False, verify=False)
             full_path.extend(path)
             task_paths.append(assigned_tasks[i].trajectory.coords)
             travel_paths.append(path)
@@ -87,10 +94,10 @@ def getTimeDiscountedReward(cost, Lambda, task: TrajectoryTask, agent_capacity):
     # return Lambda ** (cost) + task.reward
     norm_factor = 1 / agent_capacity
     tau = cost * norm_factor
-    # result = 0.05 ** (tau) * task.reward
+    # result = Lambda ** (tau) * task.reward
     result = -math.log(tau) * task.reward
+    # result = pow(Lambda, tau) * task.reward
     # This is not the fastest place to do the normalization, but in getTravelCost will break the time settings.
-    # Make sure that this is correct with respect to the capacity of the agent TODO
     return result
 
 

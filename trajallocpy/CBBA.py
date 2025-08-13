@@ -14,11 +14,13 @@ import time
 
 
 class BundleResult:
-    def __init__(self, agent: Agent):
+    # CBBA.agent
+    def __init__(self, agent):
         self.bundle = agent.bundle
         self.path = agent.path
         self.winning_agents = agent.winning_agents
         self.winning_bids = agent.winning_bids
+        self.timestamps = agent.timestamps
         self.id = agent.id
 
 
@@ -104,8 +106,8 @@ class agent:
     def send_message(self):
         return self.winning_bids.tolist(), self.winning_agents.tolist(), self.timestamps
 
-    def receive_message(self, Y):
-        self.Y = Y
+    # def receive_message(self, Y):
+    #     self.Y = Y
 
     def getCij(self):
         """
@@ -144,7 +146,7 @@ class agent:
     def can_aquire_more_tasks(self):
         return bool(len(self.times) == 0 or self.times[-1] < self.capacity)
 
-    def build_bundle(self, queue: multiprocessing.Queue):
+    def build_bundle(self, queue: multiprocessing.Queue = None):
         current_capacity = Agent.getTotalTravelCost(self.state, self.getPathTasks(), self.environment)
         while self.can_aquire_more_tasks():
             # while current_capacity <= self.capacity:
@@ -169,6 +171,8 @@ class agent:
             potential_capacity = Agent.getTotalTravelCost(self.state, [self.tasks[i] for i in potential_path], self.environment)
             if potential_capacity > self.capacity:
                 break
+            else:
+                current_capacity = potential_capacity
 
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
@@ -176,16 +180,13 @@ class agent:
 
             self.winning_bids[J_i] = c[J_i]
             self.winning_agents[J_i] = self.id
-            # update the capacity
-            current_capacity = potential_capacity
         if queue is not None:
             queue.put(BundleResult(self))
         else:
             return BundleResult(self)
 
-    def update_task(self):
-        id_list = list(self.Y.keys())
-        id_list.insert(0, self.id)
+    def update_task(self, messages):
+        id_list = list(messages.keys())
 
         # Update timestamp list for the agent which has sent a message
         time_now = time.monotonic()
@@ -194,17 +195,20 @@ class agent:
                 self.timestamps[id] = time_now
             else:
                 s_list = []
+                # for all agent ids in the message find the latest timestamp
                 for neighbor_id in id_list[1:]:
-                    s_list.append(self.Y[neighbor_id][2][id])
+                    s_list.append(messages[neighbor_id][2][id])
                 if len(s_list) > 0:
                     self.timestamps[id] = max(s_list)
 
+        self.time_step += 1
+        conflicts = 0
         # Update Process
         for j in range(self.task_num):
-            for k in id_list[1:]:
-                y_k = self.Y[k][0]
-                z_k = self.Y[k][1]
-                s_k = self.Y[k][2]
+            for k in id_list:
+                y_k = messages[k][0]
+                z_k = messages[k][1]
+                s_k = messages[k][2]
                 i = self.id
 
                 z_ij = self.winning_agents[j]
@@ -217,25 +221,25 @@ class agent:
                     # Rule 1
                     if z_ij == self.id:
                         if y_kj > y_ij:
-                            self.__update(j, y_kj, z_kj)
+                            conflicts += self.__update(j, y_kj, z_kj)
                         elif abs(y_kj - y_ij) < EPSILON:  # Tie Breaker
                             if k < self.id:
-                                self.__update(j, y_kj, z_kj)
+                                conflicts += self.__update(j, y_kj, z_kj)
                         else:
                             self.__leave()
                     # Rule 2
                     elif z_ij == k:
-                        self.__update(j, y_kj, z_kj)
+                        conflicts += self.__update(j, y_kj, z_kj)
                     # Rule 3
                     elif z_ij != -1:
                         m = z_ij
                         if (
                             (s_k[m] > self.timestamps[m]) or (y_kj > y_ij) or (abs(y_kj - y_ij) < EPSILON and k < self.id)
                         ):  # Combine conditions using logical or
-                            self.__update(j, y_kj, z_kj)
+                            conflicts += self.__update(j, y_kj, z_kj)
                     # Rule 4
                     elif z_ij == -1:
-                        self.__update(j, y_kj, z_kj)
+                        conflicts += self.__update(j, y_kj, z_kj)
                     else:
                         raise Exception("Error while updating")
                 # Rule 5~8
@@ -245,12 +249,12 @@ class agent:
                         self.__leave()
                     # Rule 6
                     elif z_ij == k:
-                        self.__reset(j)
+                        conflicts += self.__reset(j)
                     # Rule 7
                     elif z_ij != -1:
                         m = z_ij
                         if s_k[m] > self.timestamps[m]:
-                            self.__reset(j)
+                            conflicts += self.__reset(j)
                     # Rule 8
                     elif z_ij == -1:
                         self.__leave()
@@ -262,17 +266,17 @@ class agent:
                     # Rule 9
                     if z_ij == i:
                         if (s_k[m] >= self.timestamps[m]) and ((y_kj > y_ij) or (abs(y_kj - y_ij) < EPSILON and m < self.id)):
-                            self.__update(j, y_kj, z_kj)
+                            conflicts += self.__update(j, y_kj, z_kj)
                     # Rule 10
                     elif z_ij == k:
                         if s_k[m] > self.timestamps[m]:
-                            self.__update(j, y_kj, z_kj)
+                            conflicts += self.__update(j, y_kj, z_kj)
                         else:
                             self.__reset(j)
                     # Rule 11
                     elif z_ij == m:
                         if s_k[m] > self.timestamps[m]:
-                            self.__update(j, y_kj, z_kj)
+                            conflicts += self.__update(j, y_kj, z_kj)
                     # Rule 12
                     elif z_ij != -1:
                         n = z_ij
@@ -286,11 +290,11 @@ class agent:
                             or (s_k[n] > self.timestamps[n])
                             and (self.timestamps[m] > s_k[m])
                         ):
-                            self.__update(j, y_kj, z_kj)
+                            conflicts += self.__update(j, y_kj, z_kj)
                     # Rule 13
                     elif z_ij == -1:
                         if s_k[m] > self.timestamps[m]:
-                            self.__update(j, y_kj, z_kj)
+                            conflicts += self.__update(j, y_kj, z_kj)
                     else:
                         raise Exception("Error while updating")
                 # Rule 14~17
@@ -300,12 +304,12 @@ class agent:
                         self.__leave()
                     # Rule 15
                     elif z_ij == k:
-                        self.__update(j, y_kj, z_kj)
+                        conflicts += self.__update(j, y_kj, z_kj)
                     # Rule 16
                     elif z_ij != -1:
                         m = z_ij
                         if s_k[m] > self.timestamps[m]:
-                            self.__update(j, y_kj, z_kj)
+                            conflicts += self.__update(j, y_kj, z_kj)
                     # Rule 17
                     elif z_ij == -1:
                         self.__leave()
@@ -313,12 +317,11 @@ class agent:
                         raise Exception("Error while updating")
                 else:
                     raise Exception("Error while updating")
-
-        self.time_step += 1
+        return conflicts
 
     def __update_path(self, task):
         if task not in self.bundle:
-            return
+            return 0
         index = self.bundle.index(task)
         b_retry = self.bundle[index + 1 :]
         for idx in b_retry:
@@ -329,6 +332,7 @@ class agent:
         self.path = [num for num in self.path if num not in self.bundle[index:]]
         self.bundle = self.bundle[:index]
         self.times = self.times[:index]
+        return 1
 
     def __update(self, j, y_kj, z_kj):
         """
@@ -336,7 +340,7 @@ class agent:
         """
         self.winning_bids[j] = y_kj
         self.winning_agents[j] = z_kj
-        self.__update_path(j)
+        return self.__update_path(j)
 
     def __reset(self, j):
         """
@@ -344,7 +348,7 @@ class agent:
         """
         self.winning_bids[j] = 0
         self.winning_agents[j] = -1  # -1 means "none"
-        self.__update_path(j)
+        return self.__update_path(j)
 
     def __leave(self):
         """

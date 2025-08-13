@@ -1,4 +1,5 @@
 import copy
+import json
 import multiprocessing
 import threading
 import timeit
@@ -86,31 +87,16 @@ class Runner:
             robot.add_tasks(tasks)
 
     def solve(self, profiling_enabled=False, debug=False):
-        if profiling_enabled:
-            print("Profiling enabled!")
-            import cProfile
-            import io
-            import pstats
-            from pstats import SortKey
-
-            pr = cProfile.Profile()
-            pr.enable()
         t = 0  # Iteration number
 
-        if self.plot:
-            plotter = Utility.Plotter(self.robot_list.values(), self.communication_graph)
-            # Plot the search area and restricted area
-            plotter.plotPolygon(self.coverage_problem.getSearchArea(), color=(0, 0, 0, 0.5))
-            if self.coverage_problem.getRestrictedAreas() is not None:
-                plotter.plotMultiPolygon(self.coverage_problem.getRestrictedAreas(), color=(0, 0, 0, 0.2), fill=True)
         self.start_time = timeit.default_timer()
 
         result_queue = multiprocessing.Queue()
         # result_queue.cancel_join_thread()
         use_threads = True
-        while True:
-            converged_list = []
+        number_of_messages = 0
 
+        while True:
             print("Iteration {}".format(t + 1))
             # Phase 1: Auction Process
 
@@ -142,7 +128,6 @@ class Runner:
                 print("Path")
                 for robot in self.robot_list.values():
                     print(robot.path)
-            previous_bundle = {robot_id: robot.bundle.copy() for robot_id, robot in self.robot_list.items()}
 
             # Do not communicate if there are no agents to communicate with
             if len(self.robot_list) <= 1:
@@ -150,48 +135,35 @@ class Runner:
 
             # Communication stage
             message_pool = [robot.send_message() for robot in self.robot_list.values()]
-            for robot_id, robot in self.robot_list.items():
-                # Recieve winning bidlist from neighbors
-                g = self.communication_graph[robot_id]
-
-                (connected,) = np.where(g == 1)
-                connected = list(connected)
-                connected.remove(robot_id)
-
-                Y = {neighbor_id: message_pool[neighbor_id] for neighbor_id in connected} if len(connected) > 0 else None
-                robot.Y = Y
+            conflicts = 0
             # Phase 2: Consensus Process
             if isinstance(self.robot_list[0], ACBBA.agent):  # ACBBA
-                message_pool = [robot.send_message() for robot in self.robot_list.values()]
                 messages = 0
                 for robot in self.robot_list.values():
                     robot: ACBBA.Agent
                     # Update local information and decision
-                    messages += len(robot.update_task(robot.Y))
+                    conflicts += len(robot.update_task(robot.Y))
 
                 if messages == 0:
                     break
             else:  # CBBA
-                if Y is not None:
-                    for robot in self.robot_list.values():
-                        robot: CBBA.agent
-                        robot.update_task()
+                for robot_id, robot in self.robot_list.items():
+                    robot: CBBA.agent
+                    # Recieve winning bidlist from neighbors
+                    g = self.communication_graph[robot_id]
 
-            # Check for convergence
-            bundle_diff = {robot_id: set(previous_bundle[robot_id]) - set(robot.bundle) for robot_id, robot in self.robot_list.items()}
-            if debug:
-                print("Bundle Difference:", bundle_diff)
-            if all(len(s) == 0 for s in bundle_diff.values()):
+                    (connected,) = np.where(g == 1)
+                    connected = list(connected)
+                    connected.remove(robot_id)
+                    conflicts += robot.update_task({neighbor_id: message_pool[neighbor_id] for neighbor_id in connected})
+                if debug:
+                    print("Conflicts:", conflicts)
+
+            if conflicts == 0:
+                print("Converged in {} iterations, and sent {} messages".format(t + 1, number_of_messages))
                 break
 
             if debug:
-                # Plot
-                if self.plot:
-                    plotter.setTitle("Time Step:{}".format(t))
-                    plotter.plotAgents(self.robot_list.values())
-                    plotter.pause(0.1)
-                    # plotter.save("iteration{}.png".format(t))
-
                 print("Bundle")
                 for robot in self.robot_list.values():
                     print(robot.bundle)
@@ -203,14 +175,6 @@ class Runner:
 
         self.iterations = t
 
-        if profiling_enabled:
-            print("Profiling finished:")
-            s = io.StringIO()
-            sortby = SortKey.CUMULATIVE
-            ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-            ps.print_stats(100)
-            pr.disable()
-
         self.end_time = timeit.default_timer()
 
         # Save the results in the object
@@ -219,7 +183,13 @@ class Runner:
                 robot.state, robot.getPathTasks(), robot.environment
             )
 
-        if self.plot:
-            plotter.plotAgents(self.robot_list.values())
-        if self.plot:
-            plotter.show()
+        # Export the transport and tasks to a JSON file
+        with open("transport.json", "w") as json_file:
+            json.dump(self.transport, json_file, default=lambda o: o.__dict__, indent=4)
+        with open("tasks.json", "w") as json_file:
+            json.dump(self.tasks, json_file, default=lambda o: o.tolist() if isinstance(o, np.ndarray) else o.__dict__, indent=4)
+        with open("routes.json", "w") as json_file:
+            json.dump(self.routes, json_file, default=lambda o: o.__dict__, indent=4)
+        # Print the agent bundles
+        for robot_id, robot in self.robot_list.items():
+            print(f"Agent {robot_id} bundle: {robot.bundle}")
