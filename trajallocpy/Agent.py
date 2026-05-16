@@ -89,16 +89,27 @@ def getTravelCost(start, end, environment):
     return distanceToCost(getDistance(start, end, environment))
 
 
+_TAU_EPS = 1e-9
+
+
 def getTimeDiscountedReward(cost, Lambda, task: TrajectoryTask, agent_capacity):
-    # return np.exp((Lambda - 1) * cost) * task.reward +1
-    # return Lambda ** (cost) + task.reward
-    norm_factor = 1 / agent_capacity
-    tau = cost * norm_factor
-    # result = Lambda ** (tau) * task.reward
-    result = -math.log(tau) * task.reward
-    # result = pow(Lambda, tau) * task.reward
-    # This is not the fastest place to do the normalization, but in getTravelCost will break the time settings.
-    return result
+    # Bounded, monotonically non-increasing discount in (0, reward]. The old
+    # -log(tau) form was unbounded and raised a domain error at cost==0.
+    tau = cost / agent_capacity
+    tau = min(max(tau, _TAU_EPS), 1.0)
+    return (Lambda**tau) * task.reward
+
+
+def _endpoints(task: TrajectoryTask, reverse: bool):
+    if reverse:
+        return task.end, task.start
+    return task.start, task.end
+
+
+def _has_deadline(task: TrajectoryTask) -> bool:
+    # A task only has a hard time window when end_time is set (>0). Tasks left
+    # at the default start_time==end_time==0 are treated as having no window.
+    return task.end_time > 0
 
 
 def getMinTravelCost(point, task: TrajectoryTask, environment):
@@ -111,68 +122,54 @@ def getMinTravelCost(point, task: TrajectoryTask, environment):
     return result, shouldBeReversed
 
 
-def test_calculatePathRewardWithNewTask(environment, agent, taskCurr, taskPrev, timePrev, taskNext, timeNext, Lambda):
-    # TODO
-    # * Keep track of the time/distance of each task in the path and store it in a vector, just like the path
-    # * Iterate through the vector and calculate
-
-    if taskPrev == None:  # First task in the path
-        dt, is_reversed = getMinTravelCost(agent.state, taskCurr, environment)
-        minStart = max(taskCurr.start_time, agent.availability_time + dt)
-    else:  # Not the first in the task
-        dt, is_reversed = getMinTravelCost(taskPrev.end, taskCurr, environment)
-        minStart = max(taskCurr.start_time, timePrev + distanceToCost(taskPrev.length) + dt)  # i have to have time to do task at j-1 and go to task m
-
-    if taskNext == None:
-        maxStart = taskCurr.end_time
-    else:  # Not the last task in the path and we can still make the promised task
-        dt, is_reversed = getMinTravelCost(taskCurr.end, taskNext, environment)
-        maxStart = min(taskCurr.end_time, timeNext - distanceToCost(taskCurr.length) - dt)
-
-    reward = getTimeDiscountedReward(dt, Lambda, taskCurr, 2000)
-    penalty = getTravelCost(agent.state, taskCurr.start, environment)
-    score = reward - penalty
-
-    return score, minStart, maxStart
-
-
 def calculatePathRewardWithNewTask(j, n, state, tasks, path, environment, Lambda, agent_capacity, use_single_point_estimation=False):
+    """Score of inserting task ``j`` at position ``n``.
+
+    Returns ``(S_p, inserted_reversed, best_time, feasible)``. ``feasible`` is
+    False when any task on the resulting path would have to start after its
+    hard deadline (``end_time``); such an insertion must never be chosen.
+    """
     temp_path = list(path)
     temp_path.insert(n, j)
-    # print(j)
-    is_reversed = False
-    # travel cost to first task
-    travel_cost = getTravelCost(state, tasks[temp_path[0]].start, environment)
-    S_p = getTimeDiscountedReward(travel_cost, Lambda, tasks[temp_path[0]], agent_capacity)
-    best_time = 0
-    # Use a single point instead of greedily optimising the direction
-    for p_idx in range(len(temp_path) - 1):
-        previous_task = tasks[temp_path[p_idx]]
-        next_task = tasks[temp_path[p_idx + 1]]
+
+    travel_cost = 0.0  # cumulative travel cost, drives the reward discount
+    arrival = 0.0  # cumulative time incl. travel + execution + waiting (feasibility)
+    feasible = True
+    inserted_reversed = False
+    best_time = 0.0
+    prev_exit = state
+    S_p = 0.0
+
+    for t_idx in temp_path:
+        task = tasks[t_idx]
         if use_single_point_estimation:
-            travel_cost += getTravelCost(previous_task.end, next_task.start)
+            reverse = False
+            leg = getTravelCost(prev_exit, task.start, environment)
         else:
-            if p_idx == n - 1:
-                # The task is inserted at n, when evaluating the task use n-1 to determine whether it should be reversed
-                temp_cost, is_reversed = getMinTravelCost(previous_task.end, next_task, environment)
+            cost_fwd = getTravelCost(prev_exit, task.start, environment)
+            cost_rev = getTravelCost(prev_exit, task.end, environment)
+            reverse = cost_rev < cost_fwd
+            leg = cost_rev if reverse else cost_fwd
+        _, exit_point = _endpoints(task, reverse)
 
-                travel_cost += temp_cost
-                best_time = travel_cost
-            elif p_idx == n:
-                # the task after has to use the is_reversed bool to determine where to travel from
-                if is_reversed:
-                    travel_cost += getTravelCost(previous_task.end, next_task.start, environment)
-                else:
-                    travel_cost += getTravelCost(previous_task.end, next_task.start, environment)
-            else:
-                travel_cost += getTravelCost(previous_task.end, next_task.start, environment)
-            # Scale the travelcost with the reward/priority
-        S_p += getTimeDiscountedReward(travel_cost, Lambda, next_task, agent_capacity)
+        travel_cost += leg
+        arrival += leg
+        # Honor the earliest start time by waiting if we arrive early.
+        if task.start_time > 0 and arrival < task.start_time:
+            arrival = task.start_time
+        # Hard time window: the task must begin no later than its deadline.
+        if _has_deadline(task) and arrival > task.end_time:
+            feasible = False
+        arrival += distanceToCost(task.length)
 
-    # Add the cost for returning home
-    travel_cost += getTravelCost(tasks[temp_path[-1]].end, state, environment)
-    S_p += getTimeDiscountedReward(travel_cost, Lambda, tasks[temp_path[-1]], agent_capacity)
-    return (S_p, is_reversed, best_time)
+        S_p += getTimeDiscountedReward(travel_cost, Lambda, task, agent_capacity)
+
+        if t_idx == j:
+            inserted_reversed = reverse
+            best_time = travel_cost
+        prev_exit = exit_point
+
+    return (S_p, inserted_reversed, best_time, feasible)
 
 
 # This is only used for evaluations!
@@ -190,6 +187,35 @@ def getTotalPathLength(position, task_list, environment):
         # Add the cost of returning home
         total_length += getDistance(position, task_list[-1].end, environment)
     return total_length
+
+
+def countTimeWindowViolations(position, task_list: List[TrajectoryTask], environment):
+    """Number of tasks on the route that begin after their hard deadline."""
+    violations = 0
+    arrival = 0.0
+    prev = position
+    for task in task_list:
+        arrival += getTravelCost(prev, task.start, environment)
+        if task.start_time > 0 and arrival < task.start_time:
+            arrival = task.start_time
+        if _has_deadline(task) and arrival > task.end_time:
+            violations += 1
+        arrival += distanceToCost(task.length)
+        prev = task.end
+    return violations
+
+
+def getArrivalTimes(position, task_list: List[TrajectoryTask], environment):
+    """Cumulative travel cost to the start of each task in ``task_list``."""
+    times = []
+    cost = 0.0
+    prev = position
+    for task in task_list:
+        cost += getTravelCost(prev, task.start, environment)
+        times.append(cost)
+        cost += distanceToCost(task.length)
+        prev = task.end
+    return times
 
 
 def getTotalTaskLength(task_list):

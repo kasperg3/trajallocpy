@@ -9,17 +9,25 @@ from threading import Thread
 import numpy as np
 import shapely
 
-from trajallocpy import ACBBA, CBBA, Agent, CoverageProblem, Utility
+from trajallocpy import ACBBA, CBBA, PI, Agent, CoverageProblem, Utility
 
 
 class Runner:
-    def __init__(self, coverage_problem: CoverageProblem.CoverageProblem, agents: list[Agent.config], enable_plotting=False):
+    def __init__(
+        self,
+        coverage_problem: CoverageProblem.CoverageProblem,
+        agents: list[Agent.config],
+        enable_plotting=False,
+        algorithm: str = "CBBA",
+    ):
         # Task definition
         self.coverage_problem = coverage_problem
         self.robot_list = {}
+        self.algorithm = algorithm
+        agent_cls = PI.agent if algorithm == "PI" else CBBA.agent
 
         for agent in agents:
-            self.robot_list[agent.id] = CBBA.agent(
+            self.robot_list[agent.id] = agent_cls(
                 id=agent.id,
                 state=shapely.Point(agent.position),
                 environment=copy.deepcopy(self.coverage_problem.environment),
@@ -54,6 +62,10 @@ class Runner:
                 route.extend(list(task.trajectory.coords))
             route.append(r.state)
             route_list[r.id] = route
+        self.time_window_violations = sum(
+            Agent.countTimeWindowViolations(r.state, r.getPathTasks(), r.environment) for r in self.robot_list.values()
+        )
+        self.allocated_tasks = sum(len(r.path) for r in self.robot_list.values())
         print("Results")
         print("Execution time: ", self.end_time - self.start_time)
         print("Iterations: ", self.iterations)
@@ -66,8 +78,9 @@ class Runner:
         print("Max path cost: ", max_path_cost)
         print("Sum of path lengths: ", sum(path_lengths.values()))
         print("Sum of task lengths: ", sum(task_length.values()))
-        print("Sum of path costs: ", sum(path_costs))
+        print("Sum of path costs: ", sum(path_costs.values()))
         print("Sum of rewards: ", sum(rewards.values()))
+        print("Time window violations: ", self.time_window_violations)
         return (
             self.end_time - self.start_time,
             self.iterations,

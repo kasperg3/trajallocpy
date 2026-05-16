@@ -1,1 +1,1 @@
-from trajallocpy import ACBBA, CBBA, Agent, CoverageProblem, Experiment, Task
+from trajallocpy import ACBBA, CBBA, PI, Agent, CoverageProblem, Experiment, Task

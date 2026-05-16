@@ -117,39 +117,37 @@ class agent:
         S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), self.environment, self.capacity, self.Lambda)
         # init
         best_pos = np.zeros(self.task_num, dtype=int)
-        c = np.zeros(self.task_num)
+        c = np.full(self.task_num, -np.inf)
         reverse = np.zeros(self.task_num)
-        best_time = 0
+        best_time = np.zeros(self.task_num)
         # Collect the tasks which should be considered for planning
         ignore_tasks = [key for key, value in enumerate(self.removal_list) if value > self.removal_threshold]
         tasks_to_check = set(range(len(self.tasks))).difference(self.bundle).difference(ignore_tasks)
 
         for n, j in itertools.product(range(len(self.path) + 1), tasks_to_check):
-            S_pj, should_be_reversed, time = Agent.calculatePathRewardWithNewTask(
+            S_pj, should_be_reversed, time, feasible = Agent.calculatePathRewardWithNewTask(
                 j, n, self.state, self.tasks, self.path, self.environment, self.Lambda, self.capacity, self.use_single_point_estimation
             )
+            if not feasible:  # hard time-window violation: never select this insertion
+                continue
             c_ijn = S_pj - S_p
-            if c[j] < c_ijn:
+            if c_ijn > c[j]:
                 c[j] = c_ijn  # Store the cost
                 best_pos[j] = n
                 reverse[j] = should_be_reversed
-                best_time = time
+                best_time[j] = time
 
         return (best_pos, c, reverse, best_time)
-
-    def update_time(self, index, time):
-        self.times.insert(index, time)
-        # Correct the times after the insertion
-        for i in range(index + 1, len(self.times)):
-            self.times[i] += time
 
     def can_aquire_more_tasks(self):
         return bool(len(self.times) == 0 or self.times[-1] < self.capacity)
 
     def build_bundle(self, queue: multiprocessing.Queue = None):
-        current_capacity = Agent.getTotalTravelCost(self.state, self.getPathTasks(), self.environment)
+        # DMG warp: bids must be non-increasing along the bundle so that the
+        # scoring is a diminishing-marginal-gain function (Choi et al. 2009),
+        # which is what guarantees CBBA convergence and the 50%-optimality bound.
+        last_bid = self.winning_bids[self.bundle[-1]] if self.bundle else np.inf
         while self.can_aquire_more_tasks():
-            # while current_capacity <= self.capacity:
             best_pos, c, reverse, best_time = self.getCij()
             D1 = c - self.winning_bids > EPSILON
             D2 = abs(c - self.winning_bids) <= EPSILON
@@ -171,15 +169,15 @@ class agent:
             potential_capacity = Agent.getTotalTravelCost(self.state, [self.tasks[i] for i in potential_path], self.environment)
             if potential_capacity > self.capacity:
                 break
-            else:
-                current_capacity = potential_capacity
 
             self.bundle.append(J_i)
             self.path.insert(n_J, J_i)
-            self.update_time(n_J, best_time)
+            self.times = Agent.getArrivalTimes(self.state, self.getPathTasks(), self.environment)
 
-            self.winning_bids[J_i] = c[J_i]
+            warped_bid = min(c[J_i], last_bid)
+            self.winning_bids[J_i] = warped_bid
             self.winning_agents[J_i] = self.id
+            last_bid = warped_bid
         if queue is not None:
             queue.put(BundleResult(self))
         else:
@@ -196,7 +194,7 @@ class agent:
             else:
                 s_list = []
                 # for all agent ids in the message find the latest timestamp
-                for neighbor_id in id_list[1:]:
+                for neighbor_id in id_list:
                     s_list.append(messages[neighbor_id][2][id])
                 if len(s_list) > 0:
                     self.timestamps[id] = max(s_list)
