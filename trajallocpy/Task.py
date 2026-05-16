@@ -41,9 +41,9 @@ class TrajectoryTask:
 
     def reverse(self):
         self.trajectory = shapely.LineString(self.trajectory.coords[::-1])
-        # re initialize the start and end
-        self.end = self.trajectory.coords[0]
-        self.start = self.trajectory.coords[-1]
+        # start/end must stay consistent with the (reversed) coordinate order
+        self.start = self.trajectory.coords[0]
+        self.end = self.trajectory.coords[-1]
 
     def getDuration(self, velocity, acceleration):
         # Velocity ramp
