@@ -62,10 +62,21 @@ class _Worker:
         agent.build_bundle()
 
         changed = _snapshot(agent) != before
-        did_refresh = self.refresh_period and self.activations % self.refresh_period == 0
+
+        # "active" reflects real consensus progress only. A pure periodic
+        # refresh must NOT count as activity, otherwise it perpetually resets
+        # the idle counter and the system can never be detected as quiescent.
+        active = bool(changed or rebroadcasts)
+        self.idle_rounds = 0 if active else self.idle_rounds + 1
+
+        # Adaptive refresh: re-broadcast full state to heal lost messages while
+        # still converging, but stop once this agent is locally stable. If we
+        # kept refreshing forever the simulated network would never drain under
+        # latency and quiescence could never be observed.
+        do_refresh = self.refresh_period and self.idle_rounds < self.stable_K and self.activations % self.refresh_period == 0
 
         to_send = []
-        if changed or did_refresh:
+        if changed or do_refresh:
             to_send = agent.send_message()
         elif rebroadcasts:
             to_send = rebroadcasts
@@ -74,8 +85,6 @@ class _Worker:
             self.transport.broadcast(agent.id, to_send, t=now)
 
         self.activations += 1
-        active = bool(changed or rebroadcasts or to_send)
-        self.idle_rounds = 0 if active else self.idle_rounds + 1
         return active
 
     @property
@@ -83,12 +92,26 @@ class _Worker:
         return self.idle_rounds >= self.stable_K
 
 
+def _conflict_free(workers):
+    seen = set()
+    for worker in workers:
+        for task_id in worker.agent.path:
+            if task_id in seen:
+                return False
+            seen.add(task_id)
+    return True
+
+
 def _quiescent(workers, transport):
+    # Termination is decided by *allocation stability*, not by an empty
+    # network: every agent locally stable for K activations and nothing left
+    # in flight (idle agents stop refreshing, so the medium can actually
+    # drain). A still-conflicted allocation is never reported as converged.
     if transport.in_flight() != 0:
         return False
-    if transport.sent != transport.received:
+    if not all(w.idle for w in workers):
         return False
-    return all(w.idle for w in workers)
+    return _conflict_free(workers)
 
 
 def run(
