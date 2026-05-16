@@ -16,7 +16,6 @@ class CoverageProblem:
     ):
         self.__restricted_areas = restricted_areas
         self.__search_area = search_area
-        search_area = None
         if search_area is None:
             self.environment = None
         else:

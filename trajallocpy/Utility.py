@@ -9,6 +9,7 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Polygon as PolygonPatch
 
 from trajallocpy import CBBA, Agent
+from trajallocpy._logging import logger
 
 
 def timing(f):
@@ -16,7 +17,7 @@ def timing(f):
         start = time.time()
         result = f(*args, **kwargs)
         end = time.time()
-        print(f"Elapsed time: {end - start} seconds")
+        logger.debug("Elapsed time: %s seconds", end - start)
         return result
 
     return wrap
@@ -163,7 +164,7 @@ def timing(name=None):
             result = func(*args, **kwargs)
             end_time = time.time()
             func_name = name if name is not None else func.__name__
-            print(f"{func_name} execution time:{end_time - start_time} seconds")
+            logger.debug("%s execution time: %s seconds", func_name, end_time - start_time)
             return result
 
         return wrapper

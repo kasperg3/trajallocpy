@@ -1,13 +1,8 @@
 import copy
 import itertools
-import math
 import multiprocessing
 import random
 import time
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from dataclasses import dataclass
-from functools import cache
-from multiprocessing import Pool
 from typing import List
 
 import numpy as np
@@ -16,6 +11,10 @@ import trajallocpy.Agent as Agent
 from trajallocpy.Task import TrajectoryTask
 
 EPSILON = 1e-6
+# Tolerance for comparing message timestamps. ``np.finfo(float).eps`` is far too
+# tight once timestamps come from a wall/simulated clock in seconds: ties would
+# never be detected and the consensus would livelock.
+TIME_EPS = 1e-6
 
 
 class BundleResult:
@@ -39,7 +38,11 @@ class agent:
         point_estimation=False,
         max_velocity=3,
         max_acceleration=1,
+        Lambda=None,
+        removal_threshold=5,
+        clock=time.monotonic,
     ):
+        self._clock = clock
         self.environment = environment
         self.tasks = None
         if tasks is not None:
@@ -84,11 +87,11 @@ class agent:
             raise Exception("ERROR: Initial state cannot be None")
         else:
             self.state = state.coords[0]
-        # socre function parameters
-        self.Lambda = 0.95
+        # score function parameters
+        self.Lambda = 0.95 if Lambda is None else Lambda
 
         self.removal_list = {}
-        self.removal_threshold = 5  # TODO find a good value for this when ros is implemented
+        self.removal_threshold = removal_threshold
         self.message_history = []
 
     def __repr__(self) -> str:
@@ -109,6 +112,11 @@ class agent:
         return result
 
     def send_message(self):
+        # Only broadcast tasks this agent has an opinion about (it has bid on
+        # one, or relayed/learned a winner/timestamp). Emitting the default
+        # ``y=0, z=-1, t=0`` for every task is pure noise that inflates message
+        # volume and slows convergence.
+        known = set(self.winning_bids) | set(self.winning_agents) | set(self.t)
         return [
             Agent.BidInformation(
                 y=self.winning_bids.get(task_id, 0),
@@ -117,7 +125,7 @@ class agent:
                 j=task_id,
                 k=self.id,
             )
-            for task_id in self.tasks
+            for task_id in known
         ]
 
     def getCij(self):
@@ -126,73 +134,84 @@ class agent:
         """
         # Calculate Sp_i
         S_p = Agent.calculatePathReward(self.state, self.getPathTasks(), self.environment, self.capacity, self.Lambda)
-        # init
+        # init (tasks are keyed by task.id throughout ACBBA)
         best_pos = {task_id: 0 for task_id in self.tasks}
-        c = {task_id: 0 for task_id in self.tasks}
+        c = {task_id: -np.inf for task_id in self.tasks}
         reverse = {task_id: 0 for task_id in self.tasks}
+        best_time = {task_id: 0 for task_id in self.tasks}
 
-        best_time = 0
-        # Collect the tasks which should be considered for planning
-        ignore_tasks = [key for key, value in enumerate(self.removal_list) if value > self.removal_threshold]
-        tasks_to_check = set(range(len(self.tasks))).difference(self.bundle).difference(ignore_tasks)
+        # Collect the tasks which should be considered for planning. removal_list
+        # is keyed by task id, so iterate items (not enumerate).
+        ignore_tasks = {k for k, v in self.removal_list.items() if v > self.removal_threshold}
+        tasks_to_check = set(self.tasks).difference(self.bundle).difference(ignore_tasks)
 
         for n, j in itertools.product(range(len(self.path) + 1), tasks_to_check):
-            S_pj, should_be_reversed, best_time = Agent.calculatePathRewardWithNewTask(
+            S_pj, should_be_reversed, time_to_task, feasible = Agent.calculatePathRewardWithNewTask(
                 j, n, self.state, self.tasks, self.path, self.environment, self.Lambda, self.capacity, self.use_single_point_estimation
             )
+            if not feasible:  # hard time-window violation: never select this insertion
+                continue
             c_ijn = S_pj - S_p
-            if c[j] < c_ijn:
+            if c_ijn > c[j]:
                 c[j] = c_ijn  # Store the cost
                 best_pos[j] = n
                 reverse[j] = should_be_reversed
+                best_time[j] = time_to_task
 
         return (best_pos, c, reverse, best_time)
 
     def build_bundle(self, queue: multiprocessing.Queue = None):
+        # DMG warp: bids must be non-increasing along the bundle so the scoring
+        # is a diminishing-marginal-gain function (Choi et al. 2009), which is
+        # what guarantees convergence.
+        last_bid = self.winning_bids.get(self.bundle[-1], np.inf) if self.bundle else np.inf
         while Agent.getTotalTravelCost(self.state, self.getPathTasks(), self.environment) <= self.capacity:
             best_pos, c, reverse, best_time = self.getCij()
-            # Compare the values of the same ids
 
-            D1 = {task_id: (c[task_id] - self.winning_bids.get(task_id, 0)) > EPSILON for task_id in c}
-            D2 = {task_id: abs(c[task_id] - self.winning_bids.get(task_id, 0)) <= EPSILON for task_id in c}
-            h = {task_id: D1[task_id] or (D2[task_id] and self.id < self.winning_agents.get(task_id, 0)) for task_id in c}
-            if sum(h) == 0:  # No valid task
+            best_task, best_value = None, -np.inf
+            for task_id, value in c.items():
+                if not np.isfinite(value):
+                    continue
+                y_ij = self.winning_bids.get(task_id, 0)
+                z_ij = self.winning_agents.get(task_id, -1)
+                outbids = value - y_ij > EPSILON
+                tie_win = abs(value - y_ij) <= EPSILON and (z_ij == -1 or self.id < z_ij)
+                if (outbids or tie_win) and value > best_value:
+                    best_task, best_value = task_id, value
+            if best_task is None:  # No valid task
                 break
 
-            for key in list(c.keys()):
-                if not h[key]:
-                    c[key] = 0
-            J_i = np.argmax(c)
-            J_i = max(c, key=c.get)
-            n_J = best_pos[J_i]
+            n_J = best_pos[best_task]
+            if reverse[best_task]:
+                self.tasks[best_task].reverse()
 
-            # reverse the task with max reward if necesarry
-            if reverse[J_i]:
-                self.tasks[J_i].reverse()
+            # Check for capacity before committing the task.
+            potential_path = self.path[:]
+            potential_path.insert(n_J, best_task)
+            potential_capacity = Agent.getTotalTravelCost(self.state, [self.tasks[i] for i in potential_path], self.environment)
+            if potential_capacity > self.capacity:
+                break
 
-            self.bundle.append(J_i)
-            self.path.insert(n_J, J_i)
-            self.update_time(n_J, best_time)
+            self.bundle.append(best_task)
+            self.path.insert(n_J, best_task)
+            self.times = Agent.getArrivalTimes(self.state, self.getPathTasks(), self.environment)
 
-            self.winning_bids[J_i] = c[J_i]
-            self.winning_agents[J_i] = self.id
+            warped_bid = min(best_value, last_bid)
+            self.winning_bids[best_task] = warped_bid
+            self.winning_agents[best_task] = self.id
+            self.t[best_task] = self._clock()
+            last_bid = warped_bid
 
         if queue is not None:
             queue.put(BundleResult(self))
         else:
             return BundleResult(self)
 
-    def update_time(self, index, time):
-        self.times.insert(index, time)
-        # Correct the times after the insertion
-        for i in range(index + 1, len(self.times)):
-            self.times[i] += time
-
     def __update_time(self, task):
-        self.t[task] = time.monotonic()
+        self.t[task] = self._clock()
 
     def __action_rule(self, k, j, task, z_kj, y_kj, t_kj, z_ij, y_ij, t_ij) -> Agent.BidInformation:
-        eps = np.finfo(float).eps
+        eps = TIME_EPS
         i = self.id
         sender_info = Agent.BidInformation(y=y_kj, z=z_kj, t=t_kj, j=j, k=self.id)
         own_info = Agent.BidInformation(y=y_ij, z=z_ij, t=t_ij, j=j, k=self.id)
@@ -206,7 +225,8 @@ class agent:
                     return sender_info
                 elif y_kj < y_ij:
                     self.__update_time(task)
-                    return own_info
+                    # rebuild so the relayed bid carries the bumped timestamp
+                    return Agent.BidInformation(y=y_ij, z=z_ij, t=self.t[task], j=j, k=self.id)
 
             elif z_ij == k:  # Rule 1.2
                 if t_kj > t_ij:
@@ -273,7 +293,8 @@ class agent:
 
                 elif y_kj < y_ij:
                     self.__update_time(task)
-                    return own_info
+                    # rebuild so the relayed bid carries the bumped timestamp
+                    return Agent.BidInformation(y=y_ij, z=z_ij, t=self.t[task], j=j, k=self.id)
 
             elif z_ij == k:  # Rule 3.2
                 if t_kj >= t_ij:
@@ -333,29 +354,16 @@ class agent:
         self.__leave()
         return own_info
 
-    def __rebroadcast(self, information):
-        y = information["y"]
-        z = information["z"]
-        t = information["t"]
-        self.send_information(y, z, t, self.id)
+    def receive(self, mailbox) -> List[Agent.BidInformation]:
+        """Drain an inbox of incoming bid batches and run the consensus rules.
 
-    def __receive_information(self):
-        raise NotImplementedError()
-        # message = self.my_socket.recieve(self.agent)
-        # if message is None:
-        #     return None
-        # return message
-
-    def send_information(self, y, z, t, k):
-        """This function is used for sharing information between agents and is not implemented in this base class
-        Raises
-        ------
-        NotImplementedError
-            _description_
+        Returns the list of :class:`Agent.BidInformation` that should be
+        rebroadcast to neighbours (the worker forwards them via the transport).
         """
-        raise NotImplementedError()
-        # msg = {self.agent: {"y": y, "z": z, "t": t}}
-        # self.my_socket.send(self.agent, msg, k)
+        rebroadcasts = []
+        for batch in mailbox.get_nowait_all():
+            rebroadcasts.extend(self.update_task_async(batch))
+        return rebroadcasts
 
     def update_task_async(self, bids: List[Agent.BidInformation]):
         # Update Process
@@ -379,28 +387,6 @@ class agent:
                 rebroadcasts.append(rebroadcast)
         return rebroadcasts
 
-    def update_task(self, Y: List[Agent.BidInformation]):
-        # Update Process
-        rebroadcasts = []
-
-        for k in Y:
-            for j in self.tasks:
-                # Recieve info
-                y_kj = Y[k][0].get(j, 0)  # Winning bids
-                z_kj = Y[k][1].get(j, -1)  # Winning agent
-                t_kj = Y[k][2].get(j, 0)  # Timestamps
-
-                # Own info
-                y_ij = self.winning_bids.get(j, 0)
-                z_ij = self.winning_agents.get(j, -1)
-                t_ij = self.t.get(j, 0)
-                # TODO parse the information in a better way
-                rebroadcast = self.__action_rule(k=k, j=j, task=j, z_kj=z_kj, y_kj=y_kj, t_kj=t_kj, z_ij=z_ij, y_ij=y_ij, t_ij=t_ij)
-                if rebroadcast:
-                    # TODO save the rebroadcasts
-                    rebroadcasts.append(rebroadcast)
-        return rebroadcasts
-
     def __update(self, y_kj, z_kj, t_kj, j):
         """
         Update values
@@ -418,7 +404,9 @@ class agent:
         for idx in b_retry:
             self.winning_bids[idx] = 0
             self.winning_agents[idx] = -1
-            self.t[idx] = time.monotonic()
+            # Do NOT advance self.t here: bumping the timestamp on a cascade
+            # release lets the releasing agent look "newer" and immediately
+            # reclaim the task, which causes livelock under async delivery.
 
         self.removal_list[task] = self.removal_list.get(task, 0) + 1
         self.path = [num for num in self.path if num not in self.bundle[index:]]
@@ -427,7 +415,7 @@ class agent:
     def __reset(self, task):
         self.winning_bids[task] = 0
         self.winning_agents[task] = -1
-        self.t[task] = time.monotonic()
+        self.t[task] = self._clock()
         self.__update_path(task)
 
     def __leave(self):

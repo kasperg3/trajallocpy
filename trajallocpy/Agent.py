@@ -2,21 +2,43 @@
 import math
 from dataclasses import dataclass
 from functools import cache
-from multiprocessing import Pool
-from typing import List
-
-import numpy as np
+from typing import List, Optional, Tuple
 
 from trajallocpy.Task import TrajectoryTask
 
 
 @dataclass
 class config:
+    """Per-agent configuration passed to :class:`Experiment.Runner`.
+
+    ``position`` accepts ``(x, y)``, ``[(x, y)]`` or a ``shapely`` point-like
+    object; it is normalized to a plain ``(x, y)`` tuple. ``Lambda`` left as
+    ``None`` means "use the algorithm's own default discount factor".
+    """
+
     id: int
-    position: list
+    position: object
     capacity: int  # time in seconds
     max_velocity: float = 3  # m/s
     max_acceleration: float = 1  # m/s^2
+    Lambda: Optional[float] = None  # score discount; None -> algorithm default
+    removal_threshold: int = 5
+
+    def __post_init__(self):
+        self.position = _normalize_position(self.position)
+
+
+def _normalize_position(position) -> Tuple[float, float]:
+    # shapely Point / geometry with .coords
+    coords = getattr(position, "coords", None)
+    if coords is not None:
+        x, y = list(coords)[0][:2]
+        return (float(x), float(y))
+    seq = list(position)
+    # [(x, y)] -> (x, y)
+    if len(seq) == 1 and hasattr(seq[0], "__len__"):
+        seq = list(seq[0])
+    return (float(seq[0]), float(seq[1]))
 
 
 # class Agent:

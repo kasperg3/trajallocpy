@@ -96,3 +96,7 @@ ENV/
 
 logs/*
 experiments/*
+# Run artifacts
+routes.json
+tasks.json
+transport.json

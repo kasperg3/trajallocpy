@@ -12,11 +12,11 @@
   <img src="https://github.com/kasperg3/trajallocpy/blob/e635b71b0950f02abd04f8221ceec85ef949c46d/.assets/trajectory_allocation.gif" />
 </p>
 
-**TrajAllocPy** is a Python library for decentralized multi-robot task allocation using the **Consensus Based Bundle Algorithm (CBBA)**. It's designed for area coverage problems where multiple robots need to efficiently distribute and execute trajectory-based tasks while avoiding obstacles.
+**TrajAllocPy** is a Python library for decentralized multi-robot task allocation. It provides the synchronous **Consensus Based Bundle Algorithm (CBBA)**, a **Performance Impact (PI)** baseline, and a truly asynchronous **ACBBA** that runs over a simulated network. It's designed for area coverage problems where multiple robots need to efficiently distribute and execute trajectory-based tasks while avoiding obstacles.
 
 ## 🚀 Key Features
 
-- **Decentralized Algorithm**: Uses CBBA for distributed task allocation without central coordination
+- **Decentralized Algorithms**: synchronous **CBBA**, a **PI** baseline, and a truly asynchronous **ACBBA** that runs over a simulated network (configurable topology, latency and packet loss) with distributed termination detection — no central coordination and no global barrier
 - **Obstacle Avoidance**: Built-in support for complex environments with obstacles
 - **Trajectory Tasks**: Handles line-segment based coverage tasks (e.g., search patterns, surveillance routes)
 - **Visualization**: Real-time plotting of robot paths and task allocation
@@ -81,16 +81,52 @@ agents = [
 # Run the experiment
 experiment = Experiment.Runner(
     coverage_problem=coverage_problem,
-    enable_plotting=True,  # Shows real-time visualization
-    agents=agents
+    agents=agents,
+    algorithm="CBBA",          # "CBBA", "PI", or "ACBBA"
 )
 
 # Solve and get results
 experiment.solve()
-compute_time, iterations, path_lengths, task_lengths, path_costs, rewards, routes, max_cost = experiment.evaluateSolution()
-print(f"Computation time: {compute_time:.3f} seconds")
-print(f"Total route length: {sum(path_lengths.values()):.2f}")
-print(f"Total rewards: {sum(rewards.values()):.2f}")
+result = experiment.evaluateSolution()
+print(f"Computation time: {result.compute_time:.3f} seconds")
+print(f"Total route length: {sum(result.path_lengths.values()):.2f}")
+print(f"Total rewards: {sum(result.rewards.values()):.2f}")
+
+# Back-compat: the result still unpacks as the historical 8-tuple
+compute_time, iterations, path_lengths, task_lengths, path_costs, rewards, routes, max_cost = result
+```
+
+### Asynchronous ACBBA over a simulated network
+
+`algorithm="ACBBA"` switches `Runner` to a decentralized asynchronous path:
+each agent runs its own event loop and only exchanges `BidInformation`
+messages through a simulated transport. There is no shared message pool and no
+global barrier; the run ends when a distributed quiescence detector observes
+that every agent is idle, nothing is in flight, and all messages are accounted
+for (or the `max_runtime` safety timeout fires).
+
+```python
+from trajallocpy import Transport
+
+experiment = Experiment.Runner(
+    coverage_problem=coverage_problem,
+    agents=agents,
+    algorithm="ACBBA",
+    communication_graph=Transport.CommunicationGraph.ring(len(agents)),  # or .full/.line, a matrix, or a dynamic schedule
+    link_model=Transport.LinkModel(latency_mean=0.05, latency_jitter=0.02, loss_prob=0.1),
+    seed=42,                   # reproducible given a seed
+    async_mode="step",         # "step" = deterministic sim; "threads" = real per-agent threads
+    max_runtime=30.0,
+    export_dir=None,           # set a directory to dump routes/tasks/transport JSON
+)
+experiment.solve()
+assert experiment.converged
+```
+
+Or from the command line:
+
+```bash
+trajallocpy --algorithm ACBBA --agents 3 --tasks 6 --comm ring --latency 0.05 --loss 0.1 --seed 42
 ```
 
 ## 📚 Complete Example
@@ -144,9 +180,12 @@ tasks = [
 ```python
 agent = Agent.config(
     0,                             # Unique agent identifier
-    [(0, 0)],                      # Starting position [x, y]
-    1000,                          # Maximum travel distance
-    max_velocity=10                # Maximum speed
+    (0, 0),                        # Starting position: (x, y), [(x, y)], or a shapely Point
+    1000,                          # Maximum travel budget (capacity)
+    max_velocity=10,               # Maximum speed
+    max_acceleration=1,            # Maximum acceleration
+    Lambda=None,                   # Score discount; None -> algorithm default
+    removal_threshold=5,           # Anti-thrashing: ignore a task after this many releases
 )
 ```
 
@@ -170,39 +209,45 @@ problem = CoverageProblem.CoverageProblem(
 
 ## 📊 Understanding Results
 
-The `evaluateSolution()` method returns a tuple with:
-1. **Computation time** (seconds)
-2. **Algorithm iterations**
-3. **Path lengths** (dictionary: agent_id -> total path length)
-4. **Task lengths** (dictionary: agent_id -> total task length covered)
-5. **Path costs** (dictionary: agent_id -> total travel cost)
-6. **Rewards** (dictionary: agent_id -> total rewards collected)
-7. **Route assignments** (dictionary: agent_id -> coordinate list of full route)
-8. **Maximum route cost** (bottleneck agent cost)
+`evaluateSolution()` returns an `AllocationResult` dataclass with named fields:
+
+- `compute_time` (seconds)
+- `iterations`
+- `path_lengths` / `task_lengths` / `path_costs` / `rewards` (agent_id -> value)
+- `routes` (agent_id -> coordinate list of the full route)
+- `max_path_cost` (bottleneck agent cost)
+- `time_window_violations`, `allocated_tasks`, `converged`
+
+For backwards compatibility the result still unpacks as the historical
+8-tuple `(compute_time, iterations, path_lengths, task_lengths, path_costs,
+rewards, routes, max_path_cost)`.
 
 ## 🎨 Visualization
 
-Enable real-time visualization by setting `enable_plotting=True` in the experiment runner. This shows:
-- Environment boundaries and obstacles
-- Task locations and assignments
-- Agent paths and positions
-- Real-time algorithm progress
+Plotting is **off by default** and matplotlib is imported lazily, so importing
+the library stays headless-friendly. To render an allocation after solving,
+call `runner.plot()` (interactive) or `runner.plot(save_path="out.png")` to
+write a figure to disk. It shows environment boundaries and obstacles, task
+locations, and the per-agent assigned paths.
 
 ## 🏗️ Architecture
 
-TrajAllocPy implements the CBBA algorithm with these key components:
+Key components:
 
-- **Agent**: Individual robot with position, capacity, and capabilities
-- **Task**: Trajectory segment with location, reward, and requirements  
+- **Agent**: Individual robot with position, capacity, and kinematics
+- **Task**: Trajectory segment with location, reward, and optional time window
 - **CoverageProblem**: Environment definition with boundaries and obstacles
-- **Experiment.Runner**: Algorithm execution and visualization manager
+- **CBBA / PI / ACBBA**: the allocation algorithms
+- **Transport**: simulated network — `CommunicationGraph` (static/dynamic, directed) and `LinkModel` (latency, packet loss)
+- **AsyncRunner**: the decentralized asynchronous execution path for ACBBA (per-agent event loops + distributed termination detection)
+- **Experiment.Runner**: single entry point that drives any algorithm and evaluates the result
 
 ## 📈 Performance Tips
 
 - **Task Density**: More tasks than agents generally leads to better solutions
 - **Agent Capacity**: Higher capacity allows longer routes but may reduce parallelism
 - **Environment Complexity**: Simple convex environments solve faster
-- **Visualization**: Disable plotting (`enable_plotting=False`) for faster computation
+- **Visualization**: plotting is off by default; only call `runner.plot()` when you need a figure
 
 ## 🔬 Research & Citations
 

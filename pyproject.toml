@@ -17,12 +17,30 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "numpy",
+    "shapely",
+    "geojson",
+    "scipy",
+    "networkx",
+    "matplotlib",
+    "extremitypathfinder[numba]",
 ]
 
+[project.scripts]
+trajallocpy = "trajallocpy.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["trajallocpy*"]
+
 [tool.ruff]
-extend-select = ["C4", "SIM", "TCH", "SLF", "W"]
 show-fixes = true
 line-length = 150
+
+[tool.ruff.lint]
+extend-select = ["C4", "SIM", "TCH", "SLF", "W"]
 
 [project.optional-dependencies]
 test = ["pytest"]

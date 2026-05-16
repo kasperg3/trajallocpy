@@ -46,6 +46,10 @@ class agent:
         tasks=None,
         color=None,
         point_estimation=False,
+        max_velocity=3,
+        max_acceleration=1,
+        Lambda=None,
+        removal_threshold=5,
     ):
         self.environment = environment
         self.tasks = copy.deepcopy(tasks)
@@ -53,8 +57,8 @@ class agent:
         self.use_single_point_estimation = point_estimation
         self.color = color if color is not None else (random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1))
 
-        self.max_velocity = 3
-        self.max_acceleration = 1
+        self.max_velocity = max_velocity
+        self.max_acceleration = max_acceleration
         self.id = id
 
         # winning_bids holds -performance_impact (higher == lower impact == better).
@@ -74,11 +78,11 @@ class agent:
         if state is None:
             raise Exception("ERROR: Initial state cannot be None")
         self.state = state.coords[0]
-        self.Lambda = 0.99
+        self.Lambda = 0.99 if Lambda is None else Lambda
         self.availability_time = 0
 
         self.removal_list = np.zeros(self.task_num, dtype=np.int64)
-        self.removal_threshold = 5
+        self.removal_threshold = removal_threshold
 
     def update_bundle_result(self, state: BundleResult):
         if self.id == state.id:
